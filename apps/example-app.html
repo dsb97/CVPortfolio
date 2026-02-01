@@ -1,0 +1,118 @@
+<div class="ui" style="display:grid; gap:24px;">
+
+    <h2>UI Showcase</h2>
+    <p style="color:var(--ui-text-muted)">
+        Preview of all available UI components
+    </p>
+
+    <!-- INPUTS -->
+    <section>
+        <h3>Inputs</h3>
+        <input class="ui-input" placeholder="Text input">
+        <input class="ui-input" type="password" placeholder="Password">
+        <input class="ui-input" type="number" placeholder="Number">
+        <select class="ui-select">
+            <option>Select option</option>
+            <option>Option 1</option>
+            <option>Option 2</option>
+        </select>
+    </section>
+
+    <!-- BUTTONS -->
+    <section>
+        <h3>Buttons</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="ui-button">Default</button>
+            <button class="ui-button primary">Primary</button>
+            <button class="ui-button" disabled>Disabled</button>
+        </div>
+    </section>
+
+    <!-- TOGGLES -->
+    <!-- Checkbox & radio -->
+    <label class="ui-check">
+        <input type="checkbox"> Checkbox
+    </label>
+
+    <label class="ui-radio">
+        <input type="radio" name="r"> Radio
+    </label>
+
+    <!-- Switch -->
+    <label class="ui-switch">
+        <input type="checkbox">
+        <span></span>
+    </label>
+
+    <!-- Slider -->
+    <input type="range" class="ui-slider">
+
+    <!-- TABS -->
+    <section>
+        <h3>Tabs</h3>
+        <div class="ui-tabs">
+            <div class="ui-tab active">Tab 1</div>
+            <div class="ui-tab">Tab 2</div>
+            <div class="ui-tab">Tab 3</div>
+        </div>
+    </section>
+
+    <!-- SURFACES -->
+    <section>
+        <h3>Surfaces</h3>
+
+        <div class="ui-card">
+            This is a card surface
+        </div>
+
+        <ul class="ui-list">
+            <li>List item</li>
+            <li>List item</li>
+            <li>List item</li>
+        </ul>
+    </section>
+
+    <div class="ui-grid">
+        <div class="ui-grid-item active">
+            <img src="/assets/icons/folder.png" alt="">
+            <span>Mis proyectos</span>
+        </div>
+        <div class="ui-grid-item">
+            <img src="/assets/icons/folder.png" alt="">
+            <span>Música</span>
+        </div>
+        <div class="ui-grid-item">
+            <img src="/assets/icons/folder.png" alt="">
+            <span>Inglés</span>
+        </div>
+        <div class="ui-grid-item">
+            <img src="/assets/icons/folder.png" alt="">
+            <span>Descargas</span>
+        </div>
+        <div class="ui-grid-item">
+            <img src="/assets/icons/folder.png" alt="">
+            <span>Fotos</span>
+        </div>
+    </div>
+
+    <ul class="ui-list ui-list-columns">
+        <li class="ui-list-header">
+            <span>Nombre</span>
+            <span>Tipo</span>
+            <span>Tamaño</span>
+        </li>
+
+        <li>
+            <span>Archivo.txt</span>
+            <span>Texto</span>
+            <span>12 KB</span>
+        </li>
+
+        <li>
+            <span>Foto.png</span>
+            <span>Imagen</span>
+            <span>2.4 MB</span>
+        </li>
+    </ul>
+
+</div>

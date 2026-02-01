@@ -1,0 +1,74 @@
+.explorer-container {
+  height: 100%;
+  display: flex;          /* 👈 CLAVE */
+  flex-direction: column; /* 👈 CLAVE */
+  overflow: hidden;
+}
+
+#explorer {
+  flex: 1;
+  overflow-y: auto;
+}
+/* ===============================
+   EXPLORER TOOLBAR
+   =============================== */
+
+.explorer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  margin-bottom: 8px;
+  font-size: var(--ui-font-size);
+}
+
+.ui-button.icon {
+  width: 26px;
+  padding: 0;
+}
+
+.ui-button.icon>img {
+  width: 16px;
+  padding: 0;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 20px;
+  background: var(--ui-border);
+  margin: 0 6px;
+}
+
+/* ===============================
+   PATH / BREADCRUMB
+   =============================== */
+
+.explorer-path {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-bg);
+  overflow-x: auto;
+}
+
+.explorer-path span {
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.explorer-path span:hover {
+  text-decoration: underline;
+}
+
+.explorer-path span::after {
+  content: ">";
+  margin: 0 4px;
+  color: var(--ui-text-muted);
+}
+
+.explorer-path span:last-child::after {
+  content: "";
+}

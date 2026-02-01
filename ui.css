@@ -1,0 +1,275 @@
+/* ===============================
+   UI SYSTEM – Global styles
+   =============================== */
+
+:root {
+  /* Colors */
+  --ui-bg: #ffffff;
+  --ui-bg-secondary: #f3f3f3;
+  --ui-border: #dcdcdc;
+
+  --ui-primary: #0067c0;
+  --ui-primary-hover: #0053a0;
+
+  --ui-text: #1f1f1f;
+  --ui-text-muted: #6b6b6b;
+
+  /* Radius */
+  --ui-radius: 6px;
+  --ui-radius-sm: 3px;
+
+  /* Shadow */
+  --ui-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+
+  --ui-font-size: 12px;
+}
+
+
+/* ===============================
+   INPUTS
+   =============================== */
+.ui-input,
+.ui-select {
+  font-size: var(--ui-font-size);
+  width: 100%;
+  height: 26px;
+  padding: 0px 12px;
+  border-radius: var(--ui-radius-sm);
+  border: 1px solid var(--ui-border);
+  background: var(--ui-bg);
+}
+
+.ui-input[type="number"] {
+  padding: 0px 2px 0px 12px;
+}
+
+.ui-select {
+  padding: 0px 2px 0px 12px;
+}
+
+.ui-input:focus,
+.ui-select:focus {
+  outline: none;
+  border-color: var(--ui-primary);
+}
+
+/* ===============================
+   BUTTONS
+   =============================== */
+
+.ui-button {
+  font-size: var(--ui-font-size);
+  height: 26px;
+  padding: 0px 16px;
+  border-radius: var(--ui-radius-sm);
+  border: 1px solid var(--ui-border);
+  background: var(--ui-bg);
+  cursor: pointer;
+}
+
+.ui-button.primary {
+  background: var(--ui-primary);
+  color: white;
+  border-color: var(--ui-primary);
+}
+
+.ui-button.primary:hover {
+  background: var(--ui-primary-hover);
+}
+
+/* ===============================
+   CHECKBOX & RADIO
+   =============================== */
+
+.ui-check,
+.ui-radio {
+  font-size: var(--ui-font-size);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ui-check input,
+.ui-radio input {
+  accent-color: var(--ui-primary);
+}
+
+/* ===============================
+   SWITCH
+   =============================== */
+
+.ui-switch {
+  position: relative;
+  width: 42px;
+  height: 22px;
+}
+
+.ui-switch input {
+  opacity: 0;
+}
+
+.ui-switch span {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 999px;
+  transition: .2s;
+}
+
+.ui-switch span::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: .2s;
+}
+
+.ui-switch input:checked+span {
+  background: var(--ui-primary);
+}
+
+.ui-switch input:checked+span::after {
+  transform: translateX(20px);
+}
+
+/* ===============================
+   SLIDER
+   =============================== */
+
+.ui-slider {
+  width: 100%;
+  accent-color: var(--ui-primary);
+}
+
+/* ===============================
+   TABS
+   =============================== */
+
+.ui-tabs {
+  font-size: var(--ui-font-size);
+  display: flex;
+  gap: 4px;
+  background: var(--ui-bg-secondary);
+  padding: 4px;
+  border-radius: var(--ui-radius);
+}
+
+.ui-tab {
+  padding: 6px 14px;
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+}
+
+.ui-tab.active {
+  background: var(--ui-bg);
+  box-shadow: var(--ui-shadow);
+}
+
+/* ===============================
+   SURFACES
+   =============================== */
+
+.ui-card {
+  font-size: var(--ui-font-size);
+  background: var(--ui-bg);
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+  padding: 16px;
+}
+
+.ui-list {
+  font-size: var(--ui-font-size);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ui-list li {
+  padding: 10px;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+/* ===============================
+   GRID (desktop icons)
+   =============================== */
+
+.ui-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 12px;
+}
+
+.ui-grid-item {
+  font-size: var(--ui-font-size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border-radius: var(--ui-radius-sm);
+  text-align: center;
+  height: fit-content;
+}
+
+.ui-grid-item img {
+  width: 32px;
+  height: 32px;
+}
+
+.ui-grid-item span {
+  color: var(--ui-text);
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.ui-grid-item:hover {
+  background: var(--ui-bg-secondary);
+}
+
+.ui-grid-item:active,
+.ui-grid-item.active {
+  background: rgba(0, 103, 192, 0.12);
+}
+
+/* ===============================
+   LIST WITH COLUMNS
+   =============================== */
+
+.ui-list-columns li {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.ui-list-columns li span {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ui-list-columns li:hover:not(.ui-list-header) {
+  background: var(--ui-bg-secondary);
+}
+
+.ui-list-columns li:not(.ui-list-header).active {
+  background: var(--ui-bg-secondary);
+}
+
+.ui-list-header {
+  font-weight: 600;
+  color: var(--ui-text-muted);
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.ui-small-icon {
+  margin-right: 6px;
+  height: 12px;
+  width: 12px;
+}
