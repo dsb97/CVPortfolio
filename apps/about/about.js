@@ -76,7 +76,16 @@ function aboutContactByMail() {
     window.location.href = "mailto:davidsanchezbarragan@gmail.com";
 }
 
+window.aboutInit = () => {
+    aboutChangeTab('overview');
+}
+
 window.aboutChangeTab = aboutChangeTab;
 window.aboutContactByMail = aboutContactByMail;
 
-aboutChangeTab('overview');
+window.aboutDispose = () => {
+    window.aboutInit = undefined;
+    window.aboutChangeTab = undefined;
+    window.aboutContactByMail = undefined;
+}
+

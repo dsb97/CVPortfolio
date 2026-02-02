@@ -4,10 +4,10 @@
     <div class="explorer-toolbar">
 
         <!-- Navegación -->
-        <button class="ui-button icon" onclick="explorerGoBack()" title="Atrás">
+        <button class="ui-button icon" onclick="explorerGoBack(event)" title="Atrás">
             <img src="/assets/ui/left-arrow.png" alt="Flecha izquierda" title="Atrás">
         </button>
-        <button class="ui-button icon" onclick="explorerGoForward()" title="Siguiente">
+        <button class="ui-button icon" onclick="explorerGoForward(event)" title="Siguiente">
             <img src="/assets/ui/right-arrow.png" alt="Flecha derecha" title="Siguiente">
         </button>
 
@@ -15,14 +15,14 @@
         <div class="explorer-path" id="pathBar">
         </div>
 
-        <button class="ui-button icon" onclick="explorerGoToPath()" title="Recargar vista">
+        <button class="ui-button icon" onclick="explorerGoToPath(event)" title="Recargar vista">
             <img src="/assets/ui/enter.png" alt="Flechas apuntándose una a otra" title="Recargar vista">
         </button>
 
         <div class="toolbar-separator"></div>
 
         <!-- Toggle vista -->
-        <button id="toggle-view" class="ui-button icon" title="Cambiar vista">
+        <button id="toggle-view" class="ui-button icon" title="Cambiar vista" onclick="explorerSwitchView(event)">
             <img src="/assets/ui/grid.png" alt="Cambiar vista" title="Cambiar vista">
         </button>
 

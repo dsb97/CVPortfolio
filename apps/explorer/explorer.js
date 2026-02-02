@@ -1,3 +1,11 @@
+/***********************
+ * Explorer App (multi-window)
+ ***********************/
+
+/* =====================
+   Data
+===================== */
+
 const fsData = [
     {
         contentType: "folder",
@@ -218,54 +226,100 @@ const fsData = [
     }
 ];
 
-let currentPath = [];
-let history = [
-    [...currentPath] // estado inicial (root)
-];
-let historyIndex = 0;
-let currentView = "grid"; // "grid" | "list"
+/* =====================
+   State
+===================== */
+
+// winId -> state
+const explorers = new Map();
+
+/* =====================
+   Helpers
+===================== */
+
+function getWindow(winId) {
+    return document.querySelector(`.window[data-window-id="${winId}"]`);
+}
 
 function getCurrentDirectory(data, path) {
     return path.reduce((dir, name) => {
-        return dir.find(item => item.name === name).content;
+        return dir.find(item => item.name === name)?.content || [];
     }, data);
 }
 
-const items = getCurrentDirectory(fsData, currentPath);
+/* =====================
+   Render
+===================== */
 
-function render(items) {
-    const container = document.getElementById("explorer");
+function render(winId) {
+    const state = explorers.get(winId);
+    const win = getWindow(winId);
+    if (!state || !win) return;
+
+    const container = win.querySelector("#explorer");
+    const items = getCurrentDirectory(fsData, state.currentPath);
+
     container.innerHTML = "";
+    renderPath(winId);
 
-    renderPath();
-
-    if (currentView === "grid") {
+    if (state.currentView === "grid") {
         container.className = "ui-grid";
-        items.forEach(item => container.appendChild(renderGridItem(item)));
+        items.forEach(item =>
+            container.appendChild(renderGridItem(winId, item))
+        );
     } else {
         container.className = "ui-list ui-list-columns";
         container.appendChild(renderListHeader());
-        items.forEach(item => container.appendChild(renderListItem(item)));
+        items.forEach(item =>
+            container.appendChild(renderListItem(winId, item))
+        );
     }
 }
 
-function renderGridItem(item) {
+function renderPath(winId) {
+    const state = explorers.get(winId);
+    const win = getWindow(winId);
+    const pathBar = win.querySelector("#pathBar");
+
+    pathBar.innerHTML = "";
+
+    const root = document.createElement("span");
+    root.textContent = "Disco";
+    root.onclick = () => navigateTo(winId, []);
+    pathBar.appendChild(root);
+
+    state.currentPath.forEach((segment, index) => {
+        const span = document.createElement("span");
+        span.textContent = segment;
+        span.onclick = () =>
+            navigateTo(winId, state.currentPath.slice(0, index + 1));
+        pathBar.appendChild(span);
+    });
+}
+
+/* =====================
+   Items
+===================== */
+
+function renderGridItem(winId, item) {
+    const state = explorers.get(winId);
     const div = document.createElement("div");
-    let title = (item.experience || '') + (item.experience && item.version ? ' - ' : '') + (item.version || '');
-    div.title = title;
+
+    const title =
+        (item.experience || "") +
+        (item.experience && item.version ? " - " : "") +
+        (item.version || "");
+
     div.className = "ui-grid-item";
+    div.title = title;
     div.innerHTML = `
-    <img title='${title}' src="${item.icon}">
-    <span title='${title}'>${item.name}</span>
+    <img src="${item.icon}">
+    <span>${item.name}</span>
   `;
 
     if (item.contentType === "folder") {
-        div.ondblclick = () => {
-            navigateTo([...currentPath, item.name])
-        };
-        // div.onclick = () => {
-        //     div.classList.add('active');
-        // };
+        div.ondblclick = () =>
+            navigateTo(winId, [...state.currentPath, item.name]);
     }
 
     return div;
@@ -282,98 +336,99 @@ function renderListHeader() {
     return li;
 }
 
-function renderListItem(item) {
+function renderListItem(winId, item) {
+    const state = explorers.get(winId);
     const li = document.createElement("li");
 
     li.innerHTML = `
-    <span><img src='${item.icon}' class='ui-small-icon'/>${item.name}</span>
-    <span title='${item.experience}'>${item.experience || "—"}</span>
-    <span title='${item.version}'>${item.version || "—"}</span>
+    <span><img src="${item.icon}" class="ui-small-icon">${item.name}</span>
+    <span>${item.experience || "—"}</span>
+    <span>${item.version || "—"}</span>
   `;
 
     if (item.contentType === "folder") {
-        li.ondblclick = () => {
-            navigateTo([...currentPath, item.name])
-        };
-        // li.onclick = () => {
-        //     li.classList.add('active');
-        // };
+        li.ondblclick = () =>
+            navigateTo(winId, [...state.currentPath, item.name]);
     }
 
     return li;
 }
 
-function navigateTo(newPath) {
-    history = history.slice(0, historyIndex + 1);
-    history.push([...newPath]);
-    historyIndex++;
+/* =====================
+   Navigation
+===================== */
 
-    currentPath = [...newPath];
-    render(getCurrentDirectory(fsData, currentPath));
+function getWindowIdByEvent(e) {
+    return e.target.closest('.window').dataset.windowId;
 }
 
-function switchView() {
-    currentView = currentView == 'grid' ? 'list' : 'grid';
-    document.querySelector('#toggle-view>img').src = `/assets/ui/${currentView}.png`;
-    render(getCurrentDirectory(fsData, currentPath));
+function navigateTo(winId, newPath) {
+    const state = explorers.get(winId);
+
+    state.history = state.history.slice(0, state.historyIndex + 1);
+    state.history.push([...newPath]);
+    state.historyIndex++;
+
+    state.currentPath = [...newPath];
+    render(winId);
 }
 
-function renderPath() {
-    const pathBar = document.getElementById("pathBar");
-    pathBar.innerHTML = "";
+function goBack(e) {
+    let winId = getWindowIdByEvent(e);
+    const state = explorers.get(winId);
+    if (state.historyIndex > 0) {
+        state.historyIndex--;
+        state.currentPath = [...state.history[state.historyIndex]];
+        render(winId);
+    }
+}
 
-    const root = document.createElement("span");
-    root.textContent = "Disco";
-    root.onclick = () => {
-        navigateTo([]);
-    };
-    pathBar.appendChild(root);
+function goForward(e) {
+    let winId = getWindowIdByEvent(e);
+    const state = explorers.get(winId);
+    if (state.historyIndex < state.history.length - 1) {
+        state.historyIndex++;
+        state.currentPath = [...state.history[state.historyIndex]];
+        render(winId);
+    }
+}
 
-    currentPath.forEach((segment, index) => {
-        const span = document.createElement("span");
-        span.textContent = segment;
-        span.onclick = () => {
-            navigateTo(currentPath.slice(0, index + 1));
-        };
+function switchView(e) {
+    let winId = getWindowIdByEvent(e);
+    const state = explorers.get(winId);
+    const win = getWindow(winId);
 
-        pathBar.appendChild(span);
+    state.currentView = state.currentView === "grid" ? "list" : "grid";
+    win.querySelector("#toggle-view img").src =
+        `/assets/ui/${state.currentView}.png`;
+
+    render(winId);
+}
+
+/* =====================
+   Public API
+===================== */
+
+window.explorerInit = (winId) => {
+    explorers.set(winId, {
+        currentPath: [],
+        history: [[]],
+        historyIndex: 0,
+        currentView: "grid"
     });
+
+    render(winId);
+};
+
+//Refactor
+window.explorerDispose = (winId) => {
+    explorers.delete(winId);
+};
+
+window.explorerGoBack = (e) => goBack(e);
+window.explorerGoForward = (e) => goForward(e);
+window.explorerSwitchView = (e) => switchView(e);
+window.explorerGoToPath = (e) => {
+    getWindowIdByEvent(e);
+    render(winId);
 }
-
-function goBack() {
-    if (historyIndex > 0) {
-        historyIndex--;
-        currentPath = [...history[historyIndex]];
-        render(getCurrentDirectory(fsData, currentPath));
-    }
-}
-
-function goForward() {
-    if (historyIndex < history.length - 1) {
-        historyIndex++;
-        currentPath = [...history[historyIndex]];
-        render(getCurrentDirectory(fsData, currentPath));
-    }
-}
-
-function jumpTo(newPath) {
-    currentPath = [...newPath];
-    render(getCurrentDirectory(fsData, currentPath));
-}
-
-document.querySelector('#toggle-view').addEventListener('click', function () {
-    switchView();
-});
-
-window.explorerGoBack = goBack;
-window.explorerGoForward = goForward;
-window.explorerGoToPath = () => {
-    render(getCurrentDirectory(fsData, currentPath));
-}
-
-window.explorerDispose = () => {
-    window.explorerGoBack = undefined;
-    window.explorerGoForward = undefined;
-}
-
-render(getCurrentDirectory(fsData, currentPath));
