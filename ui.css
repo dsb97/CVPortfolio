@@ -159,9 +159,10 @@
 }
 
 .ui-tab {
-  padding: 6px 14px;
+  padding: 4px 14px;
   border-radius: var(--ui-radius-sm);
   cursor: pointer;
+  font-size: var(--ui-font-size);
 }
 
 .ui-tab.active {

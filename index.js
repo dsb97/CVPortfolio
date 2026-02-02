@@ -13,16 +13,12 @@ const appsRegistry = {
   explorer: {
     title: 'Explorador de archivos',
     icon: { name: 'file-manager', pinned: true },
-    singleton: false,
-    size: { width: 575, height: 352 },
-    position: { x: 0, y: 0 }
+    singleton: false
   },
   about: {
     title: 'Acerca de...',
     icon: { name: 'about', pinned: true },
-    singleton: true,
-    size: { width: 525, height: 'auto' },
-    position: { x: 0, y: 0 }
+    singleton: true
   }
 }
 
@@ -52,14 +48,24 @@ function initDock() {
 /**
  * Crea una nueva ventana a partir de la plantilla.
  * options: { title, contentHTML, appId }
+ * height = 352, width = 575
  */
 function createWindow(options = {}) {
-  const { title = "Nueva ventana", contentHTML = "", appId = null, icon = 'folder', height = 352, width = 575 } = options;
+  const {
+    title = "Nueva ventana",
+    contentHTML = "",
+    appId = null,
+    icon = "folder",
+    size = {},
+    position = {}
+  } = options;
+  const { width = 575, height = 352 } = size;
+  const { left = 0, top = 0 } = position;
   const clone = windowTemplate.content.firstElementChild.cloneNode(true);
   const winId = "win-" + windowIdCounter++;
   clone.dataset.windowId = winId;
-  // clone.style.left = 60 + windowIdCounter * 20 + "px";
-  // clone.style.top = 60 + windowIdCounter * 20 + "px";
+  clone.style.left = left + "px";
+  clone.style.top = top + "px";
   clone.style.height = height + (height == 'auto' ? '' : "px");
   clone.style.width = width + (width == 'auto' ? '' : "px");
 
@@ -75,29 +81,6 @@ function createWindow(options = {}) {
   focusWindow(clone);
 
   const info = windowsById[winId];
-  // const btn = document.createElement("div");
-  // btn.dataset.title = clone.querySelector(".window-title").textContent || "Ventana";
-  // btn.className = "dock-app-icon";
-  // if (info.icon.pinned)
-  //   btn.classList.add('pinned')
-  // btn.innerHTML = `<img src="./assets/icons/${info.icon.name || "folder"}.png" alt="${info.title}">`;
-  // btn.dataset.windowId = winId;
-  // btn.addEventListener("click", (e) => {
-  //   e.stopPropagation();
-  //   const appId = info.appId;
-  //   const wins = windowsByApp[appId] || [];
-  //   if (wins.length === 0) {
-  //     openApp(appId);
-  //   }
-  //   else if (wins.length === 1) {
-  //     restoreWindow(wins[0]);
-  //   }
-  //   else {
-  //     createDockMenu(appId, btn);
-  //   }
-  // });
-  // dockIcons.appendChild(btn);
-  // info.dockButton = btn;
   if (!appsRegistry[appId]?.icon?.pinned) {
     const btn = document.createElement("div");
     btn.className = "dock-app-icon";
@@ -304,7 +287,7 @@ async function loadHTML(appId) {
   return await res.text();
 }
 
-function loadAppScript(appId, winId) {
+function loadAppScript(appId, winId, options = {}) {
   // const url = `/apps/${appId}/${appId}.js`;
 
   // if (document.querySelector(`script[data-app="${url}"]`)) {
@@ -321,49 +304,49 @@ function loadAppScript(appId, winId) {
   // document.body.appendChild(script);
 
 
-    const url = `/apps/${appId}/${appId}.js`;
-    const initName = `${appId}Init`;
+  const url = `/apps/${appId}/${appId}.js`;
+  const initName = `${appId}Init`;
 
-    // 1) Si ya existe la promesa, encadenamos la llamada al init cuando termine.
-    if (appScriptLoaders.has(url)) {
-      return appScriptLoaders.get(url).then(() => {
-        if (typeof window[initName] !== "function") {
-          throw new Error(`El script cargó pero no existe window.${initName}`);
-        }
-        return window[initName](winId);
-      });
+  // 1) Si ya existe la promesa, encadenamos la llamada al init cuando termine.
+  if (appScriptLoaders.has(url)) {
+    return appScriptLoaders.get(url).then(() => {
+      if (typeof window[initName] !== "function") {
+        throw new Error(`El script cargó pero no existe window.${initName}`);
+      }
+      return window[initName](winId, options);
+    });
+  }
+
+  // 2) Crear una promesa nueva y guardarla *antes* de empezar a cargar (clave).
+  const p = new Promise((resolve, reject) => {
+    // Si ya hay script tag (por ejemplo insertado por otra parte), reutilízalo.
+    let script = document.querySelector(`script[data-app="${url}"]`);
+
+    if (!script) {
+      script = document.createElement("script");
+      script.src = url;
+      script.type = "module";
+      script.dataset.app = url;
+      document.body.appendChild(script);
     }
 
-    // 2) Crear una promesa nueva y guardarla *antes* de empezar a cargar (clave).
-    const p = new Promise((resolve, reject) => {
-      // Si ya hay script tag (por ejemplo insertado por otra parte), reutilízalo.
-      let script = document.querySelector(`script[data-app="${url}"]`);
+    script.addEventListener("load", () => resolve(), { once: true });
+    script.addEventListener("error", () => reject(new Error(`No se pudo cargar ${url}`)), { once: true });
+  });
 
-      if (!script) {
-        script = document.createElement("script");
-        script.src = url;
-        script.type = "module";
-        script.dataset.app = url;
-        document.body.appendChild(script);
-      }
+  appScriptLoaders.set(url, p);
 
-      script.addEventListener("load", () => resolve(), { once: true });
-      script.addEventListener("error", () => reject(new Error(`No se pudo cargar ${url}`)), { once: true });
-    });
-
-    appScriptLoaders.set(url, p);
-
-    // 3) Cuando la carga termine, llamamos al init (y propagamos errores).
-    return p.then(() => {
-      if (typeof window[initName] !== "function") {
-        throw new Error(`Cargado ${url} pero window.${initName} no está definido`);
-      }
-      return window[initName](winId);
-    }).catch(err => {
-      // si falla, quitamos la promesa para permitir reintentos
-      appScriptLoaders.delete(url);
-      throw err;
-    });
+  // 3) Cuando la carga termine, llamamos al init (y propagamos errores).
+  return p.then(() => {
+    if (typeof window[initName] !== "function") {
+      throw new Error(`Cargado ${url} pero window.${initName} no está definido`);
+    }
+    return window[initName](winId, options);
+  }).catch(err => {
+    // si falla, quitamos la promesa para permitir reintentos
+    appScriptLoaders.delete(url);
+    throw err;
+  });
 }
 
 
@@ -404,7 +387,7 @@ function unloadAppStyle(appId) {
 /**
  * Abrir app (crea una nueva ventana asociada a un appId)
  */
-async function openApp(appId) {
+async function openApp(appId, options) {
   const app = appsRegistry[appId];
   if (!app) return;
   // Inicializar lista
@@ -423,13 +406,13 @@ async function openApp(appId) {
     contentHTML,
     appId,
     icon: app.icon,
-    width: app.size.width,
-    height: app.size.height
+    size: options.size,
+    position: options.position
   });
   const winId = win.dataset.windowId;
   windowsByApp[appId].push(winId);
   loadAppStyle(appId);
-  loadAppScript(appId, winId);
+  loadAppScript(appId, winId, options);
 }
 
 // Click en iconos de escritorio
@@ -487,8 +470,24 @@ document.querySelectorAll(".dock-app-icon").forEach(icon => {
 // openExplorer();
 // openAbout();
 
-openApp('explorer');
-openApp('explorer');
-openApp('about');
+openApp('explorer', {
+  size: { width: 575, height: 352 },
+  position: { left: 627, top: 369 },
+  path: ['Lenguajes']
+});
+openApp('explorer', {
+  size: { width: 575, height: 352 },
+  position: { left: 627, top: 9 },
+  path: ['Frameworks']
+});
+openApp('explorer', {
+  size: { width: 575, height: 352 },
+  position: { left: 45, top: 369 },
+  path: ['Microsoft']
+});
+openApp('about', {
+  size: { width: 525, height: 'auto' },
+  position: { left: 94, top: 9 },
+});
 
 initDock();

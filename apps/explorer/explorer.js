@@ -11,6 +11,7 @@ const fsData = [
         contentType: "folder",
         name: "Frameworks",
         icon: "/assets/icons/frameworks.png",
+        defaultView: 'list',
         content: [
             {
                 contentType: "folder",
@@ -74,6 +75,7 @@ const fsData = [
         contentType: "folder",
         name: "Lenguajes",
         icon: "/assets/icons/languages.png",
+        defaultView: 'grid',
         content: [
             {
                 contentType: "file",
@@ -137,6 +139,7 @@ const fsData = [
         contentType: "folder",
         name: "Microsoft",
         icon: "/assets/icons/microsoft.png",
+        defaultView: 'list',
         content: [
             {
                 contentType: "folder",
@@ -247,6 +250,16 @@ function getCurrentDirectory(data, path) {
     }, data);
 }
 
+function getFolderByPath(data, path) {
+    return path.reduce((dir, name) => {
+        // dir es siempre un objeto { name, content?, ... }
+        // o al inicio { content: data }
+        return dir.content?.find(item => item.name === name) || null;
+    }, { content: data });
+}
+
+
+
 /* =====================
    Render
 ===================== */
@@ -274,6 +287,8 @@ function render(winId) {
             container.appendChild(renderListItem(winId, item))
         );
     }
+
+    win.querySelector('.window-title').textContent = win.querySelector('#pathBar').lastElementChild.textContent;
 }
 
 function renderPath(winId) {
@@ -342,8 +357,8 @@ function renderListItem(winId, item) {
 
     li.innerHTML = `
     <span><img src="${item.icon}" class="ui-small-icon">${item.name}</span>
-    <span>${item.experience || "—"}</span>
-    <span>${item.version || "—"}</span>
+    <span title='${item.experience || ""}'$>${item.experience || "—"}</span>
+    <span title='${item.version || ""}'>${item.version || "—"}</span>
   `;
 
     if (item.contentType === "folder") {
@@ -409,20 +424,33 @@ function switchView(e) {
    Public API
 ===================== */
 
-window.explorerInit = (winId) => {
+window.explorerInit = (winId, options) => {
+    const initialPath = options.path ? options.path : [];
+    const folder = getFolderByPath(fsData, initialPath);
+
     explorers.set(winId, {
-        currentPath: [],
-        history: [[]],
+        currentPath: [...initialPath],
+        history: [[...initialPath]],
         historyIndex: 0,
-        currentView: "grid"
+        currentView: folder?.defaultView || "grid"
     });
+
+    const win = getWindow(winId);
+    win.querySelector("#toggle-view img").src =
+        `/assets/ui/${folder?.defaultView || "grid"}.png`;
 
     render(winId);
 };
 
-//Refactor
+
 window.explorerDispose = (winId) => {
     explorers.delete(winId);
+    if (explorers.size == 0) {
+        window.explorerGoBack = undefined;
+        window.explorerGoForward = undefined;
+        window.explorerSwitchView = undefined;
+        window.explorerGoToPath = undefined;
+    }
 };
 
 window.explorerGoBack = (e) => goBack(e);
