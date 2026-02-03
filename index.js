@@ -19,6 +19,11 @@ const appsRegistry = {
     title: 'Acerca de...',
     icon: { name: 'about', pinned: true },
     singleton: true
+  },
+  terminal: {
+    title: 'Terminal',
+    icon: { name: 'terminal', pinned: true },
+    singleton: true
   }
 }
 
@@ -30,10 +35,11 @@ function initDock() {
     btn.dataset.appId = appId;
     btn.dataset.title = app.title;
     btn.innerHTML = `
-<img src="./assets/icons/${app.icon.name}.png" alt="${app.title}">
+<img src="/assets/icons/${app.icon.name}.png" alt="${app.title}">
    `;
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
+      debugger;
       const wins = windowsByApp[appId] || [];
       if (wins.length === 0) {
         openApp(appId);
@@ -288,22 +294,6 @@ async function loadHTML(appId) {
 }
 
 function loadAppScript(appId, winId, options = {}) {
-  // const url = `/apps/${appId}/${appId}.js`;
-
-  // if (document.querySelector(`script[data-app="${url}"]`)) {
-  //   window[`${appId}Init`](winId);
-  //   return; // ya está cargado
-  // }
-  // const script = document.createElement("script");
-  // script.src = url;
-  // script.type = "module";
-  // script.dataset.app = url;
-  // script.onload = () => {
-  //   window[`${appId}Init`](winId);
-  // }
-  // document.body.appendChild(script);
-
-
   const url = `/apps/${appId}/${appId}.js`;
   const initName = `${appId}Init`;
 
@@ -431,45 +421,6 @@ document.querySelectorAll(".dock-app-icon").forEach(icon => {
   });
 });
 
-
-// // Crear una ventana inicial de ejemplo
-// async function openExplorer() {
-//   let newWindow = {
-//     icon: {
-//       name: "file-manager",
-//       pinned: true
-//     },
-//     title: "Explorador de archivos",
-//     contentHTML: '',
-//     appId: "explorer"
-//   }
-//   newWindow.contentHTML = await loadHTML(newWindow.appId);
-//   createWindow(newWindow);
-//   loadAppStyle(newWindow.appId);
-//   loadAppScript(newWindow.appId);
-// };
-
-// async function openAbout() {
-//   let newWindow = {
-//     icon: {
-//       name: 'about',
-//       pinned: true
-//     },
-//     title: "Acerca de...",
-//     contentHTML: '',
-//     appId: "about",
-//     height: 'auto',
-//     width: 525
-//   }
-//   newWindow.contentHTML = await loadHTML(newWindow.appId);
-//   createWindow(newWindow);
-//   loadAppStyle(newWindow.appId);
-//   loadAppScript(newWindow.appId);
-// };
-
-// openExplorer();
-// openAbout();
-
 openApp('explorer', {
   size: { width: 575, height: 352 },
   position: { left: 627, top: 369 },
@@ -481,9 +432,13 @@ openApp('explorer', {
   path: ['Frameworks']
 });
 openApp('explorer', {
-  size: { width: 575, height: 352 },
+  size: { width: 575, height: 278 },
   position: { left: 45, top: 369 },
   path: ['Microsoft']
+});
+openApp('terminal', {
+  size: { width: 350, height: 200 },
+  position: { left: 1211, top: 9 },
 });
 openApp('about', {
   size: { width: 525, height: 'auto' },

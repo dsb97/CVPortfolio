@@ -15,7 +15,6 @@ function aboutChangeTab(tabId) {
             <ul class="ui-list about-specs">
                 <li>Desarrollador full-stack</li>
                 <li><strong>Stack principal</strong> .NET (Desktop/Web)</li>
-                <li><strong>Experiencia</strong> ${(new Date().getFullYear() - 2018)} años desarrollando soluciones reales</li>
                 <li><strong>Ubicación</strong> Madrid</li>
             </ul>
 
@@ -59,6 +58,79 @@ function aboutChangeTab(tabId) {
             </ul>`;
             className = 'contact-layout';
             break;
+        case 'experience':
+            const totalYears = (new Date().getFullYear() - 2018) - 1;
+            const indraYears = 3;
+            const nttYears = totalYears - indraYears;
+
+            html = `
+            <div class="experience-layout">
+            
+            <div class="experience-icon">
+                <img src="/assets/icons/disk.png" alt="Experiencia">
+                <span>${totalYears} años</span>
+            </div>
+
+            <div class="experience-info">
+                <h2>Experiencia profesional</h2>
+
+                <div class="experience-bar">
+                <div
+                    class="experience-segment indra"
+                    style="width: ${(indraYears / totalYears) * 100}%"
+                ></div>
+                <div
+                    class="experience-segment ntt"
+                    style="width: ${(nttYears / totalYears) * 100}%"
+                ></div>
+                </div>
+
+                <div class="experience-legend-inline">
+                <div class="legend-item">
+                    <span class="legend-color indra"></span>
+                    <span>Indra</span>
+                    <span class="legend-value">${indraYears} años</span>
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-color ntt"></span>
+                    <span>NTT Data</span>
+                    <span class="legend-value">${nttYears} años</span>
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-color total"></span>
+                    <span>Total</span>
+                    <span class="legend-value">${totalYears} años</span>
+                </div>
+                </div>
+            </div>
+
+            </div>
+        `;
+            className = '';
+            break;
+        case 'diplomas':
+            html = `
+            <div class="education-scroll">
+
+            <div class="education-item">
+                <img src="/assets/icons/dam.png" alt="CFGS DAM">
+                <strong>CFGS Desarrollo de Aplicaciones Multiplataforma</strong>
+                <span>2016 - 2018</span>
+            </div>
+
+            <div class="education-item">
+                <img src="/assets/icons/daw.png" alt="CFGS DAW">
+                <strong>CFGS Desarrollo de Aplicaciones Web</strong>
+                <span>2021 - 2022</span>
+            </div>
+
+            </div>
+        `;
+            className = '';
+            break;
+
     }
     const contentElement = document.querySelector('#content');
     contentElement.innerHTML = html;
