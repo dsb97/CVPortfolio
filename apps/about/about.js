@@ -20,8 +20,8 @@ function aboutChangeTab(winId, tabId) {
             </ul>
 
             <div class="about-actions">
-                <button class="ui-button">Cambiar idioma...</button>
-                <button class="ui-button">Actualizar sistema...</button>
+                <button class="ui-button">Cambiar idioma</button>
+                <button class="ui-button" onclick = "window.open('/assets/CV.pdf', '_blank')">Descargar este CV...</button>
             </div>
             </div>`;
             className = 'about-content';
@@ -42,19 +42,19 @@ function aboutChangeTab(winId, tabId) {
             <ul class="ui-list contact-list">
             <li>
                 <span>Correo electrónico</span>
-                <button class="ui-button" onclick="aboutContactByMail()">Enviar email</button>
+                <button class="ui-button" onclick="window.location.href = 'mailto:davidsanchezbarragan@gmail.com'">Enviar email</button>
             </li>
             <li>
                 <span>LinkedIn</span>
-                <button class="ui-button">Ver perfil</button>
+                <button class="ui-button" onclick="window.open('https://www.linkedin.com/in/dsanchezb/', '_blank')">Ver perfil</button>
             </li>
             <li>
                 <span>X (Twitter)</span>
-                <button class="ui-button">Visitar</button>
+                <button class="ui-button" onclick="window.open('https://x.com/davdevdiv_', '_blank')">Visitar</button>
             </li>
             <li>
                 <span>GitHub</span>
-                <button class="ui-button">Ver repositorios</button>
+                <button class="ui-button" onclick="window.open('https://github.com/dsb97', '_blank')">Ver repositorios</button>
             </li>
             </ul>`;
             className = 'contact-layout';
@@ -145,10 +145,6 @@ function aboutChangeTab(winId, tabId) {
 
 }
 
-function aboutContactByMail() {
-    window.location.href = "mailto:davidsanchezbarragan@gmail.com";
-}
-
 window.aboutInit = (winId, options) => {
     aboutChangeTab(winId, 'overview');
     let win = window.getWindow(winId);
@@ -159,8 +155,6 @@ window.aboutInit = (winId, options) => {
     });
 
 }
-
-window.aboutContactByMail = aboutContactByMail;
 
 window.aboutDispose = () => {
 

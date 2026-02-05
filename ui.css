@@ -64,7 +64,6 @@
   border-radius: var(--ui-radius-sm);
   border: 1px solid var(--ui-border);
   background: var(--ui-bg);
-  cursor: pointer;
 }
 
 .ui-button.primary {
@@ -161,7 +160,6 @@
 .ui-tab {
   padding: 4px 14px;
   border-radius: var(--ui-radius-sm);
-  cursor: pointer;
   font-size: var(--ui-font-size);
 }
 
