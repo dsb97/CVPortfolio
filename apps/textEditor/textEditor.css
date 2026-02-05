@@ -1,0 +1,101 @@
+.editor-container {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Estilos para textEditor */
+.topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+  z-index: 1;
+}
+
+.separator {
+    width: 1px;
+    height: 24px;
+    background: #ccc;
+}
+
+.layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.editor-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+#editor {
+    background: #fff;
+    padding: 20px;
+    min-height: 100%;
+    max-width: 800px;
+    margin: auto;
+    outline: none;
+}
+
+#editor ul,
+#editor ol {
+  padding-left: 24px;
+  margin-left: 0;  
+}
+
+.sidebar {
+    width: 260px;
+    border-left: 1px solid #ddd;
+    padding: 16px;
+    overflow: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.panel {
+    position: relative;
+    padding-top: 40px; /* espacio para el botón X */
+}
+
+
+.panel h3 {
+    margin-top: 0;
+}
+
+.close-panel {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+}
+
+.close-panel:hover {
+    color: red;
+}
+
+.select,
+.input {
+    width: 100%;
+    margin-top: 4px;
+}
+
+.row {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.row button {
+    flex: 1;
+}

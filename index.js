@@ -22,6 +22,12 @@ const appsRegistry = {
     singleton: true,
     size: { width: 525, height: 'auto' }
   },
+  textEditor: {
+    title: 'Editor de texto',
+    icon: { name: 'text-edit', pinned: true },
+    singleton: false,
+    size: { width: 695, height: 503 }
+  },
   terminal: {
     title: 'Terminal',
     icon: { name: 'terminal', pinned: true },
@@ -451,7 +457,11 @@ if (window.screen.width < 1920) {
     size: { width: 525, height: 'auto' },
     position: { left: 94, top: 9 },
   });
-
+  openApp('textEditor', {
+    position: {left: 1211, top: 218},
+    firstLoad: true,
+    title: 'Responsabilidades en proyectos.ted'
+  });
 }
 
 initDock();
@@ -459,6 +469,3 @@ initDock();
 window.getWindow = (winId) => {
   return document.querySelector(`.window[data-window-id="${winId}"]`);
 }
-
-// alert(window.screen.availHeight);
-// alert(window.screen.availWidth);

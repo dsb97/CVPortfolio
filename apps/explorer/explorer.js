@@ -411,7 +411,7 @@ function switchView(e) {
 
     state.currentView = state.currentView === "grid" ? "list" : "grid";
     win.querySelector("#toggle-view img").src =
-        `/assets/ui/${state.currentView}.png`;
+        `/assets/ui/${state.currentView === "grid" ? "list" : "grid"}.png`;
 
     render(winId);
 }
@@ -433,7 +433,7 @@ window.explorerInit = (winId, options) => {
 
     const win = window.getWindow(winId);
     win.querySelector("#toggle-view img").src =
-        `/assets/ui/${folder?.defaultView || "grid"}.png`;
+        `/assets/ui/${folder?.defaultView || "list"}.png`;
 
     render(winId);
 };

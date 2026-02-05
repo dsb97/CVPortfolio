@@ -21,7 +21,7 @@ function aboutChangeTab(winId, tabId) {
 
             <div class="about-actions">
                 <button class="ui-button">Cambiar idioma</button>
-                <button class="ui-button" onclick = "window.open('/assets/CV.pdf', '_blank')">Descargar este CV...</button>
+                <button class="ui-button primary" onclick = "window.open('/assets/CV.pdf', '_blank')">Descargar este CV...</button>
             </div>
             </div>`;
             className = 'about-content';

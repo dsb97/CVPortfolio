@@ -1,0 +1,116 @@
+<div class="editor-container">
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <button class="ui-button toolbar" id="copyBtn">
+            <img src="/assets/ui/copy.png" alt="">
+            Copiar
+        </button>
+        <button class="ui-button toolbar" id="cutBtn">
+            <img src="/assets/ui/cut.png" alt="">
+            Cortar
+        </button>
+        <button class="ui-button toolbar" id="pasteBtn">
+            <img src="/assets/ui/paste.png" alt="">
+            Pegar
+        </button>
+
+
+        <div class="separator"></div>
+
+        <button class="ui-button toolbar" id="textBtn">
+            <img src="/assets/ui/text.png" alt="">
+            Texto
+        </button>
+        <button class="ui-button toolbar" id="mediaBtn">
+            <img src="/assets/ui/picture.png" alt="">Imágenes
+        </button>
+
+        <div class="separator"></div>
+
+        <button class="ui-button toolbar" id="saveBtn">
+            <img src="/assets/ui/save.png" alt="">
+            Guardar
+        </button>
+        <button class="ui-button toolbar" id="openBtn">
+            <img src="/assets/ui/open-document.png" alt="">
+            Abrir...</button>
+        <input class='ui-input' type="file" accept=".ted,.html" id="openFile" hidden />
+    </header>
+
+    <main class="layout">
+        <!-- EDITOR -->
+        <section class="editor-content">
+            <div id="editor" contenteditable="true">
+                <p></p>
+            </div>
+        </section>
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="sidebar hidden">
+            <!-- Text panel -->
+            <div id="textPanel" class="panel hidden">
+                <button class="close-panel">×</button>
+                <h3>Texto</h3>
+
+                <div class="row">
+                    <button class="ui-button" id="boldBtn"><strong>B</strong></button>
+                    <button class="ui-button" id="italicBtn"><em>I</em></button>
+                    <button class="ui-button" id="underlineBtn"><u>U</u></button>
+                </div>
+
+                <label class='ui-label'>Estilo</label>
+                <select class='ui-select' id="styleSelect">
+                    <option value="p">Párrafo</option>
+                    <option value="h1">Título</option>
+                    <option value="h2">Encabezado 1</option>
+                    <option value="h3">Encabezado 2</option>
+                    <option value="h4">Encabezado 3</option>
+                    <option value="h5">Encabezado 4</option>
+                </select>
+
+                <label class='ui-label'>Fuente</label>
+                <select class="ui-select" id="fontSelect">
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="Helvetica, sans-serif">Helvetica</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="Verdana, sans-serif">Verdana</option>
+                    <option value="'Varela Round', sans-serif" selected>Varela Round</option>
+                </select>
+
+
+                <label class="ui-label">Tamaño</label>
+                <input class="ui-input" type="number" id="fontSize" value="16" />
+
+                <label class="ui-label">Listas</label>
+                <div class="row">
+                    <button class="ui-button" data-list="ul">• Lista</button>
+                    <button class="ui-button" data-list="ol">1. Lista</button>
+                </div>
+
+                <label class="ui-label">Alineación</label>
+                <div class="row">
+                    <button class="ui-button" data-align="left">
+                        <img src="/assets/ui/left-align.png" alt="">
+                    </button>
+                    <button class="ui-button" data-align="center">
+                        <img src="/assets/ui/center-align.png" alt="">
+                    </button>
+                    <button class="ui-button" data-align="right">
+                        <img src="/assets/ui/right-align.png" alt="">
+                    </button>
+                </div>
+            </div>
+
+            <div id="mediaPanel" class="panel hidden">
+                <button class="close-panel">×</button>
+                <h3>Imágenes</h3>
+                <input class="ui-input" type="file" id="imageInput" accept="image/*" hidden />
+                <label for="imageInput" class="ui-button">
+                    Selecciona una imagen...
+                </label>
+            </div>
+        </aside>
+    </main>
+</div>

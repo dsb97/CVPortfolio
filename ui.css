@@ -5,6 +5,7 @@
 :root {
   /* Colors */
   --ui-bg: #ffffff;
+  --ui-bg-hover: #e4e4e4;
   --ui-bg-secondary: #f3f3f3;
   --ui-border: #dcdcdc;
 
@@ -22,7 +23,17 @@
   --ui-shadow: 0 8px 24px rgba(0, 0, 0, .12);
 
   --ui-font-size: 12px;
+
+  --ui-font-family: "Varela Round", sans-serif;
 }
+
+.ui-label {
+  font-size: 12px;
+  margin-top: 12px;
+  display: block;
+  font-family: var(--ui-font-family);
+}
+
 
 
 /* ===============================
@@ -37,6 +48,7 @@
   border-radius: var(--ui-radius-sm);
   border: 1px solid var(--ui-border);
   background: var(--ui-bg);
+  font-family: var(--ui-font-family);
 }
 
 .ui-input[type="number"] {
@@ -45,6 +57,7 @@
 
 .ui-select {
   padding: 0px 2px 0px 12px;
+  font-family: var(--ui-font-family);
 }
 
 .ui-input:focus,
@@ -58,12 +71,53 @@
    =============================== */
 
 .ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: var(--ui-font-size);
   height: 26px;
-  padding: 0px 16px;
+  padding: 0 16px;
   border-radius: var(--ui-radius-sm);
   border: 1px solid var(--ui-border);
   background: var(--ui-bg);
+  gap: 6px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  font-family: var(--ui-font-family);
+}
+
+.ui-button img {
+  display: inline-block;
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+}
+
+.ui-button.toolbar {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: auto;
+  padding: 4px 8px;
+}
+
+.ui-button.toolbar img {
+  height: 16px;
+  width: 16px;
+}
+
+label.ui-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  font-family: var(--ui-font-family);
+}
+
+.ui-button:hover {
+  background: var(--ui-bg-hover);
 }
 
 .ui-button.primary {
@@ -86,11 +140,13 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: var(--ui-font-family);
 }
 
 .ui-check input,
 .ui-radio input {
   accent-color: var(--ui-primary);
+  font-family: var(--ui-font-family);
 }
 
 /* ===============================
@@ -142,6 +198,7 @@
 .ui-slider {
   width: 100%;
   accent-color: var(--ui-primary);
+  font-family: var(--ui-font-family);
 }
 
 /* ===============================
@@ -155,12 +212,14 @@
   background: var(--ui-bg-secondary);
   padding: 4px;
   border-radius: var(--ui-radius);
+  font-family: var(--ui-font-family);
 }
 
 .ui-tab {
   padding: 4px 14px;
   border-radius: var(--ui-radius-sm);
   font-size: var(--ui-font-size);
+  font-family: var(--ui-font-family);
 }
 
 .ui-tab.active {
@@ -178,6 +237,7 @@
   border-radius: var(--ui-radius);
   box-shadow: var(--ui-shadow);
   padding: 16px;
+  font-family: var(--ui-font-family);
 }
 
 .ui-list {
@@ -185,11 +245,13 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  font-family: var(--ui-font-family);
 }
 
 .ui-list li {
   padding: 10px;
   border-bottom: 1px solid var(--ui-border);
+  font-family: var(--ui-font-family);
 }
 
 /* ===============================
@@ -200,6 +262,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
   gap: 12px;
+  font-family: var(--ui-font-family);
 }
 
 .ui-grid-item {
@@ -212,6 +275,7 @@
   border-radius: var(--ui-radius-sm);
   text-align: center;
   height: fit-content;
+  font-family: var(--ui-font-family);
 }
 
 .ui-grid-item img {
@@ -223,6 +287,7 @@
   color: var(--ui-text);
   line-height: 1.2;
   word-break: break-word;
+  font-family: var(--ui-font-family);
 }
 
 .ui-grid-item:hover {
@@ -243,6 +308,7 @@
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   gap: 12px;
+  font-family: var(--ui-font-family);
 }
 
 .ui-list-columns li span {
@@ -251,6 +317,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: var(--ui-font-family);
 }
 
 .ui-list-columns li:hover:not(.ui-list-header) {
@@ -265,10 +332,12 @@
   font-weight: 600;
   color: var(--ui-text-muted);
   border-bottom: 1px solid var(--ui-border);
+  font-family: var(--ui-font-family);
 }
 
 .ui-small-icon {
   margin-right: 6px;
   height: 12px;
   width: 12px;
+  font-family: var(--ui-font-family);
 }

@@ -3,8 +3,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 100%;          /* o el alto fijo de la ventana */
-  overflow: hidden;      /* CLAVE */
+  height: 100%;
+  overflow: hidden;
 }
 
 #content {

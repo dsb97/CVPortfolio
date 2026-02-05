@@ -1,8 +1,8 @@
 .explorer-container {
   padding: 12px;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -52,6 +52,7 @@
   border-radius: var(--ui-radius-sm);
   background: var(--ui-bg);
   overflow-x: auto;
+  height: 26px;
 }
 
 .explorer-path span {
