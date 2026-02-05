@@ -68,7 +68,8 @@ function createWindow(options = {}) {
     position = {}
   } = options;
   const { width = 575, height = 352 } = size;
-  const { left = ((window.screen.availWidth / 2) - (width / 2)), top = ((window.screen.availHeight / 2) - (height / 2)) } = position;
+  debugger;
+  const { left = ((window.innerWidth - width) / 2), top = ((window.innerHeight - 352) / 2) } = position;
   const clone = windowTemplate.content.firstElementChild.cloneNode(true);
   const winId = "win-" + windowIdCounter++;
   clone.dataset.windowId = winId;
