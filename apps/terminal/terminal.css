@@ -1,8 +1,8 @@
 .terminal {
   background: #1e1e1e;
-  color: #e6e6e6;
+  color: #8ce01c;
   font-family: Menlo, Monaco, monospace;
-  font-size: 14px;
+  font-size: 12px;
   padding: 12px;
   height: 100%;
   display: flex;
@@ -11,18 +11,17 @@
 }
 
 .terminal-output {
-  flex: 1;
   white-space: pre-wrap;
   overflow-y: auto;
 }
 
 .terminal-input-line {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 }
 
 .terminal-prompt {
-  color: #7dd3fc;
+  color: #8ce10c;
   margin-right: 8px;
 }
 
@@ -34,4 +33,5 @@
   font-family: inherit;
   font-size: inherit;
   flex: 1;
+  margin-top: 12px;
 }

@@ -1,47 +1,54 @@
-const output = document.getElementById("terminal-output");
-const input = document.getElementById("terminal-input");
+window.terminalInit = (winId, options) => {
+    const output = window.getWindow(winId).querySelector("#terminal-output");
+    const input = window.getWindow(winId).querySelector("#terminal-input");
+    const prompt = "david@CV ~ $";
 
-const prompt = "david@CV ~ $";
+    const softSkills = [
+        "Trabajo en equipo",
+        "Meticulosidad",
+        "Comunicación asertiva",
+        "Flexibilidad",
+        "Constancia",
+        "Curiosidad"
+    ];
 
-const softSkills = [
-    "Trabajo en equipo",
-    "Meticulosidad",
-    "Comunicación asertiva",
-    "Flexibilidad",
-    "Constancia",
-    "Curiosidad"
-];
+    input.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter") return;
 
-print("Escribe 'help' para ver los comandos disponibles\n");
+        const command = input.value.trim();
+        print()
+        print(`${prompt} ${command}`);
+        print()
+        handleCommand(command.toLowerCase());
+        input.value = "";
+    });
 
-input.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter") return;
+    function print(text = "") {
+        output.textContent += text + "\n";
+        output.scrollTop = output.scrollHeight;
+    }
 
-    const command = input.value.trim();
-    print(`${prompt} ${command}`);
-    handleCommand(command.toLowerCase());
-    input.value = "";
-});
+    function handleCommand(cmd) {
+        switch (cmd) {
+            case "help":
+                print("clear: limpia la pantalla");
+                print("softskills: muestra las soft skills de David");
+                break;
+            case "softskills":
+                softSkills.forEach(skill => print(skill));
+                break;
+            case 'clear':
+                output.innerHTML = '';
+            case "":
+                break;
 
-function print(text = "") {
-    output.textContent += text + "\n";
-    output.scrollTop = output.scrollHeight;
+            default:
+                print(`comando no encontrado: ${cmd}`);
+        }
+        
+    }
+    print("Escribe 'help' para ver los comandos disponibles\n");
 }
 
-function handleCommand(cmd) {
-    switch (cmd) {
-        case "help":
-            print("softskills  → Muestra las soft skills de David");
-            break;
-
-        case "softskills":
-            softSkills.forEach(skill => print(skill));
-            break;
-
-        case "":
-            break;
-
-        default:
-            print(`command not found: ${cmd}`);
-    }
+window.terminalDispose = () => {
 }

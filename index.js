@@ -13,17 +13,20 @@ const appsRegistry = {
   explorer: {
     title: 'Explorador de archivos',
     icon: { name: 'file-manager', pinned: true },
-    singleton: false
+    singleton: false,
+    size: { width: 575, height: 352 }
   },
   about: {
     title: 'Acerca de...',
     icon: { name: 'about', pinned: true },
-    singleton: true
+    singleton: true,
+    size: { width: 525, height: 'auto' }
   },
   terminal: {
     title: 'Terminal',
     icon: { name: 'terminal', pinned: true },
-    singleton: true
+    singleton: true,
+    size: { width: 350, height: 200 }
   }
 }
 
@@ -39,7 +42,6 @@ function initDock() {
    `;
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      debugger;
       const wins = windowsByApp[appId] || [];
       if (wins.length === 0) {
         openApp(appId);
@@ -66,7 +68,7 @@ function createWindow(options = {}) {
     position = {}
   } = options;
   const { width = 575, height = 352 } = size;
-  const { left = 0, top = 0 } = position;
+  const { left = ((window.screen.availWidth / 2) - (width / 2)), top = ((window.screen.availHeight / 2) - (height / 2)) } = position;
   const clone = windowTemplate.content.firstElementChild.cloneNode(true);
   const winId = "win-" + windowIdCounter++;
   clone.dataset.windowId = winId;
@@ -360,6 +362,7 @@ function unloadAppScript(appId) {
   if (script) {
     script.remove();
   }
+  appScriptLoaders.delete(url);
 }
 
 function unloadAppStyle(appId) {
@@ -377,7 +380,7 @@ function unloadAppStyle(appId) {
 /**
  * Abrir app (crea una nueva ventana asociada a un appId)
  */
-async function openApp(appId, options) {
+async function openApp(appId, options = {}) {
   const app = appsRegistry[appId];
   if (!app) return;
   // Inicializar lista
@@ -396,8 +399,8 @@ async function openApp(appId, options) {
     contentHTML,
     appId,
     icon: app.icon,
-    size: options.size,
-    position: options.position
+    size: options.size ?? appsRegistry[appId].size,
+    position: options.position ?? appsRegistry[appId].position
   });
   const winId = win.dataset.windowId;
   windowsByApp[appId].push(winId);
@@ -405,44 +408,57 @@ async function openApp(appId, options) {
   loadAppScript(appId, winId, options);
 }
 
-// Click en iconos de escritorio
-document.querySelectorAll(".desktop-icon").forEach(icon => {
-  icon.addEventListener("dblclick", () => {
-    const appId = icon.dataset.appId;
-    openApp(appId);
-  });
-});
+// // Click en iconos de escritorio
+// document.querySelectorAll(".desktop-icon").forEach(icon => {
+//   icon.addEventListener("dblclick", () => {
+//     const appId = icon.dataset.appId;
+//     openApp(appId);
+//   });
+// });
 
-// Click en iconos del dock
-document.querySelectorAll(".dock-app-icon").forEach(icon => {
-  icon.addEventListener("click", () => {
-    const appId = icon.dataset.appId;
-    openApp(appId);
+// // Click en iconos del dock
+// document.querySelectorAll(".dock-app-icon").forEach(icon => {
+//   icon.addEventListener("click", () => {
+//     const appId = icon.dataset.appId;
+//     openApp(appId);
+//   });
+// });
+if (window.screen.width < 1920) {
+  openApp('about', {
+    size: { width: 525, height: 'auto' },
   });
-});
+} else {
+  openApp('explorer', {
+    size: { width: 575, height: 352 },
+    position: { left: 627, top: 369 },
+    path: ['Lenguajes']
+  });
+  openApp('explorer', {
+    size: { width: 575, height: 352 },
+    position: { left: 627, top: 9 },
+    path: ['Frameworks']
+  });
+  openApp('explorer', {
+    size: { width: 575, height: 352 },
+    position: { left: 45, top: 369 },
+    path: ['Microsoft']
+  });
+  openApp('terminal', {
+    size: { width: 350, height: 200 },
+    position: { left: 1211, top: 9 },
+  });
+  openApp('about', {
+    size: { width: 525, height: 'auto' },
+    position: { left: 94, top: 9 },
+  });
 
-openApp('explorer', {
-  size: { width: 575, height: 352 },
-  position: { left: 627, top: 369 },
-  path: ['Lenguajes']
-});
-openApp('explorer', {
-  size: { width: 575, height: 352 },
-  position: { left: 627, top: 9 },
-  path: ['Frameworks']
-});
-openApp('explorer', {
-  size: { width: 575, height: 278 },
-  position: { left: 45, top: 369 },
-  path: ['Microsoft']
-});
-openApp('terminal', {
-  size: { width: 350, height: 200 },
-  position: { left: 1211, top: 9 },
-});
-openApp('about', {
-  size: { width: 525, height: 'auto' },
-  position: { left: 94, top: 9 },
-});
+}
 
 initDock();
+
+window.getWindow = (winId) => {
+  return document.querySelector(`.window[data-window-id="${winId}"]`);
+}
+
+// alert(window.screen.availHeight);
+// alert(window.screen.availWidth);

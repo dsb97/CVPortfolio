@@ -240,10 +240,6 @@ const explorers = new Map();
    Helpers
 ===================== */
 
-function getWindow(winId) {
-    return document.querySelector(`.window[data-window-id="${winId}"]`);
-}
-
 function getCurrentDirectory(data, path) {
     return path.reduce((dir, name) => {
         return dir.find(item => item.name === name)?.content || [];
@@ -266,7 +262,7 @@ function getFolderByPath(data, path) {
 
 function render(winId) {
     const state = explorers.get(winId);
-    const win = getWindow(winId);
+    const win = window.getWindow(winId);
     if (!state || !win) return;
 
     const container = win.querySelector("#explorer");
@@ -293,7 +289,7 @@ function render(winId) {
 
 function renderPath(winId) {
     const state = explorers.get(winId);
-    const win = getWindow(winId);
+    const win = window.getWindow(winId);
     const pathBar = win.querySelector("#pathBar");
 
     pathBar.innerHTML = "";
@@ -411,7 +407,7 @@ function goForward(e) {
 function switchView(e) {
     let winId = getWindowIdByEvent(e);
     const state = explorers.get(winId);
-    const win = getWindow(winId);
+    const win = window.getWindow(winId);
 
     state.currentView = state.currentView === "grid" ? "list" : "grid";
     win.querySelector("#toggle-view img").src =
@@ -435,7 +431,7 @@ window.explorerInit = (winId, options) => {
         currentView: folder?.defaultView || "grid"
     });
 
-    const win = getWindow(winId);
+    const win = window.getWindow(winId);
     win.querySelector("#toggle-view img").src =
         `/assets/ui/${folder?.defaultView || "grid"}.png`;
 
@@ -444,13 +440,7 @@ window.explorerInit = (winId, options) => {
 
 
 window.explorerDispose = (winId) => {
-    explorers.delete(winId);
-    if (explorers.size == 0) {
-        window.explorerGoBack = undefined;
-        window.explorerGoForward = undefined;
-        window.explorerSwitchView = undefined;
-        window.explorerGoToPath = undefined;
-    }
+    explorers.clear();
 };
 
 window.explorerGoBack = (e) => goBack(e);

@@ -1,4 +1,5 @@
-function aboutChangeTab(tabId) {
+function aboutChangeTab(winId, tabId) {
+    let win = window.getWindow(winId);
     let html = '';
     let className = '';
     switch (tabId) {
@@ -132,15 +133,15 @@ function aboutChangeTab(tabId) {
             break;
 
     }
-    const contentElement = document.querySelector('#content');
+    const contentElement = win.querySelector('#content');
     contentElement.innerHTML = html;
     contentElement.className = className;
 
-    let tabs = document.querySelector('.about-tabs').querySelectorAll('.ui-tab');
+    let tabs = win.querySelector('.about-tabs').querySelectorAll('.ui-tab');
     tabs.forEach(tab => {
         tab.classList.remove('active');
     });
-    document.querySelector(`#${tabId}`).classList.add('active');
+    win.querySelector(`#${tabId}`).classList.add('active');
 
 }
 
@@ -148,16 +149,20 @@ function aboutContactByMail() {
     window.location.href = "mailto:davidsanchezbarragan@gmail.com";
 }
 
-window.aboutInit = () => {
-    aboutChangeTab('overview');
+window.aboutInit = (winId, options) => {
+    aboutChangeTab(winId, 'overview');
+    let win = window.getWindow(winId);
+    const tabs = win.querySelector('.ui-tabs.about-tabs'); // o el contenedor común
+    tabs.addEventListener('click', (e) => {
+        if (!e.target.id) return;
+        aboutChangeTab(winId, e.target.id);
+    });
+
 }
 
-window.aboutChangeTab = aboutChangeTab;
 window.aboutContactByMail = aboutContactByMail;
 
 window.aboutDispose = () => {
-    window.aboutInit = undefined;
-    window.aboutChangeTab = undefined;
-    window.aboutContactByMail = undefined;
+
 }
 
