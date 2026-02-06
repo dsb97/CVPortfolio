@@ -15,23 +15,42 @@
 <body>
     <div id="desktop">
         <!-- Iconos de escritorio -->
-        <div class="desktop-icon" data-app-id="explorer">
+        <div class="desktop-icon" data-app-id="explorer" ondblclick="
+        openApp('explorer', {
+            path: ['Lenguajes']
+        })">
             <div class="icon-image">
                 <img src="/assets/icons/languages.png" alt="">
             </div>
             <div class="icon-label">Lenguajes</div>
         </div>
-        <div class="desktop-icon" data-app-id="explorer">
+        <div class="desktop-icon" data-app-id="explorer" ondblclick="
+        openApp('explorer', {
+            path: ['Frameworks']
+        })">
             <div class="icon-image">
                 <img src="/assets/icons/frameworks.png" alt="">
             </div>
             <div class="icon-label">Frameworks</div>
         </div>
-        <div class="desktop-icon" data-app-id="explorer">
+        <div class="desktop-icon" data-app-id="explorer" ondblclick="
+        openApp('explorer', {
+            path: ['Microsoft']
+        })">
             <div class="icon-image">
                 <img src="/assets/icons/microsoft.png" alt="">
             </div>
             <div class="icon-label">Microsoft</div>
+        </div>
+        <div class="desktop-icon" data-app-id="explorer" ondblclick="
+            openApp('textEditor', {
+                firstLoad: true,
+                title: 'Responsabilidades en proyectos.ted'
+            });">
+            <div class="icon-image">
+                <img src="/assets/icons/document.png" alt="">
+            </div>
+            <div class="icon-label">Responsabilidades en proyectos.ted</div>
         </div>
     </div>
 

@@ -280,6 +280,19 @@ function createDockMenu(appId, dockIcon) {
   menu.style.bottom = (window.innerHeight - rect.top + 8) + "px";
 }
 
+function updateDockForApp(appId) {
+  const dockIcon = document.querySelector(`.dock-app-icon[data-app-id="${appId}"]`);
+  if (!dockIcon) return;
+
+  const wins = windowsByApp[appId] || [];
+  dockIcon.classList.toggle("has-multiple", wins.length > 1);
+  if (wins.length > 1) {
+    createDockMenu(appId, dockIcon);
+  } else {
+    removeDockMenu();
+  }
+}
+
 function removeDockMenu() {
   document.querySelectorAll('.dock-window-menu').forEach(m => m.remove());
 }
@@ -410,6 +423,7 @@ async function openApp(appId, options = {}) {
   });
   const winId = win.dataset.windowId;
   windowsByApp[appId].push(winId);
+  updateDockForApp(appId);
   loadAppStyle(appId);
   loadAppScript(appId, winId, options);
 }
