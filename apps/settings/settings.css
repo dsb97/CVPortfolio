@@ -1,0 +1,84 @@
+.control-panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 28px 40px;
+  margin-top: 24px;
+}
+
+.control-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background .15s;
+}
+
+.control-item img {
+  width: 40px;
+  height: 40px;
+}
+
+.control-item span {
+  font-size: var(--ui-font-size);
+  color: var(--ui-text);
+}
+
+.control-item:hover {
+  background: #eef6ff;
+}
+
+.settings-app {
+  display: flex;
+  height: 100%;
+  font-family: system-ui;
+}
+
+.settings-content {
+  flex: 1;
+  padding: 24px;
+}
+
+.subtitle {
+  color: var(--ui-text-muted);
+  margin-bottom: 16px;
+}
+
+.wallpaper-grid {
+  border: 1px solid var(--ui-bg-secondary);
+  border-radius: var(--ui-radius);
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 28px;
+}
+
+.wallpaper-item {
+  border-radius: var(--ui-radius);
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--ui-bg-secondary);
+  overflow: hidden;
+  position: relative;
+}
+
+.wallpaper-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+}
+
+.wallpaper-item.selected {
+  outline: 4px solid var(--ui-primary);
+  outline-offset: -4px;
+}
+
+.btn-back {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  transition: background 0.2s;
+  margin-bottom: 8px;
+}

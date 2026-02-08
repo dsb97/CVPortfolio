@@ -1,0 +1,77 @@
+
+
+
+
+
+<main class="settings-content" id="settingsContent">
+  
+</main>
+
+<!-- VISTA PRINCIPAL -->
+<template id="tpl-settings-home">
+  <h2>Ajustes</h2>
+
+  <div class="control-panel-grid">
+    <div class="control-item" data-template="tpl-wallpaper">
+      <img src="/assets/icons/image.png">
+      <span>Fondo de pantalla</span>
+    </div>
+
+    <div class="control-item" data-template="tpl-window-color">
+      <img src="/assets/icons/color.png">
+      <span>Color de ventanas y dock</span>
+    </div>
+
+    <div class="control-item" data-template="tpl-language">
+      <img src="/assets/icons/language.png">
+      <span>Idioma</span>
+    </div>
+
+    <div class="control-item" data-template="tpl-privacy">
+      <img src="/assets/icons/privacy.png">
+      <span>Privacidad</span>
+    </div>
+
+    <div class="control-item" data-template="tpl-location">
+      <img src="/assets/icons/location.png">
+      <span>Ubicación</span>
+    </div>
+
+    <div class="control-item" onclick="openApp('about', {
+      size: { width: 525, height: 'auto' },
+      });">
+      <img src="/assets/icons/about.png">
+      <span>Acerca de...</span>
+    </div>
+  </div>
+</template>
+
+
+<!-- TEMPLATES -->
+<template id="tpl-wallpaper">
+  <h3>Fondo de pantalla</h3>
+  <p class="subtitle">Haz clic en una imagen para usarla como fondo de escritorio.</p>
+
+  <div class="wallpaper-grid" id="wallpaperGrid"></div>
+
+</template>
+
+<template id="tpl-window-color">
+  <h3>Color de las ventanas y dock</h3>
+  <p><img src="/assets/icons/build.png" alt=""> En construcción</p>
+</template>
+
+<template id="tpl-language">
+  <h3>Cambiar idioma</h3>
+  <p><img src="/assets/icons/build.png" alt=""> En construcción</p>
+</template>
+
+<template id="tpl-privacy">
+  <h3>Privacidad</h3>
+  <p><img src="/assets/icons/build.png" alt=""> En construcción</p>
+</template>
+
+<template id="tpl-location">
+  <h3>Ubicación</h3>
+  <p><img src="/assets/icons/build.png" alt=""> En construcción</p>
+</template>

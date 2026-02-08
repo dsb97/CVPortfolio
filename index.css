@@ -18,9 +18,9 @@ body {
 #desktop {
     position: fixed;
     inset: 0;
-    background-image: url('./assets/images/original-gradient.png');
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
     padding: 10px;
 }
 
@@ -204,27 +204,35 @@ body {
 /* Botones redondos pequeños */
 .window-buttons button {
     width: 23px;
-    /* pequeño */
     height: 11px;
     border-radius: 4px;
     border: none;
     padding: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 10px;
 }
 
-/* Colores exactos tipo semáforo */
 .btn-minimize {
     background: #00BF63;
-    /* verde */
+}
+.btn-minimize:hover {
+    background-image: url('/assets/ui/minimize.png');
 }
 
 .btn-maximize {
     background: #FFBC2D;
 }
+.btn-maximize:hover {
+    background-image: url('/assets/ui/restore.png');
+}
 
 .btn-close {
     background: #FF5F57;
 }
-
+.btn-close:hover {
+    background-image: url('/assets/ui/close.png');
+}
 
 
 /* Contenido */
@@ -238,5 +246,5 @@ body {
 
 /* Para modo maximizado */
 .window.maximized {
-    border-radius: 0;
+    border-radius: 0px 0px var(--ui-radius) var(--ui-radius);
 }
