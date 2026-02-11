@@ -14,7 +14,7 @@ function aboutChangeTab(winId, tabId) {
             <p class="about-version">Desarrollador de aplicaciones</p>
 
             <ul class="ui-list about-specs">
-                <li>Desarrollador full-stack</li>
+                <li>Desarrollador Full-Stack</li>
                 <li><strong>Stack principal</strong> .NET (Desktop/Web)</li>
                 <li><strong>Ubicación</strong> Madrid</li>
             </ul>

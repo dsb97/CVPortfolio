@@ -52,7 +52,7 @@ const appsRegistry = {
 function initDock() {
   Object.entries(appsRegistry).forEach(([appId, app]) => {
     if (!app.icon?.pinned) return;
-    
+
     const btn = createDockIcon(appId, app);
     dockIcons.appendChild(btn);
   });
@@ -64,18 +64,18 @@ function createDockIcon(appId, app) {
   btn.dataset.appId = appId;
   btn.dataset.title = app.title;
   btn.innerHTML = `<img src="/assets/icons/${app.icon.name}.png" alt="${app.title}">`;
-  
+
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
     handleDockIconClick(appId, btn);
   });
-  
+
   return btn;
 }
 
 function handleDockIconClick(appId, btn) {
   const wins = windowsByApp[appId] || [];
-  
+
   if (wins.length === 0) {
     openApp(appId);
   } else if (wins.length === 1) {
@@ -87,35 +87,65 @@ function handleDockIconClick(appId, btn) {
 
 function createDockMenu(appId, dockIcon) {
   removeDockMenu();
-  
+
   const menu = document.createElement("div");
   menu.className = "dock-window-menu";
   menu.dataset.appId = appId;
-  
+
   windowsByApp[appId].forEach(winId => {
     const info = windowsById[winId];
     if (!info) return;
-    
+
     const item = createDockMenuItem(winId, info);
     menu.appendChild(item);
   });
-  
+
   document.body.appendChild(menu);
   positionDockMenu(menu, dockIcon);
 }
 
+// function createDockMenuItem(winId, windowInfo) {
+//   const item = document.createElement("div");
+//   item.className = "dock-window-menu-item";
+//   item.textContent = windowInfo.element.querySelector(".window-title").textContent;
+
+//   item.addEventListener("click", () => {
+//     restoreWindow(winId);
+//     removeDockMenu();
+//   });
+
+//   return item;
+// }
+
 function createDockMenuItem(winId, windowInfo) {
   const item = document.createElement("div");
   item.className = "dock-window-menu-item";
-  item.textContent = windowInfo.element.querySelector(".window-title").textContent;
-  
-  item.addEventListener("click", () => {
+
+  const title = document.createElement("span");
+  title.className = "dock-window-title";
+  title.textContent =
+    windowInfo.element.querySelector(".window-title").textContent;
+
+  title.addEventListener("click", () => {
     restoreWindow(winId);
     removeDockMenu();
   });
-  
+
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "dock-window-close";
+  closeBtn.textContent = "×";
+
+  closeBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // 🔥 CLAVE
+    closeWindow(windowInfo.element);
+  });
+
+  item.appendChild(title);
+  item.appendChild(closeBtn);
+
   return item;
 }
+
 
 function positionDockMenu(menu, dockIcon) {
   const rect = dockIcon.getBoundingClientRect();
@@ -128,8 +158,9 @@ function updateDockForApp(appId) {
   if (!dockIcon) return;
 
   const wins = windowsByApp[appId] || [];
+  dockIcon.classList.toggle("open", wins.length > 0);
   dockIcon.classList.toggle("has-multiple", wins.length > 1);
-  
+
   if (wins.length > 1) {
     createDockMenu(appId, dockIcon);
   } else {
@@ -161,30 +192,30 @@ function createWindow(options = {}) {
     size = {},
     position = {}
   } = options;
-  
+
   const { width = 575, height = 352 } = size;
   const calculatedPosition = calculateWindowPosition(width, height, position);
-  
+
   const clone = windowTemplate.content.firstElementChild.cloneNode(true);
   const winId = "win-" + windowIdCounter++;
-  
+
   setupWindowElement(clone, winId, calculatedPosition, { width, height });
   setWindowContent(clone, title, contentHTML);
-  
+
   desktop.appendChild(clone);
-  
+
   registerWindow(winId, clone, appId, icon);
   makeWindowInteractive(clone);
   focusWindow(clone);
   createWindowDockButton(winId, title, icon, appId);
-  
+
   return clone;
 }
 
 function calculateWindowPosition(width, height, position) {
   const numericWidth = width === 'auto' ? 575 : width;
   const numericHeight = height === 'auto' ? 352 : height;
-  
+
   return {
     left: position.left ?? (window.innerWidth - numericWidth) / 2,
     top: position.top ?? (window.innerHeight - numericHeight) / 2
@@ -202,7 +233,7 @@ function setupWindowElement(element, winId, position, size) {
 function setWindowContent(element, title, contentHTML) {
   const titleEl = element.querySelector(".window-title");
   const contentEl = element.querySelector(".window-content");
-  
+
   if (title) titleEl.textContent = title;
   if (contentHTML) contentEl.innerHTML = contentHTML;
 }
@@ -221,16 +252,17 @@ function registerWindow(winId, element, appId, icon) {
 
 function createWindowDockButton(winId, title, icon, appId) {
   const info = windowsById[winId];
-  
+
   if (appsRegistry[appId]?.icon?.pinned) return;
-  
+
   const btn = document.createElement("div");
   btn.className = "dock-app-icon";
+  btn.dataset.appId = appId;
   btn.dataset.windowId = winId;
   btn.dataset.title = title;
   btn.innerHTML = `<img src="./assets/icons/${icon.name || "folder"}.png">`;
   btn.addEventListener("click", () => restoreWindow(winId));
-  
+
   dockIcons.appendChild(btn);
   info.dockButton = btn;
 }
@@ -245,9 +277,9 @@ function focusWindow(winEl) {
 function minimizeWindow(winEl) {
   const id = winEl.dataset.windowId;
   const info = windowsById[id];
-  
+
   if (!info || info.minimized) return;
-  
+
   winEl.style.display = "none";
   info.minimized = true;
 }
@@ -255,7 +287,7 @@ function minimizeWindow(winEl) {
 function restoreWindow(winId) {
   const info = windowsById[winId];
   if (!info) return;
-  
+
   info.minimized = false;
   info.element.style.display = "flex";
   focusWindow(info.element);
@@ -277,14 +309,14 @@ function maximizeWindow(winEl, info) {
   const rect = winEl.getBoundingClientRect();
   const dock = document.getElementById('dock');
   const dockHeight = parseFloat(getComputedStyle(dock).height);
-  
+
   info.prevRect = {
     left: rect.left,
     top: rect.top,
     width: rect.width,
     height: rect.height
   };
-  
+
   winEl.classList.add("maximized");
   winEl.style.left = "0px";
   winEl.style.top = "0px";
@@ -295,14 +327,14 @@ function maximizeWindow(winEl, info) {
 
 function restoreMaximizedWindow(winEl, info) {
   winEl.classList.remove("maximized");
-  
+
   if (info.prevRect) {
     winEl.style.left = info.prevRect.left + "px";
     winEl.style.top = info.prevRect.top + "px";
     winEl.style.width = info.prevRect.width + "px";
     winEl.style.height = info.prevRect.height + "px";
   }
-  
+
   info.maximized = false;
 }
 
@@ -310,17 +342,19 @@ function closeWindow(winEl) {
   const id = winEl.dataset.windowId;
   const info = windowsById[id];
   if (!info) return;
-  
+
   const appId = info.appId;
-  
+
   unregisterWindow(id, appId);
   cleanupAppIfNeeded(appId);
-  
+
   winEl.remove();
-  
+
   if (info.dockButton && !appsRegistry[info.appId]?.icon?.pinned) {
     info.dockButton.remove();
   }
+
+  updateDockForApp(appId);
 }
 
 function unregisterWindow(winId, appId) {
@@ -359,26 +393,26 @@ function setupWindowDrag(winEl) {
 
   titlebar.addEventListener("mousedown", (e) => {
     if (e.target.closest("button")) return;
-    
+
     isDragging = true;
     winEl.classList.remove("maximized");
-    
+
     const rect = winEl.getBoundingClientRect();
     startX = e.clientX;
     startY = e.clientY;
     startLeft = rect.left;
     startTop = rect.top;
-    
+
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   });
 
   function handleMouseMove(e) {
     if (!isDragging) return;
-    
+
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-    
+
     winEl.style.left = startLeft + dx + "px";
     winEl.style.top = startTop + dy + "px";
   }
@@ -418,11 +452,11 @@ function setupWindowButtons(winEl) {
 async function loadHTML(appId) {
   const url = `/apps/${appId}/${appId}.html`;
   const res = await fetch(url);
-  
+
   if (!res.ok) {
     throw new Error("No se pudo cargar " + url);
   }
-  
+
   return await res.text();
 }
 
@@ -479,7 +513,7 @@ function executeScriptInit(initName, winId, options) {
 
 function loadAppStyle(appId) {
   const url = `/apps/${appId}/${appId}.css`;
-  
+
   if (document.querySelector(`link[data-app="${url}"]`)) {
     return; // Ya está cargado
   }
@@ -488,25 +522,25 @@ function loadAppStyle(appId) {
   link.rel = "stylesheet";
   link.href = url;
   link.dataset.app = url;
-  
+
   document.head.appendChild(link);
 }
 
 function unloadAppScript(appId) {
   const url = `/apps/${appId}/${appId}.js`;
   const script = document.querySelector(`script[data-app="${url}"]`);
-  
+
   if (script) {
     script.remove();
   }
-  
+
   appScriptLoaders.delete(url);
 }
 
 function unloadAppStyle(appId) {
   const url = `/apps/${appId}/${appId}.css`;
   const link = document.querySelector(`link[data-app="${url}"]`);
-  
+
   if (link) {
     link.remove();
   }
@@ -519,7 +553,7 @@ function unloadAppStyle(appId) {
 async function openApp(appId, options = {}) {
   const app = appsRegistry[appId];
   if (!app) return;
-  
+
   // Inicializar lista de ventanas para esta app
   if (!windowsByApp[appId]) {
     windowsByApp[appId] = [];
@@ -531,7 +565,7 @@ async function openApp(appId, options = {}) {
     restoreWindow(winId);
     return;
   }
-  
+
   // Cargar HTML y crear ventana
   const contentHTML = await loadHTML(appId);
   const win = createWindow({
@@ -542,10 +576,10 @@ async function openApp(appId, options = {}) {
     size: options.size ?? appsRegistry[appId].size,
     position: options.position ?? appsRegistry[appId].position
   });
-  
+
   const winId = win.dataset.windowId;
   windowsByApp[appId].push(winId);
-  
+
   updateDockForApp(appId);
   loadAppStyle(appId);
   loadAppScript(appId, winId, options);

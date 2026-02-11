@@ -104,14 +104,13 @@ body {
 .dock-app-icon.open::before {
     content: "";
     position: absolute;
-    bottom: -6px;
+    bottom: -3px;
     left: 50%;
     transform: translateX(-50%);
-    width: 4px;
-    height: 4px;
-    background: black;
-    border-radius: 50%;
-    opacity: 0.8;
+    width: 35px;
+    height: 3px;
+    background: white;
+    border-radius: 4px;
 }
 
 /* mostrar */
@@ -144,16 +143,32 @@ body {
 }
 
 .dock-window-menu-item {
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    color: #eee;
-    white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 10px;
+  color: #fff;
+  font-size: var(--ui-font-size);
 }
 
-.dock-window-menu-item:hover {
-    background: rgba(255, 255, 255, 0.12);
+.dock-window-title {
+  flex: 1;
 }
+
+.dock-window-close {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.dock-window-close:hover {
+  color: #ff5f57;
+}
+
+
+
 
 
 /* Ventanas */
@@ -216,6 +231,7 @@ body {
 .btn-minimize {
     background: #00BF63;
 }
+
 .btn-minimize:hover {
     background-image: url('/assets/ui/minimize.png');
 }
@@ -223,6 +239,7 @@ body {
 .btn-maximize {
     background: #FFBC2D;
 }
+
 .btn-maximize:hover {
     background-image: url('/assets/ui/restore.png');
 }
@@ -230,6 +247,7 @@ body {
 .btn-close {
     background: #FF5F57;
 }
+
 .btn-close:hover {
     background-image: url('/assets/ui/close.png');
 }

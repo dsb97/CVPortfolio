@@ -150,6 +150,11 @@ window.textEditorInit = (winId, options) => {
     document.execCommand("cut");
   };
 
+  win.querySelector("#pasteBtn").onclick = () => {
+    editor.focus();
+    document.execCommand("paste");
+  };
+
   const applyStyle = (command) => {
     editor.focus();
     restoreSelection();
