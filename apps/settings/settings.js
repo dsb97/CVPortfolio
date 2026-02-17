@@ -5,20 +5,21 @@ window.settingsInit = (winId, options) => {
   const wallpapers = [
     'Architecture.png',
     'Aurora.png',
-    'Boat.png',
+    'Beach.jpg',
     'Cliff.png',
     'Flower.png',
     'Frogs.png',
     'Gradient.png',
     'Grass.png',
     'Lavender.png',
+    'Lily.jpg',
     'Mountains.png',
     'Nebula.png',
+    'Purple.png',
     'Sand.png',
     'Sky.png',
     'Space.png',
     'Strawberries.png',
-    'Sunset beach.png',
     'Toucan.png',
     'Tree.png',
     'Velvet.png',
@@ -29,7 +30,6 @@ window.settingsInit = (winId, options) => {
   const content = win.querySelector('#settingsContent');
 
   function loadTemplate(id) {
-    debugger;
     content.innerHTML = '';
     if (id != 'tpl-settings-home') {
       const btnBack = document.createElement('button');
@@ -70,7 +70,7 @@ window.settingsInit = (winId, options) => {
       const url = `${pathFull}/${pic}`;
       const div = document.createElement('div');
       div.className = 'wallpaper-item';
-      div.title = `${pic}`;
+      div.title = `${pic.split('.')[0]}`;
       div.innerHTML = `<img src="${pathThumbs}/${pic}" alt="${pic}"/>`;
 
       if (url === savedWallpaper) {
@@ -88,28 +88,18 @@ window.settingsInit = (winId, options) => {
     });
   }
 
+  let templateToLoad = '';
+    switch(options.setting) {
+      case 'language':
+        templateToLoad = 'tpl-language';
+        break;
+      default:
+        templateToLoad = 'tpl-settings-home';
+        break;
+    }
 
-  // win.querySelectorAll('template').forEach(tpl => {
-  //   if(tpl.id == 'tpl-settings-home')
-  //       return;
-  //   const btnBack = document.createElement('button');
-  //   btnBack.className = 'btn-back';
-  //   btnBack.textContent = '← Atrás';
-  //   btnBack.addEventListener('click', (event) => {
-  //     debugger;
-  //     alert('hola')
-  //     loadTemplate('tpl-settings-home');
-  //   });
-
-  //   // insertarlo al principio del template
-  //   tpl.content.prepend(btnBack);
-  // });
-
-
-
-  // Vista inicial
-  loadTemplate('tpl-settings-home');
-
+    loadTemplate(templateToLoad);
+  
 
 }
 

@@ -636,7 +636,7 @@ function loadInitialSetup() {
     openApp('textEditor', {
       position: { left: 1211, top: 218 },
       firstLoad: true,
-      title: 'Responsabilidades en proyectos.ted'
+      title: 'Responsabilidades.ted'
     });
   }
 }
@@ -659,3 +659,4 @@ window.getWindow = (winId) => {
 };
 
 window.applyDesktopWallpaper = applyDesktopWallpaper;
+window.openApp = openApp;

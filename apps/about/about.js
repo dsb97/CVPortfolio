@@ -10,8 +10,8 @@ function aboutChangeTab(winId, tabId) {
             </div>
 
             <div class="about-info">
-            <h1><strong>David</strong> Sánchez Barragán</h1>
-            <p class="about-version">Desarrollador de aplicaciones</p>
+            <h1><strong>David</strong> S. Barragán</h1>
+            <p class="ui-muted about-version">Desarrollador de aplicaciones</p>
 
             <ul class="ui-list about-specs">
                 <li>Desarrollador Full-Stack</li>
@@ -20,7 +20,7 @@ function aboutChangeTab(winId, tabId) {
             </ul>
 
             <div class="about-actions">
-                <button class="ui-button">Cambiar idioma</button>
+                <button class="ui-button" onclick='window.openApp("settings", {"setting":"language"})'>Cambiar idioma</button>
                 <button class="ui-button primary" onclick = "window.open('/assets/CV.pdf', '_blank')">Descargar este CV...</button>
             </div>
             </div>`;
@@ -31,8 +31,8 @@ function aboutChangeTab(winId, tabId) {
             <div class="contact-header">
             <img class="contact-icon" src="/assets/icons/contact.png" alt="">
             <div class="contact-text">
-                <h2>Contacto</h2>
-                <p>
+                <h4>Contacto</h4>
+                <p class="ui-muted">
                 Si este proyecto le ha interesado y le gustaría ver algo similar
                 en su empresa, no dude en contactar conmigo.
                 </p>
@@ -64,16 +64,14 @@ function aboutChangeTab(winId, tabId) {
             const indraYears = 3;
             const nttYears = totalYears - indraYears;
 
-            html = `
-            <div class="experience-layout">
-            
-            <div class="experience-icon">
+            html = `            
+            <div class="experience-icon ui-muted">
                 <img src="/assets/icons/disk.png" alt="Experiencia">
                 <span>${totalYears} años</span>
             </div>
 
             <div class="experience-info">
-                <h2>Experiencia profesional</h2>
+                <h4>Experiencia profesional</h4>
 
                 <div class="experience-bar">
                 <div
@@ -90,48 +88,41 @@ function aboutChangeTab(winId, tabId) {
                 <div class="legend-item">
                     <span class="legend-color indra"></span>
                     <span>Indra</span>
-                    <span class="legend-value">${indraYears} años</span>
+                    <span class="ui-muted">${indraYears} años</span>
                 </div>
 
                 <div class="legend-item">
                     <span class="legend-color ntt"></span>
                     <span>NTT Data</span>
-                    <span class="legend-value">${nttYears} años</span>
+                    <span class="ui-muted">${nttYears} años</span>
                 </div>
 
                 <div class="legend-item">
                     <span class="legend-color total"></span>
                     <span>Total</span>
-                    <span class="legend-value">${totalYears} años</span>
+                    <span class="ui-muted">${totalYears} años</span>
                 </div>
                 </div>
-            </div>
-
             </div>
         `;
-            className = '';
+            className = 'experience-layout';
             break;
         case 'diplomas':
             html = `
-            <div class="education-scroll">
-
             <div class="education-item">
                 <img src="/assets/icons/dam.png" alt="CFGS DAM">
                 <strong>CFGS Desarrollo de Aplicaciones Multiplataforma</strong>
-                <span>2016 - 2018</span>
+                <span class="ui-muted">2016 - 2018</span>
             </div>
 
             <div class="education-item">
                 <img src="/assets/icons/daw.png" alt="CFGS DAW">
                 <strong>CFGS Desarrollo de Aplicaciones Web</strong>
-                <span>2021 - 2022</span>
-            </div>
-
+                <span class="ui-muted">2021 - 2022</span>
             </div>
         `;
-            className = '';
+            className = 'education-scroll';
             break;
-
     }
     const contentElement = win.querySelector('#content');
     contentElement.innerHTML = html;
@@ -148,7 +139,7 @@ function aboutChangeTab(winId, tabId) {
 window.aboutInit = (winId, options) => {
     aboutChangeTab(winId, 'overview');
     let win = window.getWindow(winId);
-    const tabs = win.querySelector('.ui-tabs.about-tabs'); // o el contenedor común
+    const tabs = win.querySelector('.ui-tabs.about-tabs');
     tabs.addEventListener('click', (e) => {
         if (!e.target.id) return;
         aboutChangeTab(winId, e.target.id);

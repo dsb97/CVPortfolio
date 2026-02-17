@@ -20,7 +20,7 @@
 }
 
 .control-item span {
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   color: var(--ui-text);
 }
 
@@ -40,7 +40,6 @@
 }
 
 .subtitle {
-  color: var(--ui-text-muted);
   margin-bottom: 16px;
 }
 

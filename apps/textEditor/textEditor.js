@@ -182,8 +182,8 @@ window.textEditorInit = (winId, options) => {
               SharePoint, incluyendo diseño de procesos, modelado de datos y definición de integraciones con APIs y
               servicios externos.</li>
       </ul>
-      <div><br></div>
       </p>
+      <br>
       <h2>Indra</h2>
       <p>
       <ul>

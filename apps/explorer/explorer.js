@@ -433,7 +433,7 @@ window.explorerInit = (winId, options) => {
 
     const win = window.getWindow(winId);
     win.querySelector("#toggle-view img").src =
-        `/assets/ui/${folder?.defaultView || "list"}.png`;
+        `/assets/ui/${folder?.defaultView === "grid" ? "list" : "grid"}.png`;
 
     render(winId);
 };

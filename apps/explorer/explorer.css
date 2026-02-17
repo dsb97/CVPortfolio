@@ -19,7 +19,7 @@
   align-items: center;
   gap: 6px;
   margin-bottom: 8px;
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
 }
 
 .ui-button.icon {

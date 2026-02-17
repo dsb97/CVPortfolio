@@ -35,7 +35,6 @@
 
 .about-info h1 {
   margin: 0;
-  font-size: 22px;
   font-weight: 400;
 }
 /* .about-info h1 strong{
@@ -46,8 +45,7 @@
 
 .about-version {
   margin: 4px 0 12px;
-  color: var(--ui-text-muted);
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
 }
 
 .about-specs li {
@@ -79,22 +77,18 @@
   width: 50px;
   height: 50px;
   border-radius: 8px;
-  background: var(--ui-bg-secondary);
+  background-color: var(--ui-bg-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.contact-text h2 {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
+.contact-text h4 {
+  margin: 0 0 8px;
 }
 
 .contact-text p {
   margin: 4px 0 0;
-  font-size: var(--ui-font-size);
-  color: var(--ui-text-muted);
   line-height: 1.4;
 }
 
@@ -119,8 +113,6 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  font-size: var(--ui-font-size);
-  color: var(--ui-text-muted);
 }
 
 .experience-icon img {
@@ -129,9 +121,9 @@
 }
 
 /* Zona derecha */
-.experience-info h2 {
+.experience-info h4 {
   margin: 0 0 8px;
-  font-size: 13px;
+  /* font-size: 13px; */
   font-weight: 600;
 }
 
@@ -162,7 +154,7 @@
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
 }
 
 .legend-item {
@@ -187,10 +179,6 @@
 
 .legend-color.total {
   background: #9ca3af;
-}
-
-.legend-value {
-  color: var(--ui-text-muted);
 }
 
 .education-scroll {
@@ -220,11 +208,6 @@
 }
 
 .education-item strong {
-  font-size: 13px;
+  /* font-size: 13px; */
   font-weight: 600;
-}
-
-.education-item span {
-  font-size: var(--ui-font-size);
-  color: var(--ui-text-muted);
 }

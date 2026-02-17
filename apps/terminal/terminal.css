@@ -2,7 +2,7 @@
   background: #1e1e1e;
   color: #8ce01c;
   font-family: Menlo, Monaco, monospace;
-  font-size: 12px;
+  /* font-size: 12px; */
   padding: 12px;
   height: 100%;
   display: flex;
@@ -31,7 +31,7 @@
   outline: none;
   color: inherit;
   font-family: inherit;
-  font-size: inherit;
+  /* font-size: inherit; */
   flex: 1;
   margin-top: 12px;
 }

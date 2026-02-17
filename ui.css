@@ -6,7 +6,7 @@
   /* Colors */
   --ui-bg: #ffffff;
   --ui-bg-hover: #e4e4e4;
-  --ui-bg-secondary: #f3f3f3;
+  --ui-bg-secondary: rgba(0,0,0,0.1);
   --ui-border: #dcdcdc;
 
   --ui-primary: #0067c0;
@@ -23,12 +23,59 @@
   --ui-shadow: 0 8px 24px rgba(0, 0, 0, .12);
 
   --ui-font-size: 12px;
+  --ui-font-size-scale: 1.125;
 
   --ui-font-family: "Varela Round", sans-serif;
 }
 
+* {
+  font-size: var(--ui-font-size);
+}
+
+small {
+  font-size: calc(var(--ui-font-size) / pow(var(--ui-font-size-scale), 1));
+}
+
+h6 {
+  font-size: calc(var(--ui-font-size) * pow(var(--ui-font-size-scale), 1));
+}
+
+h5 {
+  font-size: calc(var(--ui-font-size) * pow(var(--ui-font-size-scale), 2));
+}
+
+h4 {
+  font-size: calc(var(--ui-font-size) * pow(var(--ui-font-size-scale), 3));
+}
+
+h3 {
+  font-size: calc(var(--ui-font-size) * pow(var(--ui-font-size-scale), 4));
+}
+
+h2 {
+  font-size: calc(var(--ui-font-size) * pow(var(--ui-font-size-scale), 5));
+}
+
+h1 {
+  font-size: calc(var(--ui-font-size) * pow(var(--ui-font-size-scale), 6));
+}
+
+strong,
+b,
+i,
+em,
+mark,
+ins {
+  font-size: inherit;
+}
+
+.ui-muted {
+  color: var(--ui-text-muted);
+}
+
+
 .ui-label {
-  font-size: 12px;
+  /* font-size: 12px; */
   margin-top: 12px;
   display: block;
   font-family: var(--ui-font-family);
@@ -41,7 +88,7 @@
    =============================== */
 .ui-input,
 .ui-select {
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   width: 100%;
   height: 26px;
   padding: 0px 12px;
@@ -74,7 +121,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   height: 26px;
   padding: 0 16px;
   border-radius: var(--ui-radius-sm);
@@ -136,7 +183,7 @@ label.ui-button {
 
 .ui-check,
 .ui-radio {
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   display: flex;
   align-items: center;
   gap: 8px;
@@ -206,7 +253,7 @@ label.ui-button {
    =============================== */
 
 .ui-tabs {
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   display: flex;
   gap: 4px;
   background: var(--ui-bg-secondary);
@@ -218,7 +265,7 @@ label.ui-button {
 .ui-tab {
   padding: 4px 14px;
   border-radius: var(--ui-radius-sm);
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   font-family: var(--ui-font-family);
 }
 
@@ -232,7 +279,7 @@ label.ui-button {
    =============================== */
 
 .ui-card {
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   background: var(--ui-bg);
   border-radius: var(--ui-radius);
   box-shadow: var(--ui-shadow);
@@ -241,7 +288,7 @@ label.ui-button {
 }
 
 .ui-list {
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   list-style: none;
   padding: 0;
   margin: 0;
@@ -266,7 +313,7 @@ label.ui-button {
 }
 
 .ui-grid-item {
-  font-size: var(--ui-font-size);
+  /* font-size: var(--ui-font-size); */
   display: flex;
   flex-direction: column;
   align-items: center;
