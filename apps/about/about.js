@@ -71,7 +71,7 @@ function aboutChangeTab(winId, tabId) {
             </div>
 
             <div class="experience-info">
-                <h4>Experiencia profesional</h4>
+                <h4>Experiencia laboral</h4>
 
                 <div class="experience-bar">
                 <div
