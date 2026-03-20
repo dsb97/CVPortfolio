@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" fill="none">
+  <!-- esquina superior derecha -->
+  <line x1="6" y1="2" x2="8" y2="2" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="8" y1="2" x2="8" y2="4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- esquina inferior izquierda -->
+  <line x1="2" y1="6" x2="2" y2="8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="2" y1="8" x2="4" y2="8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

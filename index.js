@@ -2,6 +2,10 @@
 // CONSTANTES Y ELEMENTOS DEL DOM
 // ========================================
 
+String.prototype.capitalize = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 const desktop = document.getElementById("desktop");
 const dockIcons = document.getElementById("dock-icons");
 const windowTemplate = document.getElementById("window-template");
@@ -309,6 +313,8 @@ function maximizeWindow(winEl, info) {
   const rect = winEl.getBoundingClientRect();
   const dock = document.getElementById('dock');
   const dockHeight = parseFloat(getComputedStyle(dock).height);
+  const statusbar = document.getElementById('statusbar');
+  const statusbarHeight = parseFloat(getComputedStyle(statusbar).height);
 
   info.prevRect = {
     left: rect.left,
@@ -318,10 +324,10 @@ function maximizeWindow(winEl, info) {
   };
 
   winEl.classList.add("maximized");
-  winEl.style.left = "0px";
-  winEl.style.top = "0px";
-  winEl.style.width = window.innerWidth + "px";
-  winEl.style.height = (window.innerHeight - dockHeight - 20) + "px";
+  winEl.style.left = "5px";
+  winEl.style.top = `${statusbarHeight + 10}px`;
+  winEl.style.width = window.innerWidth - 10 + "px";
+  winEl.style.height = (window.innerHeight - dockHeight - statusbarHeight - 20) + "px";
   info.maximized = true;
 }
 
@@ -413,8 +419,19 @@ function setupWindowDrag(winEl) {
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
 
-    winEl.style.left = startLeft + dx + "px";
-    winEl.style.top = startTop + dy + "px";
+    let newLeft = startLeft + dx;
+    let newTop = startTop + dy;
+
+    /* límite superior (statusbar) */
+    const statusbar = document.getElementById("statusbar");
+    const topLimit = statusbar ? statusbar.offsetHeight + statusbar.offsetTop : 0;
+
+    if (newTop < topLimit) {
+      newTop = topLimit;
+    }
+
+    winEl.style.left = newLeft + "px";
+    winEl.style.top = newTop + "px";
   }
 
   function handleMouseUp() {
@@ -612,43 +629,118 @@ function loadInitialSetup() {
   } else {
     openApp('explorer', {
       size: { width: 575, height: 352 },
-      position: { left: 627, top: 369 },
+      position: { left: 627, top: 425 },
       path: ['Lenguajes']
     });
     openApp('explorer', {
       size: { width: 575, height: 352 },
-      position: { left: 627, top: 9 },
+      position: { left: 627, top: 65 },
       path: ['Frameworks']
     });
     openApp('explorer', {
       size: { width: 575, height: 352 },
-      position: { left: 45, top: 369 },
+      position: { left: 45, top: 425 },
       path: ['Microsoft']
     });
     openApp('terminal', {
       size: { width: 350, height: 200 },
-      position: { left: 1211, top: 9 },
+      position: { left: 1211, top: 65 },
     });
     openApp('about', {
       size: { width: 525, height: 'auto' },
-      position: { left: 94, top: 9 },
+      position: { left: 95, top: 136 },
     });
     openApp('textEditor', {
-      position: { left: 1211, top: 218 },
+      position: { left: 1211, top: 274 },
       firstLoad: true,
       title: 'Responsabilidades.ted'
     });
   }
 }
 
+function updateClock() {
+  var time = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  var h = time.getHours() >= 10 ? time.getHours() : '0' + time.getHours();
+  var m = time.getMinutes() >= 10 ? time.getMinutes() : '0' + time.getMinutes();
+  hour.innerHTML = `${h}:${m}`;
+  date.innerHTML = time.toLocaleDateString('es-ES', options);
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(getForecast);
+    navigator.geolocation.getCurrentPosition(getCityName);
+  } else {
+    forecastDescription.innerHTML = "Acepte el acceso a la ubicación para obtener la previsión meteorológica."
+  }
+}
+
+function forecastRequest(position) {
+  let url = `https://api.openweathermap.org/data/2.5/weather?lang=es&units=metric&lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=24df251cc48b660b67328e7b827099d5`;
+  var myHeaders = new Headers();
+  var myInit = {
+    method: "GET",
+    headers: myHeaders,
+    mode: "cors",
+    cache: "default",
+  };
+  return new Request(
+    url,
+    myInit
+  );
+}
+
+function cityNameRequest(position) {
+  let url = `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`;
+  var myHeaders = new Headers();
+  var myInit = {
+    method: "GET",
+    headers: myHeaders,
+    mode: "cors",
+    cache: "default",
+  };
+  return new Request(
+    url,
+    myInit
+  );
+}
+
+function getForecast(position) {
+  fetch(forecastRequest(position))
+    .then(function (response) {
+      return response.json();;
+    })
+    .then(processForecastResponse);
+}
+
+function getCityName(position) {
+  fetch(cityNameRequest(position))
+    .then(function (response) {
+      var responseJSON = response.json();
+      return responseJSON;
+    })
+    .then(processCityNameResponse);
+}
+
+function processCityNameResponse(datos) {
+  cityName.innerHTML = datos.address.city;
+}
+
+function processForecastResponse(datos) {
+  forecastIcon.setAttribute('src', '/assets/weather/' + datos.weather[0].icon + '.png');
+  forecastDescription.innerText = `${Math.ceil(datos.main.temp)} °C  ${datos.weather[0].description.toString().capitalize()}`;
+}
+
 // ========================================
 // INICIALIZACIÓN
 // ========================================
-
+getLocation();
 document.addEventListener('DOMContentLoaded', loadDesktopWallpaper);
-
 initDock();
 loadInitialSetup();
+updateClock();
+setInterval(updateClock, 1000);
 
 // ========================================
 // API GLOBAL
