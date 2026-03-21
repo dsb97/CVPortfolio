@@ -237,24 +237,35 @@ h1 {
     background-color: var(--ui-bg-secondary);
 }
 
-.btn-minimize:hover {
+.btn-minimize {
     background-image: url('/assets/ui/minimize.png');
     /* background-color: #00BF63; */
     
 }
 
-.btn-maximize:hover {
+.btn-maximize {
     background-image: url('/assets/ui/maximize.svg');
     /* background-color: #FFBC2D; */
 }
 
-.btn-close {
+.window.active .btn-close {
     background-color: #FF5F57;
+    background-image: url('/assets/ui/close.svg');
+}
+
+.window:not(.active) .btn-close {
+    background-color: var(--ui-bg-secondary);
+    background-image: url('/assets/ui/close.svg');
 }
 
 .btn-close:hover {
-    background-image: url('/assets/ui/close.svg');
+    
 }
+
+.btn-minimize:hover, .btn-maximize:hover {
+    background-color: var(--ui-bg-secondary);
+}
+
 
 
 /* Contenido */

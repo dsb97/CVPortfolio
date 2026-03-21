@@ -648,7 +648,7 @@ function loadInitialSetup() {
     });
     openApp('about', {
       size: { width: 525, height: 'auto' },
-      position: { left: 95, top: 136 },
+      position: { left: 95, top: 125 },
     });
     openApp('textEditor', {
       position: { left: 1211, top: 274 },
