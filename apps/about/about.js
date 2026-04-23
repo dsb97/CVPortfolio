@@ -162,6 +162,12 @@ function aboutChangeTab(winId, tabId) {
                 <strong>CFGS Desarrollo de Aplicaciones Web</strong>
                 <span class="ui-muted">2021 - 2022</span>
             </div>
+
+            <div class="education-item">
+                <img src="/assets/icons/english.png" alt="Inglés">
+                <strong>Key English Test - Cambridge</strong>
+                <span class="ui-muted">2018</span>
+            </div>
         `;
             className = 'education-scroll';
             break;
