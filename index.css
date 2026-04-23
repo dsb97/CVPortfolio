@@ -14,11 +14,6 @@ body {
     font-family: "Varela Round", sans-serif;
 }
 
-h1 {
-
-}
-
-/* Escritorio */
 #desktop {
     position: fixed;
     inset: 0;
@@ -28,7 +23,6 @@ h1 {
     padding: 36px 5px 5px 5px;
 }
 
-/* Iconos de escritorio */
 .desktop-icon {
     width: 80px;
     text-align: center;
@@ -46,7 +40,6 @@ h1 {
     text-shadow: 1px 1px 2px black;
 }
 
-/* Dock inferior */
 #dock {
     position: fixed;
     left: 50%;
@@ -60,7 +53,7 @@ h1 {
     gap: 16px;
     align-items: center;
     color: white;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) saturate(2) brightness(1.5);
 }
 
 #dock-icons,
@@ -148,28 +141,28 @@ h1 {
 }
 
 .dock-window-menu-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 10px;
-  color: #fff;
-  /* font-size: var(--ui-font-size); */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 10px;
+    color: #fff;
+    /* font-size: var(--ui-font-size); */
 }
 
 .dock-window-title {
-  flex: 1;
+    flex: 1;
 }
 
 .dock-window-close {
-  background: none;
-  border: none;
-  color: #aaa;
-  /* font-size: 14px; */
+    background: none;
+    border: none;
+    color: #aaa;
+    /* font-size: 14px; */
 }
 
 .dock-window-close:hover {
-  color: #ff5f57;
+    color: #ff5f57;
 }
 
 
@@ -186,7 +179,7 @@ h1 {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) saturate(2) brightness(1.5);
 }
 
 .window.active {
@@ -206,7 +199,6 @@ h1 {
 
 
 .window-title {
-    /* font-size: 12px; */
     font-weight: 500;
     color: #222;
 }
@@ -214,42 +206,42 @@ h1 {
 /* Botones ventana */
 .window-buttons {
     position: absolute;
-    right: 6px;
+    right: 0px;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     gap: 5px;
+    padding: 6px;
 }
 
 /* Botones redondos pequeños */
 .window-buttons button {
-    width: 23px;
-    height: 11px;
+    width: 24px;
+    height: 12px;
     border-radius: 4px;
     border: none;
     padding: 0;
     background-repeat: no-repeat;
     background-position: center;
     background-size: 10px 10px;
+    transition: background-color 0.12s ease;
 }
 
-.btn-minimize, .btn-maximize {
+.btn-minimize,
+.btn-maximize {
     background-color: var(--ui-bg-secondary);
 }
 
 .btn-minimize {
-    background-image: url('/assets/ui/minimize.png');
-    /* background-color: #00BF63; */
-    
+    background-image: url('/assets/ui/minimize.svg');
 }
 
 .btn-maximize {
     background-image: url('/assets/ui/maximize.svg');
-    /* background-color: #FFBC2D; */
 }
 
 .window.active .btn-close {
-    background-color: #FF5F57;
+    background-color: var(--ui-window-button-close);
     background-image: url('/assets/ui/close.svg');
 }
 
@@ -258,14 +250,29 @@ h1 {
     background-image: url('/assets/ui/close.svg');
 }
 
-.btn-close:hover {
-    
+.window-buttons:hover .btn-minimize {
+    background-color: var(--ui-window-button-minimize);
 }
 
-.btn-minimize:hover, .btn-maximize:hover {
-    background-color: var(--ui-bg-secondary);
+.window-buttons:hover .btn-maximize {
+    background-color: var(--ui-window-button-maximize);
 }
 
+.window-buttons:hover .btn-close {
+    background-color: var(--ui-window-button-close);
+}
+
+.window-buttons .btn-minimize:hover {
+    background-color: var(--ui-window-button-minimize-hover);
+}
+
+.window-buttons .btn-maximize:hover {
+    background-color: var(--ui-window-button-maximize-hover);
+}
+
+.window-buttons .btn-close:hover {
+    background-color: var(--ui-window-button-close-hover);
+}
 
 
 /* Contenido */
@@ -283,14 +290,14 @@ h1 {
 }
 
 .window-resizer {
-  width: 12px;
-  height: 12px;
+    width: 12px;
+    height: 12px;
 
-  position: absolute;
-  right: 0;
-  bottom: 0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
 
-  cursor: nwse-resize;
+    cursor: nwse-resize;
 }
 
 
@@ -309,8 +316,8 @@ h1 {
     align-items: center;
     justify-content: space-between;
 
-    background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px) saturate(2) brightness(1.5);
 
     border-radius: var(--ui-radius);
     color: white;
@@ -335,12 +342,12 @@ h1 {
     outline: none;
     padding: 4px 10px;
     border-radius: 6px;
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.15);
     color: white;
 }
 
 #searchBar::placeholder {
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 #date,

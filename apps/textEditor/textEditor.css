@@ -1,21 +1,21 @@
 .editor-container {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
 }
 
 /* Estilos para textEditor */
 .topbar {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 8px;
-  padding: 8px 12px;
-  border-bottom: 1px solid #ddd;
-  z-index: 1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+    z-index: 1;
 }
 
 .separator {
@@ -25,29 +25,34 @@
 }
 
 .layout {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
+    flex: 1;
+    display: flex;
+    overflow: hidden;
 }
 
 .editor-content {
-  flex: 1;
-  overflow-y: auto;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    overflow: hidden;
 }
 
 #editor {
     background: #fff;
     padding: 20px;
-    min-height: 100%;
+    width: 100%;
     max-width: 800px;
-    margin: auto;
+    margin: 0;
     outline: none;
+    height: 100%;
+    overflow-y: auto;
 }
 
 #editor ul,
 #editor ol {
-  padding-left: 24px;
-  margin-left: 0;  
+    padding-left: 24px;
+    margin-left: 0;
 }
 
 .sidebar {
@@ -63,7 +68,8 @@
 
 .panel {
     position: relative;
-    padding-top: 40px; /* espacio para el botón X */
+    padding-top: 40px;
+    /* espacio para el botón X */
 }
 
 

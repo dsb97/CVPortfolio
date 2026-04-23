@@ -669,8 +669,12 @@ function updateClock() {
 
 function getLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(getForecast);
-    navigator.geolocation.getCurrentPosition(getCityName);
+    //Coordenadas km0 = 40º25´00´´N 3º32´13´´O
+    navigator.geolocation.getCurrentPosition((position) => {
+      alert(position);
+      getForecast(position);
+      getCityName(position);
+    });
   } else {
     forecastDescription.innerHTML = "Acepte el acceso a la ubicación para obtener la previsión meteorológica."
   }
