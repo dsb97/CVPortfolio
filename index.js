@@ -752,7 +752,6 @@ function getCityName(position) {
       return response.json();
     })
     .then((data) => {
-      debugger;
       processCityNameResponse(data, position)
     });
 }
