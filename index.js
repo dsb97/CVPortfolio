@@ -5,7 +5,12 @@
 String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
-
+const DEFAULT_POSITION = {
+  coords: {
+    latitude: 40.416729,
+    longitude: -3.703339
+  }
+};
 const desktop = document.getElementById("desktop");
 const dockIcons = document.getElementById("dock-icons");
 const windowTemplate = document.getElementById("window-template");
@@ -668,16 +673,39 @@ function updateClock() {
 }
 
 function getLocation() {
-  if (navigator.geolocation) {
-    //Coordenadas km0 = 40º25´00´´N 3º32´13´´O
-    navigator.geolocation.getCurrentPosition((position) => {
-      alert(position);
-      getForecast(position);
-      getCityName(position);
-    });
-  } else {
-    forecastDescription.innerHTML = "Acepte el acceso a la ubicación para obtener la previsión meteorológica."
-  }
+  let resolved = false;
+
+  const timeout = setTimeout(() => {
+    if (!resolved) {
+      resolved = true;
+      handlePosition(DEFAULT_POSITION);
+    }
+  }, 6000);
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      if (resolved) return;
+      resolved = true;
+      clearTimeout(timeout);
+      handlePosition(position);
+    },
+    () => {
+      if (resolved) return;
+      resolved = true;
+      clearTimeout(timeout);
+      handlePosition(DEFAULT_POSITION);
+    },
+    {
+      timeout: 5000,
+      maximumAge: 0,
+      enableHighAccuracy: false
+    }
+  );
+}
+
+function handlePosition(position) {
+  getForecast(position);
+  getCityName(position);
 }
 
 function forecastRequest(position) {
@@ -721,14 +749,17 @@ function getForecast(position) {
 function getCityName(position) {
   fetch(cityNameRequest(position))
     .then(function (response) {
-      var responseJSON = response.json();
-      return responseJSON;
+      return response.json();
     })
-    .then(processCityNameResponse);
+    .then((data) => {
+      debugger;
+      processCityNameResponse(data, position)
+    });
 }
 
-function processCityNameResponse(datos) {
-  cityName.innerHTML = datos.address.city;
+function processCityNameResponse(data, position) {
+  cityName.innerHTML = data.address.city;
+  cityName.title = (position == DEFAULT_POSITION ? 'Ubicación por defecto' : '');
 }
 
 function processForecastResponse(datos) {
