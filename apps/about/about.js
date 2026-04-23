@@ -64,6 +64,13 @@ function aboutChangeTab(winId, tabId) {
             const indraYears = 3;
             const nttYears = totalYears - indraYears;
 
+            const publicSector = 3;
+            const international = 3;
+            const banking = 1;
+            const energy = 2;
+            const internalTools = 2;
+            const totalProjects = publicSector + international + banking + energy + internalTools;
+
             html = `            
             <div class="experience-icon ui-muted">
                 <img src="/assets/icons/disk.png" alt="Experiencia">
@@ -74,37 +81,72 @@ function aboutChangeTab(winId, tabId) {
                 <h4>Experiencia laboral</h4>
 
                 <div class="experience-bar">
-                <div
-                    class="experience-segment indra"
-                    style="width: ${(indraYears / totalYears) * 100}%"
-                ></div>
-                <div
-                    class="experience-segment ntt"
-                    style="width: ${(nttYears / totalYears) * 100}%"
-                ></div>
+                    <div title="Indra" class="experience-segment blue" style="width: ${(indraYears / totalYears) * 100}%"></div>
+                    <div title="NTT Data" class="experience-segment yellow" style="width: ${(nttYears / totalYears) * 100}%"></div>
                 </div>
 
                 <div class="experience-legend-inline">
-                <div class="legend-item">
-                    <span class="legend-color indra"></span>
-                    <span>Indra</span>
-                    <span class="ui-muted">${indraYears} años</span>
+                    <div class="legend-item">
+                        <span class="legend-color blue"></span>
+                        <span>Indra</span>
+                        <span class="ui-muted">${indraYears} años</span>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-color yellow"></span>
+                        <span>NTT Data</span>
+                        <span class="ui-muted">${nttYears} años</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-icon ui-muted">
+                <img src="/assets/icons/suitcase.png" alt="Sectores">
+                <span>${totalProjects} clientes</span>
+            </div>
+
+            <div class="experience-info">
+                <h4>Sectores</h4>
+
+                <div class="experience-bar">
+                    <div title="Sector público" class="experience-segment blue" style="width: ${(publicSector / totalProjects) * 100}%"></div>
+                    <div title="Internacional" class="experience-segment yellow" style="width: ${(international / totalProjects) * 100}%"></div>
+                    <div title="Banca" class="experience-segment red" style="width: ${(banking / totalProjects) * 100}%"></div>
+                    <div title="Energía" class="experience-segment green" style="width: ${(energy / totalProjects) * 100}%"></div>
+                    <div title="Herramientas empresariales" class="experience-segment purple" style="width: ${(internalTools / totalProjects) * 100}%"></div>
                 </div>
 
-                <div class="legend-item">
-                    <span class="legend-color ntt"></span>
-                    <span>NTT Data</span>
-                    <span class="ui-muted">${nttYears} años</span>
-                </div>
+                <div class="experience-legend-inline">
+                    <div class="legend-item">
+                        <span class="legend-color blue"></span>
+                        <span>Público</span>
+                        <span class="ui-muted">${publicSector} clientes</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color yellow"></span>
+                        <span>Internacional</span>
+                        <span class="ui-muted">${international} clientes</span>
 
-                <div class="legend-item">
-                    <span class="legend-color total"></span>
-                    <span>Total</span>
-                    <span class="ui-muted">${totalYears} años</span>
-                </div>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color red"></span>
+                        <span>Banca</span>
+                        <span class="ui-muted">${banking} clientes</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color green"></span>
+                        <span>Energía</span>
+                        <span class="ui-muted">${energy} clientes</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color purple"></span>
+                        <span>Herramientas empresariales</span>
+                        <span class="ui-muted">${internalTools} clientes</span>
+                    </div>
                 </div>
             </div>
         `;
+        
             className = 'experience-layout';
             break;
         case 'diplomas':

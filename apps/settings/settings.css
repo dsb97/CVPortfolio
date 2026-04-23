@@ -46,9 +46,9 @@
 .wallpaper-grid {
   border: 1px solid var(--ui-bg-secondary);
   border-radius: var(--ui-radius);
-  padding: 24px;
+  padding: 16px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(107px, 1fr));
   gap: 28px;
 }
 

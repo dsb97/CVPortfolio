@@ -125,9 +125,6 @@ window.textEditorInit = (winId, options) => {
   };
 
   // OPEN
-  win.querySelector("#openBtn").onclick = () =>
-    win.querySelector("#openFile").click();
-
   win.querySelector("#openFile").onchange = e => {
     const file = e.target.files[0];
     if (!file) return;

@@ -31,10 +31,11 @@
             <img src="/assets/ui/save.png" alt="">
             Guardar
         </button>
-        <button class="ui-button toolbar" id="openBtn">
+        <label for="openFile" class="ui-button toolbar" id="openBtn">
             <img src="/assets/ui/open-document.png" alt="">
-            Abrir...</button>
-        <input class='ui-input' type="file" accept=".ted,.html" id="openFile" hidden />
+            Abrir...
+        </label>
+        <input type="file" accept=".ted" id="openFile" hidden />
     </header>
 
     <main class="layout">
@@ -106,10 +107,13 @@
             <div id="mediaPanel" class="panel hidden">
                 <button class="close-panel">×</button>
                 <h3>Imágenes</h3>
-                <input class="ui-input" type="file" id="imageInput" accept="image/*" hidden />
-                <label for="imageInput" class="ui-button">
-                    Selecciona una imagen...
-                </label>
+                <div class="row">
+                    <input class="ui-input" type="file" id="imageInput" accept="image/*" hidden />
+                    <label for="imageInput" class="ui-button">
+                        Selecciona una imagen...
+                    </label>
+                </div>
+
             </div>
         </aside>
     </main>

@@ -112,8 +112,14 @@ ins {
 }
 
 .ui-select {
-  padding: 0px 2px 0px 12px;
-  font-family: var(--ui-font-family);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0px 32px 0px 12px;
+  background-image: url("/assets/ui/chevron.svg");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
 }
 
 .ui-input:focus,
