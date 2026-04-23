@@ -113,19 +113,6 @@ function createDockMenu(appId, dockIcon) {
   positionDockMenu(menu, dockIcon);
 }
 
-// function createDockMenuItem(winId, windowInfo) {
-//   const item = document.createElement("div");
-//   item.className = "dock-window-menu-item";
-//   item.textContent = windowInfo.element.querySelector(".window-title").textContent;
-
-//   item.addEventListener("click", () => {
-//     restoreWindow(winId);
-//     removeDockMenu();
-//   });
-
-//   return item;
-// }
-
 function createDockMenuItem(winId, windowInfo) {
   const item = document.createElement("div");
   item.className = "dock-window-menu-item";
@@ -145,7 +132,7 @@ function createDockMenuItem(winId, windowInfo) {
   closeBtn.textContent = "×";
 
   closeBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // 🔥 CLAVE
+    e.stopPropagation();
     closeWindow(windowInfo.element);
   });
 
@@ -181,7 +168,12 @@ function removeDockMenu() {
   document.querySelectorAll('.dock-window-menu').forEach(m => m.remove());
 }
 
-// Cerrar menú del dock al hacer click fuera
+function getDockIconForWindow(info) {
+  if (info.dockButton) return info.dockButton;
+
+  return document.querySelector(`.dock-app-icon[data-app-id="${info.appId}"]`);
+}
+
 document.addEventListener("mousedown", (e) => {
   if (!e.target.closest(".dock-window-menu") && !e.target.closest(".dock-app-icon")) {
     removeDockMenu();
@@ -212,6 +204,14 @@ function createWindow(options = {}) {
   setWindowContent(clone, title, contentHTML);
 
   desktop.appendChild(clone);
+
+  clone.classList.add("opening");
+
+  clone.getBoundingClientRect();
+
+  requestAnimationFrame(() => {
+    clone.classList.remove("opening");
+  });
 
   registerWindow(winId, clone, appId, icon);
   makeWindowInteractive(clone);
@@ -289,7 +289,45 @@ function minimizeWindow(winEl) {
 
   if (!info || info.minimized) return;
 
-  winEl.style.display = "none";
+  const iconEl = getDockIconForWindow(info);
+  if (!iconEl) {
+    winEl.classList.add('minimized');
+    info.minimized = true;
+    return;
+  }
+
+  const winRect = winEl.getBoundingClientRect();
+  const iconRect = iconEl.getBoundingClientRect();
+
+  const winCX = winRect.left + winRect.width / 2;
+  const winCY = winRect.top + winRect.height / 2;
+
+  const iconCX = iconRect.left + iconRect.width / 2;
+  const iconCY = iconRect.top + iconRect.height / 2;
+
+  const dx = iconCX - winCX;
+  const dy = iconCY - winCY;
+
+  const scaleX = iconRect.width / winRect.width;
+  const scaleY = iconRect.height / winRect.height;
+
+  info.prevTransform = winEl.style.transform;
+
+  winEl.style.transform = `
+    translate(${dx}px, ${dy}px)
+    scale(${scaleX}, ${scaleY})
+  `;
+
+  winEl.style.opacity = "0";
+
+  winEl.classList.add('minimizing');
+
+  setTimeout(() => {
+    winEl.style.display = "none";
+    winEl.classList.remove('minimizing');
+    winEl.classList.add('minimized');
+  }, 200);
+
   info.minimized = true;
 }
 
@@ -297,9 +335,49 @@ function restoreWindow(winId) {
   const info = windowsById[winId];
   if (!info) return;
 
+  const winEl = info.element;
+
+  winEl.style.display = "flex";
+
+  const iconEl = getDockIconForWindow(info);
+
+  if (!iconEl) {
+    winEl.classList.remove('minimized');
+    info.minimized = false;
+    focusWindow(winEl);
+    return;
+  }
+
+  const winRect = winEl.getBoundingClientRect();
+  const iconRect = iconEl.getBoundingClientRect();
+
+  const winCX = winRect.left + winRect.width / 2;
+  const winCY = winRect.top + winRect.height / 2;
+
+  const iconCX = iconRect.left + iconRect.width / 2;
+  const iconCY = iconRect.top + iconRect.height / 2;
+
+  const dx = iconCX - winCX;
+  const dy = iconCY - winCY;
+
+  const scaleX = iconRect.width / winRect.width;
+  const scaleY = iconRect.height / winRect.height;
+
+  winEl.style.transform = `
+    translate(${dx}px, ${dy}px)
+    scale(${scaleX}, ${scaleY})
+  `;
+  winEl.style.opacity = "0";
+
+  winEl.getBoundingClientRect();
+
+  winEl.style.transform = "";
+  winEl.style.opacity = "1";
+
+  winEl.classList.remove('minimized');
+
   info.minimized = false;
-  info.element.style.display = "flex";
-  focusWindow(info.element);
+  focusWindow(winEl);
 }
 
 function toggleMaximize(winEl) {
@@ -356,16 +434,20 @@ function closeWindow(winEl) {
 
   const appId = info.appId;
 
-  unregisterWindow(id, appId);
-  cleanupAppIfNeeded(appId);
+  winEl.classList.add("closing");
 
-  winEl.remove();
+  setTimeout(() => {
+    unregisterWindow(id, appId);
+    cleanupAppIfNeeded(appId);
 
-  if (info.dockButton && !appsRegistry[info.appId]?.icon?.pinned) {
-    info.dockButton.remove();
-  }
+    winEl.remove();
 
-  updateDockForApp(appId);
+    if (info.dockButton && !appsRegistry[info.appId]?.icon?.pinned) {
+      info.dockButton.remove();
+    }
+
+    updateDockForApp(appId);
+  }, 200);
 }
 
 function unregisterWindow(winId, appId) {
@@ -486,7 +568,6 @@ function loadAppScript(appId, winId, options = {}) {
   const url = `/apps/${appId}/${appId}.js`;
   const initName = `${appId}Init`;
 
-  // Si ya existe la promesa, encadenamos la llamada al init
   if (appScriptLoaders.has(url)) {
     return appScriptLoaders.get(url).then(() => {
       if (typeof window[initName] !== "function") {
@@ -496,11 +577,9 @@ function loadAppScript(appId, winId, options = {}) {
     });
   }
 
-  // Crear promesa de carga
   const loadPromise = createScriptLoadPromise(url);
   appScriptLoaders.set(url, loadPromise);
 
-  // Ejecutar init cuando termine la carga
   return loadPromise
     .then(() => executeScriptInit(initName, winId, options))
     .catch(err => {
@@ -537,7 +616,7 @@ function loadAppStyle(appId) {
   const url = `/apps/${appId}/${appId}.css`;
 
   if (document.querySelector(`link[data-app="${url}"]`)) {
-    return; // Ya está cargado
+    return;
   }
 
   const link = document.createElement("link");
@@ -576,19 +655,16 @@ async function openApp(appId, options = {}) {
   const app = appsRegistry[appId];
   if (!app) return;
 
-  // Inicializar lista de ventanas para esta app
   if (!windowsByApp[appId]) {
     windowsByApp[appId] = [];
   }
 
-  // Si es singleton y ya tiene ventanas, restaurar la primera
   if (app.singleton && windowsByApp[appId].length > 0) {
     const winId = windowsByApp[appId][0];
     restoreWindow(winId);
     return;
   }
 
-  // Cargar HTML y crear ventana
   const contentHTML = await loadHTML(appId);
   const win = createWindow({
     title: app.title,

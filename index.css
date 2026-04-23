@@ -180,6 +180,31 @@ body {
     flex-direction: column;
     overflow: hidden;
     backdrop-filter: blur(10px) saturate(2) brightness(1.5);
+    transition:
+        transform 0.2s cubic-bezier(0.2, 1.1, 0.3, 1),
+        opacity 0.12s ease;
+    transform-origin: center center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+.window.minimizing {
+  pointer-events: none;
+}
+
+.window.minimized {
+    opacity: 0;
+}
+
+.window.opening {
+  transform: scale(0.85);
+  opacity: 0;
+}
+
+.window.closing {
+  transform: scale(0.85);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .window.active {
