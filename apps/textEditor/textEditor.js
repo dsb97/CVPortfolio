@@ -173,25 +173,35 @@ window.textEditorInit = (winId, options) => {
   if (options.firstLoad) {
     editor.innerHTML = `
       <h1 style="text-align: center;">Responsabilidades en proyectos</h1>
-      <h2>NTT Data</h2>
-      <p>
+      <h2>Desarrollo de soluciones en entorno ETRM (Allegro)</h2>
+      <p>Participación en el desarrollo de soluciones técnicas y funcionales dentro de un proyecto basado en Allegro ETRM, orientado al trading de commodities.</p>
+      <p><b>Entre las tareas realizadas se incluyen:</b></p>
       <ul>
-          <li>Diseño, desarrollo y mantenimiento de aplicaciones .NET (de escritorio y web) para diversos proyectos y
-              clientes, incluyendo el sector público nacional e internacional, así como sector bancario.</li>
-          <li>Desarrollo y soporte de soluciones técnicas y funcionales en Dynamics 365, Power Automate, .NET y
-              SharePoint, incluyendo diseño de procesos, modelado de datos y definición de integraciones con APIs y
-              servicios externos.</li>
+      <li>Implementación de funcionalidades adaptadas a los procesos de negocio del área de trading.</li>
+      <li>Ejecución de pruebas funcionales junto con usuarios clave para validar los desarrollos.</li>
+      <li>Colaboración en tareas de soporte de primer nivel, resolviendo incidencias operativas y dando asistencia al equipo de negocio.</li>
+      <li>Participación en la mejora continua del sistema, proponiendo ajustes técnicos y funcionales.</li>
       </ul>
-      </p>
-      <br>
-      <h2>Indra</h2>
-      <p>
+      <h2>Desarrollo de aplicaciones .NET (Desktop y Web)</h2>
+      <p>Intervención en el diseño, desarrollo, pruebas y mantenimiento de aplicaciones tanto de escritorio como web basadas en tecnologías .NET.</p>
+      <p><b>Este trabajo abarca:</b></p>
       <ul>
-          <li>Diseño, desarrollo y mantenimiento de aplicaciones .NET para proyectos del sector público y energético.</li>
-          <li>Desarrollo de soluciones técnicas y funcionales en Allegro ETRM en entornos de comercio de materias primas,
-              optimizando procesos y soporte para la gestión comercial y operativa.</li>
+      <li>Desarrollo de nuevas funcionalidades en diferentes proyectos con múltiples versiones del framework .NET.</li>
+      <li>Adaptación a distintos entornos tecnológicos y lenguajes asociados según las necesidades del proyecto.</li>
+      <li>Diseño y ejecución de pruebas técnicas y funcionales para asegurar la calidad del software.</li>
+      <li>Mantenimiento evolutivo y correctivo de aplicaciones existentes.</li>
+      <li>Resolución de incidencias y optimización del rendimiento de las soluciones implementadas.</li>
       </ul>
-      </p>`
+      <h2>Liderazgo técnico en Dynamics 365 y Power Platform</h2>
+      <p>Responsabilidad en el liderazgo del diseño, desarrollo y soporte de soluciones basadas en Microsoft Dynamics 365 y Power Platform.</p>
+      <p><b>Las funciones principales incluyen:</b></p>
+      <ul>
+      <li>Definición de arquitecturas técnicas y diseño de soluciones funcionales alineadas con los requisitos del negocio.</li>
+      <li>Liderazgo del desarrollo de aplicaciones, módulos y extensiones dentro del ecosistema Dynamics 365.</li>
+      <li>Gestión del soporte y mantenimiento de aplicaciones en producción, asegurando su estabilidad y evolución.</li>
+      <li>Coordinación técnica de equipos en la implementación de nuevas funcionalidades.</li>
+      <li>Mejora continua de las soluciones mediante la optimización de procesos y la adopción de buenas prácticas en la plataforma.</li>
+      </ul>`
   }
 
   if (options.title) {
