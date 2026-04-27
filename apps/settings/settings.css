@@ -75,9 +75,9 @@
 }
 
 .btn-back {
-  position: relative;
-  top: 0px;
-  left: 0px;
-  transition: background 0.2s;
-  margin-bottom: 8px;
+  display: none;
+}
+
+.settings-toolbar {
+  height: 0px;
 }

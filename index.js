@@ -1,7 +1,12 @@
 // ========================================
 // CONSTANTES Y ELEMENTOS DEL DOM
 // ========================================
-
+const DEFAULT_SETTINGS = {
+  appearance: {
+    wallpaper: '/assets/images/wallpapers/Gradient.png',
+    windowColor: '#ffffff'
+  }
+};
 String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
@@ -157,11 +162,7 @@ function updateDockForApp(appId) {
   dockIcon.classList.toggle("open", wins.length > 0);
   dockIcon.classList.toggle("has-multiple", wins.length > 1);
 
-  if (wins.length > 1) {
-    createDockMenu(appId, dockIcon);
-  } else {
-    removeDockMenu();
-  }
+  removeDockMenu();
 }
 
 function removeDockMenu() {
@@ -202,6 +203,7 @@ function createWindow(options = {}) {
 
   setupWindowElement(clone, winId, calculatedPosition, { width, height });
   setWindowContent(clone, title, contentHTML);
+  injectToolbar(clone);
 
   desktop.appendChild(clone);
 
@@ -465,6 +467,19 @@ function cleanupAppIfNeeded(appId) {
   }
 }
 
+function injectToolbar(winEl) {
+  const toolbarHost = winEl.querySelector('.window-toolbar');
+  const content = winEl.querySelector('.window-content');
+
+  const toolbar = content.querySelector('[data-toolbar]');
+  if (!toolbar) {
+    toolbarHost.remove();
+    return;
+  }
+
+  toolbarHost.appendChild(toolbar);
+}
+
 // ========================================
 // INTERACTIVIDAD DE VENTANAS
 // ========================================
@@ -687,9 +702,69 @@ async function openApp(appId, options = {}) {
 // GESTIÓN DEL ESCRITORIO
 // ========================================
 
+const SETTINGS_KEY = 'userSettings';
+
+function getSettings() {
+  try {
+    const saved = localStorage.getItem(SETTINGS_KEY);
+    if (!saved) return structuredClone(DEFAULT_SETTINGS);
+
+    return {
+      ...structuredClone(DEFAULT_SETTINGS),
+      ...JSON.parse(saved)
+    };
+  } catch (e) {
+    console.warn('Error leyendo settings, usando defaults', e);
+    return structuredClone(DEFAULT_SETTINGS);
+  }
+}
+
+function getSetting(path, fallback = undefined) {
+  const settings = getSettings();
+
+  let ref = settings;
+
+  for (let i = 0; i < path.length; i++) {
+    if (ref == null) return fallback;
+    ref = ref[path[i]];
+  }
+
+  return ref ?? fallback;
+}
+
+function saveSettings(settings) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+function updateSettings(path, value) {
+  const settings = getSettings();
+
+  let ref = settings;
+  for (let i = 0; i < path.length - 1; i++) {
+    ref = ref[path[i]];
+  }
+
+  ref[path[path.length - 1]] = value;
+
+  saveSettings(settings);
+  applySettings(settings);
+}
+
+function applySettings(settings) {
+  applyDesktopWallpaper(settings.appearance.wallpaper);
+  applyWindowColors(settings.appearance.windowColor);
+}
+
 function loadDesktopWallpaper() {
-  const saved = localStorage.getItem('desktopWallpaper');
-  applyDesktopWallpaper(saved || '/assets/images/wallpapers/Gradient.png');
+  const settings = getSettings();
+  applyDesktopWallpaper(settings.appearance.wallpaper);
+}
+
+function applyWindowColors(color) {
+  const root = document.documentElement;
+
+  root.style.setProperty('--ui-window-background-color', color + "e6");
+  root.style.setProperty('--ui-window-active-background-color', color + "cc");
 }
 
 function applyDesktopWallpaper(src) {
@@ -846,7 +921,9 @@ function processForecastResponse(datos) {
 // INICIALIZACIÓN
 // ========================================
 getLocation();
-document.addEventListener('DOMContentLoaded', loadDesktopWallpaper);
+document.addEventListener('DOMContentLoaded', () => {
+  applySettings(getSettings());
+});
 initDock();
 loadInitialSetup();
 updateClock();
@@ -860,5 +937,6 @@ window.getWindow = (winId) => {
   return document.querySelector(`.window[data-window-id="${winId}"]`);
 };
 
-window.applyDesktopWallpaper = applyDesktopWallpaper;
+window.updateSettings = updateSettings;
+window.getSetting = getSetting;
 window.openApp = openApp;

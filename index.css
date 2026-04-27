@@ -166,15 +166,10 @@ body {
 }
 
 
-
-
-
-/* Ventanas */
-/* VENTANA (marco exterior muy fino y gris) */
 .window {
     position: absolute;
-    background: #ececece6;
-    border-radius: 6px;
+    background: var(--ui-window-background-color);
+    border-radius: 9px;
     border: 1px solid #d5d5d5cc;
     display: flex;
     flex-direction: column;
@@ -189,7 +184,7 @@ body {
 }
 
 .window.minimizing {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 .window.minimized {
@@ -197,25 +192,28 @@ body {
 }
 
 .window.opening {
-  transform: scale(0.85);
-  opacity: 0;
+    transform: scale(0.85);
+    opacity: 0;
 }
 
 .window.closing {
-  transform: scale(0.85);
-  opacity: 0;
-  pointer-events: none;
+    transform: scale(0.85);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .window.active {
     z-index: 9999;
     box-shadow: 0 0 0 0 #616161cc, 0 5px 12px rgba(0, 0, 0, 0.6);
-    background: #ecececcc;
+    background: var(--ui-window-active-background-color);
 }
 
-/* Barra de título */
+.window-toolbar {
+    padding: 0px 6px 6px 6px;
+}
+
 .window-titlebar {
-    height: 32px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -228,7 +226,6 @@ body {
     color: #222;
 }
 
-/* Botones ventana */
 .window-buttons {
     position: absolute;
     right: 0px;
@@ -239,11 +236,10 @@ body {
     padding: 6px;
 }
 
-/* Botones redondos pequeños */
 .window-buttons button {
     width: 24px;
     height: 12px;
-    border-radius: 4px;
+    border-radius: 3px;
     border: none;
     padding: 0;
     background-repeat: no-repeat;
@@ -304,8 +300,8 @@ body {
 .window-content {
     flex: 1;
     margin: 0px 6px 6px 6px;
-    border-radius: 6px;
-    background: #ffffffcc;
+    border-radius: 3px;
+    background: #fff;
     overflow: auto;
 }
 
@@ -359,20 +355,6 @@ body {
 .statusbar-center {
     flex: 1;
     justify-content: center;
-}
-
-/* buscador */
-#searchBar {
-    border: none;
-    outline: none;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-}
-
-#searchBar::placeholder {
-    color: rgba(255, 255, 255, 0.7);
 }
 
 #date,

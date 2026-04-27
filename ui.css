@@ -27,6 +27,9 @@
 
   --ui-font-family: "Varela Round", sans-serif;
 
+  --ui-window-background-color: #ececece6;
+  --ui-window-active-background-color: #ecececcc;
+
   --ui-window-button-close: rgba(255, 95, 87);
   --ui-window-button-minimize: rgba(44, 204, 65);
   --ui-window-button-maximize: rgba(254, 188, 45);
@@ -153,6 +156,16 @@ ins {
   vertical-align: middle;
   height: 16px;
   width: 16px;
+}
+
+.ui-button.icon {
+  width: 26px;
+  padding: 0;
+}
+
+.ui-button.icon>img {
+  width: 16px;
+  padding: 0;
 }
 
 .ui-button.toolbar {

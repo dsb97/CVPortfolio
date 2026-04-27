@@ -28,19 +28,18 @@ window.settingsInit = (winId, options) => {
   ];
 
   const content = win.querySelector('#settingsContent');
+  const toolbar = win.querySelector('.window-toolbar');
+  const btnBack = win.querySelector('.btn-back');
+
+  btnBack.addEventListener('click', () => {
+    loadTemplate('tpl-settings-home');
+  });
 
   function loadTemplate(id) {
     content.innerHTML = '';
-    if (id != 'tpl-settings-home') {
-      const btnBack = document.createElement('button');
-      btnBack.title = 'Atrás';
-      btnBack.classList.add("ui-button", "btn-back", "primary");
-      btnBack.innerHTML = '<img src="/assets/ui/back.png" alt="Icono volver atrás"/>';
-      btnBack.addEventListener('click', (event) => {
-        loadTemplate('tpl-settings-home');
-      });
-      content.appendChild(btnBack);
-    }
+
+    updateBackButton(win, id);
+
     const tpl = win.querySelector(`#${id}`);
     content.appendChild(tpl.content.cloneNode(true));
 
@@ -48,12 +47,26 @@ window.settingsInit = (winId, options) => {
       renderWallpapers();
     }
 
-    // Activar clicks internos
     content.querySelectorAll('[data-template]').forEach(item => {
       item.addEventListener('click', () => {
         loadTemplate(item.dataset.template);
       });
     });
+  }
+
+  function updateBackButton(win, currentTemplate) {
+    if(!toolbar) return;
+    toolbar.style.padding = '0';
+
+    const btnBack = win.querySelector('.btn-back');
+    if (!btnBack) return;
+
+    if (currentTemplate === 'tpl-settings-home') {
+      btnBack.style.display = 'none';
+    } else {
+      btnBack.style.display = 'inline-flex';
+      btnBack.style.transform = 'translateX(6px) translateY(-32px)';
+    }
   }
 
   function renderWallpapers() {
@@ -64,7 +77,7 @@ window.settingsInit = (winId, options) => {
 
     grid.innerHTML = '';
 
-    const savedWallpaper = localStorage.getItem('desktopWallpaper');
+    const savedWallpaper = window.getSetting(['appearance', 'wallpaper']);
 
     wallpapers.forEach(pic => {
       const url = `${pathFull}/${pic}`;
@@ -78,8 +91,7 @@ window.settingsInit = (winId, options) => {
       }
 
       div.addEventListener('click', (event) => {
-        localStorage.setItem('desktopWallpaper', url);
-        window.applyDesktopWallpaper(url);
+        window.updateSettings(['appearance', 'wallpaper'], url);
         grid.querySelector('.selected').classList.remove('selected');
         event.target.classList.add('selected');
       });
@@ -89,17 +101,17 @@ window.settingsInit = (winId, options) => {
   }
 
   let templateToLoad = '';
-    switch(options.setting) {
-      case 'language':
-        templateToLoad = 'tpl-language';
-        break;
-      default:
-        templateToLoad = 'tpl-settings-home';
-        break;
-    }
+  switch (options.setting) {
+    case 'language':
+      templateToLoad = 'tpl-language';
+      break;
+    default:
+      templateToLoad = 'tpl-settings-home';
+      break;
+  }
 
-    loadTemplate(templateToLoad);
-  
+  loadTemplate(templateToLoad);
+
 
 }
 
