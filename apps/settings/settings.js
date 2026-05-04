@@ -2,6 +2,8 @@ window.settingsInit = (winId, options) => {
   const win = window.getWindow(winId);
   if (!win) return;
 
+  const CUSTOM_WALLPAPERS_KEY = 'customWallpapers';
+
   const wallpapers = [
     'Architecture.png',
     'Aurora.png',
@@ -116,23 +118,131 @@ window.settingsInit = (winId, options) => {
 
     wallpapers.forEach(pic => {
       const url = `${pathFull}/${pic}`;
-      const div = document.createElement('div');
-      div.className = 'wallpaper-item';
-      div.title = `${pic.split('.')[0]}`;
-      div.innerHTML = `<img src="${pathThumbs}/${pic}" alt="${pic}"/>`;
-
-      if (url === savedWallpaper) {
-        div.classList.add('selected');
-      }
-
-      div.addEventListener('click', (event) => {
-        window.updateSettings(['appearance', 'wallpaper'], url);
-        grid.querySelector('.selected').classList.remove('selected');
-        event.target.classList.add('selected');
-      });
-
-      grid.appendChild(div);
+      grid.appendChild(createWallpaperItem({
+        src: url,
+        thumb: `${pathThumbs}/${pic}`,
+        title: pic.split('.')[0],
+        alt: pic,
+        isSelected: url === savedWallpaper
+      }));
     });
+
+    getCustomWallpapers().forEach(wallpaper => {
+      grid.appendChild(createWallpaperItem({
+        src: wallpaper.src,
+        thumb: wallpaper.src,
+        title: wallpaper.name,
+        alt: wallpaper.name,
+        isSelected: wallpaper.src === savedWallpaper,
+        onRemove: () => removeCustomWallpaper(wallpaper.id)
+      }));
+    });
+
+    bindWallpaperFileInput();
+  }
+
+  function createWallpaperItem({ src, thumb, title, alt, isSelected, onRemove }) {
+    const div = document.createElement('div');
+    div.className = 'wallpaper-item';
+    div.title = title;
+
+    const img = document.createElement('img');
+    img.src = thumb;
+    img.alt = alt;
+    div.appendChild(img);
+
+    if (isSelected) {
+      div.classList.add('selected');
+    }
+
+    div.addEventListener('click', () => {
+      window.updateSettings(['appearance', 'wallpaper'], src);
+      win.querySelector('#wallpaperGrid .selected')?.classList.remove('selected');
+      div.classList.add('selected');
+    });
+
+    if (onRemove) {
+      const removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.className = 'ui-button icon wallpaper-remove';
+      removeButton.textContent = 'x';
+      removeButton.title = window.t ? window.t('settings.removeWallpaper') : 'Quitar fondo';
+      removeButton.setAttribute('aria-label', removeButton.title);
+      removeButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        onRemove();
+      });
+      div.appendChild(removeButton);
+    }
+
+    return div;
+  }
+
+  function bindWallpaperFileInput() {
+    const input = win.querySelector('#wallpaperFileInput');
+    if (!input) return;
+
+    input.addEventListener('change', () => {
+      const file = input.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        const src = reader.result;
+        if (typeof src !== 'string') return;
+
+        const customWallpapers = getCustomWallpapers();
+        customWallpapers.push({
+          id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          name: file.name,
+          src
+        });
+
+        saveCustomWallpapers(customWallpapers);
+        window.updateSettings(['appearance', 'wallpaper'], src);
+        renderWallpapers();
+      });
+      reader.readAsDataURL(file);
+      input.value = '';
+    });
+  }
+
+  function getCustomWallpapers() {
+    try {
+      const saved = localStorage.getItem(CUSTOM_WALLPAPERS_KEY);
+      if (!saved) return [];
+      const wallpapers = JSON.parse(saved);
+      if (!Array.isArray(wallpapers)) return [];
+
+      return wallpapers.filter(wallpaper =>
+        wallpaper &&
+        typeof wallpaper.id === 'string' &&
+        typeof wallpaper.name === 'string' &&
+        typeof wallpaper.src === 'string'
+      );
+    } catch (e) {
+      console.warn('Error leyendo fondos personalizados', e);
+      return [];
+    }
+  }
+
+  function saveCustomWallpapers(wallpapers) {
+    localStorage.setItem(CUSTOM_WALLPAPERS_KEY, JSON.stringify(wallpapers));
+  }
+
+  function removeCustomWallpaper(id) {
+    const customWallpapers = getCustomWallpapers();
+    const wallpaperToRemove = customWallpapers.find(wallpaper => wallpaper.id === id);
+    const updatedWallpapers = customWallpapers.filter(wallpaper => wallpaper.id !== id);
+    const currentWallpaper = window.getSetting(['appearance', 'wallpaper']);
+
+    saveCustomWallpapers(updatedWallpapers);
+
+    if (wallpaperToRemove?.src === currentWallpaper) {
+      window.updateSettings(['appearance', 'wallpaper'], '/assets/images/wallpapers/Gradient.png');
+    }
+
+    renderWallpapers();
   }
 
   function renderLanguageOptions() {

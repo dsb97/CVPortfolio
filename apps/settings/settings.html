@@ -55,6 +55,10 @@
 <template id="tpl-wallpaper">
   <h4 data-i18n="settings.wallpaper">Fondo de pantalla</h4>
   <p class="subtitle ui-muted" data-i18n="settings.wallpaperHelp">Haz clic en una imagen para usarla como fondo de escritorio.</p>
+  <label class="ui-button wallpaper-file-button">
+    <span data-i18n="settings.chooseWallpaper">Elegir una imagen</span>
+    <input type="file" id="wallpaperFileInput" accept="image/*">
+  </label>
 
   <div class="wallpaper-grid" id="wallpaperGrid"></div>
 

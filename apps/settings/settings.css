@@ -48,6 +48,14 @@
   margin-bottom: 16px;
 }
 
+.wallpaper-file-button {
+  margin-bottom: 16px;
+}
+
+.wallpaper-file-button input {
+  display: none;
+}
+
 .wallpaper-grid {
   border: 1px solid var(--ui-bg-secondary);
   border-radius: var(--ui-radius);
@@ -77,6 +85,31 @@
 .wallpaper-item.selected {
   outline: 4px solid var(--ui-primary);
   outline-offset: -4px;
+}
+
+.wallpaper-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .64);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s ease, background .12s ease;
+}
+
+.wallpaper-item:hover .wallpaper-remove {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.wallpaper-remove:hover {
+  background: rgba(0, 0, 0, .82);
 }
 
 .color-section {
