@@ -3,15 +3,15 @@
     <header class="topbar">
         <button class="ui-button toolbar" id="copyBtn">
             <img src="/assets/ui/copy.png" alt="">
-            Copiar
+            <span data-i18n="editor.copy">Copiar</span>
         </button>
         <button class="ui-button toolbar" id="cutBtn">
             <img src="/assets/ui/cut.png" alt="">
-            Cortar
+            <span data-i18n="editor.cut">Cortar</span>
         </button>
         <button class="ui-button toolbar" id="pasteBtn">
             <img src="/assets/ui/paste.png" alt="">
-            Pegar
+            <span data-i18n="editor.paste">Pegar</span>
         </button>
 
 
@@ -19,21 +19,21 @@
 
         <button class="ui-button toolbar" id="textBtn">
             <img src="/assets/ui/text.png" alt="">
-            Texto
+            <span data-i18n="editor.text">Texto</span>
         </button>
         <button class="ui-button toolbar" id="mediaBtn">
-            <img src="/assets/ui/picture.png" alt="">Imágenes
+            <img src="/assets/ui/picture.png" alt=""><span data-i18n="editor.images">Imagenes</span>
         </button>
 
         <div class="separator"></div>
 
         <button class="ui-button toolbar" id="saveBtn">
             <img src="/assets/ui/save.png" alt="">
-            Guardar
+            <span data-i18n="editor.save">Guardar</span>
         </button>
         <label for="openFile" class="ui-button toolbar" id="openBtn">
             <img src="/assets/ui/open-document.png" alt="">
-            Abrir...
+            <span data-i18n="editor.open">Abrir...</span>
         </label>
         <input type="file" accept=".ted" id="openFile" hidden />
     </header>
@@ -51,7 +51,7 @@
             <!-- Text panel -->
             <div id="textPanel" class="panel hidden">
                 <button class="close-panel">×</button>
-                <h3>Texto</h3>
+                <h3 data-i18n="editor.text">Texto</h3>
 
                 <div class="row">
                     <button class="ui-button" id="boldBtn"><strong>B</strong></button>
@@ -59,17 +59,17 @@
                     <button class="ui-button" id="underlineBtn"><u>U</u></button>
                 </div>
 
-                <label class='ui-label'>Estilo</label>
+                <label class='ui-label' data-i18n="editor.style">Estilo</label>
                 <select class='ui-select' id="styleSelect">
-                    <option value="p">Párrafo</option>
-                    <option value="h1">Título</option>
-                    <option value="h2">Encabezado 1</option>
-                    <option value="h3">Encabezado 2</option>
-                    <option value="h4">Encabezado 3</option>
-                    <option value="h5">Encabezado 4</option>
+                    <option value="p" data-i18n="editor.paragraph">Parrafo</option>
+                    <option value="h1" data-i18n="editor.title">Titulo</option>
+                    <option value="h2" data-i18n="editor.heading1">Encabezado 1</option>
+                    <option value="h3" data-i18n="editor.heading2">Encabezado 2</option>
+                    <option value="h4" data-i18n="editor.heading3">Encabezado 3</option>
+                    <option value="h5" data-i18n="editor.heading4">Encabezado 4</option>
                 </select>
 
-                <label class='ui-label'>Fuente</label>
+                <label class='ui-label' data-i18n="editor.font">Fuente</label>
                 <select class="ui-select" id="fontSelect">
                     <option value="Arial, sans-serif">Arial</option>
                     <option value="Helvetica, sans-serif">Helvetica</option>
@@ -81,16 +81,16 @@
                 </select>
 
 
-                <label class="ui-label">Tamaño</label>
+                <label class="ui-label" data-i18n="editor.size">Tamano</label>
                 <input class="ui-input" type="number" id="fontSize" value="16" />
 
-                <label class="ui-label">Listas</label>
+                <label class="ui-label" data-i18n="editor.lists">Listas</label>
                 <div class="row">
-                    <button class="ui-button" data-list="ul">• Lista</button>
-                    <button class="ui-button" data-list="ol">1. Lista</button>
+                    <button class="ui-button" data-list="ul">• <span data-i18n="editor.bulletList">Lista</span></button>
+                    <button class="ui-button" data-list="ol">1. <span data-i18n="editor.numberedList">Lista</span></button>
                 </div>
 
-                <label class="ui-label">Alineación</label>
+                <label class="ui-label" data-i18n="editor.alignment">Alineacion</label>
                 <div class="row">
                     <button class="ui-button" data-align="left">
                         <img src="/assets/ui/left-align.png" alt="">
@@ -106,11 +106,11 @@
 
             <div id="mediaPanel" class="panel hidden">
                 <button class="close-panel">×</button>
-                <h3>Imágenes</h3>
+                <h3 data-i18n="editor.images">Imagenes</h3>
                 <div class="row">
                     <input class="ui-input" type="file" id="imageInput" accept="image/*" hidden />
                     <label for="imageInput" class="ui-button">
-                        Selecciona una imagen...
+                        <span data-i18n="editor.selectImage">Selecciona una imagen...</span>
                     </label>
                 </div>
 

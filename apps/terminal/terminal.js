@@ -3,13 +3,13 @@ window.terminalInit = (winId, options) => {
     const input = window.getWindow(winId).querySelector("#terminal-input");
     const prompt = "david@CV ~ $";
 
-    const softSkills = [
-        "Trabajo en equipo",
-        "Meticulosidad",
-        "Comunicación asertiva",
-        "Flexibilidad",
-        "Constancia",
-        "Curiosidad"
+    const softSkillKeys = [
+        "terminal.skill.teamwork",
+        "terminal.skill.thoroughness",
+        "terminal.skill.communication",
+        "terminal.skill.flexibility",
+        "terminal.skill.consistency",
+        "terminal.skill.curiosity"
     ];
 
     input.addEventListener("keydown", (e) => {
@@ -31,11 +31,11 @@ window.terminalInit = (winId, options) => {
     function handleCommand(cmd) {
         switch (cmd) {
             case "help":
-                print("clear: limpia la pantalla");
-                print("softskills: muestra las soft skills de David");
+                print(window.t("terminal.helpClear"));
+                print(window.t("terminal.helpSoftskills"));
                 break;
             case "softskills":
-                softSkills.forEach(skill => print(skill));
+                softSkillKeys.forEach(skillKey => print(window.t(skillKey)));
                 break;
             case 'clear':
                 output.innerHTML = '';
@@ -43,11 +43,11 @@ window.terminalInit = (winId, options) => {
                 break;
 
             default:
-                print(`comando no encontrado: ${cmd}`);
+                print(`${window.t("terminal.commandNotFound")}: ${cmd}`);
         }
         
     }
-    print("Escribe 'help' para ver los comandos disponibles\n");
+    print(`${window.t("terminal.helpPrompt")}\n`);
 }
 
 window.terminalDispose = () => {

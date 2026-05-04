@@ -10,6 +10,7 @@ const fsData = [
     {
         contentType: "folder",
         name: "Frameworks",
+        nameKey: "explorer.folder.frameworks",
         icon: "/assets/icons/frameworks.png",
         defaultView: 'list',
         content: [
@@ -22,14 +23,14 @@ const fsData = [
                         contentType: "file",
                         name: "Classic",
                         icon: "assets/icons/dotnetclassic.png",
-                        experience: "Aplicaciones de escritorio",
-                        version: "2 hasta 4.8"
+                        experienceKey: "explorer.exp.desktopApps",
+                        versionKey: "explorer.version.dotnetClassic"
                     },
                     {
                         contentType: "file",
                         name: "Core",
                         icon: "assets/icons/dotnetcore.png",
-                        experience: "Web Apps, APIs y microservicios",
+                        experienceKey: "explorer.exp.webAppsApisMicroservices",
                         version: "2 hasta 9"
                     }
                 ]
@@ -38,35 +39,35 @@ const fsData = [
                 contentType: "file",
                 name: "Bootstrap",
                 icon: "assets/icons/bootstrap.png",
-                experience: "Diseño y maquetado web",
+                experienceKey: "explorer.exp.webLayout",
                 version: "Latest (5.3)"
             },
             {
                 contentType: "file",
                 name: "JQuery",
                 icon: "assets/icons/jQuery.png",
-                experience: "Conexión a APIs, manejo del DOM",
+                experienceKey: "explorer.exp.apiConnectionDom",
                 version: "Latest (3.7)"
             },
             {
                 contentType: "file",
                 name: "Laravel",
                 icon: "assets/icons/laravel.png",
-                experience: "Desarrollo de APIs",
+                experienceKey: "explorer.exp.apiDevelopment",
                 version: "8.0"
             },
             {
                 contentType: "file",
                 name: "Angular",
                 icon: "assets/icons/angular.png",
-                experience: "Desarrollo de SPAs",
+                experienceKey: "explorer.exp.spaDevelopment",
                 version: "12"
             },
             {
                 contentType: "file",
                 name: "Electron",
                 icon: "assets/icons/electron.png",
-                experience: "Desarrollo de aplicaciones de escritorio",
+                experienceKey: "explorer.exp.desktopAppDevelopment",
                 version: ""
             }
         ]
@@ -74,6 +75,7 @@ const fsData = [
     {
         contentType: "folder",
         name: "Lenguajes",
+        nameKey: "explorer.folder.languages",
         icon: "/assets/icons/languages.png",
         defaultView: 'grid',
         content: [
@@ -81,56 +83,56 @@ const fsData = [
                 contentType: "file",
                 name: "C#",
                 icon: "assets/icons/csharp.png",
-                experience: "Desarrollo de aplicaciones de escritorio y web, APIs y microservicios",
+                experienceKey: "explorer.exp.desktopWebApisMicroservices",
                 version: ""
             },
             {
                 contentType: "file",
                 name: "Visual Basic",
                 icon: "assets/icons/vb.png",
-                experience: "Desarrollo de aplicaciones de escritorio y web y servicios SOAP",
+                experienceKey: "explorer.exp.desktopWebSoap",
                 version: ""
             },
             {
                 contentType: "file",
                 name: "PHP",
                 icon: "assets/icons/php.png",
-                experience: "Desarrollo de APIs y backend",
+                experienceKey: "explorer.exp.backendApiDevelopment",
                 version: ""
             },
             {
                 contentType: "file",
                 name: "SQL",
                 icon: "assets/icons/sql.png",
-                experience: "Consultas de bases de datos y optimización; procesos batch",
-                version: "Oracle y Microsoft"
+                experienceKey: "explorer.exp.databaseOptimization",
+                versionKey: "explorer.version.oracleMicrosoft"
             },
             {
                 contentType: "file",
                 name: "TypeScript",
                 icon: "assets/icons/ts.png",
-                experience: "Desarrollo de SPAs",
+                experienceKey: "explorer.exp.spaDevelopment",
                 version: ""
             },
             {
                 contentType: "file",
                 name: "HTML",
                 icon: "assets/icons/html.png",
-                experience: "Maquetado web semántico y accesible",
+                experienceKey: "explorer.exp.semanticLayout",
                 version: ""
             },
             {
                 contentType: "file",
                 name: "SCSS",
                 icon: "assets/icons/sass.png",
-                experience: "Estilos mantenibles y modularizados",
+                experienceKey: "explorer.exp.maintainableStyles",
                 version: ""
             },
             {
                 contentType: "file",
                 name: "Java",
                 icon: "assets/icons/java.png",
-                experience: "Experiencia general en lógica y OOP",
+                experienceKey: "explorer.exp.oop",
                 version: ""
             }
         ]
@@ -138,26 +140,28 @@ const fsData = [
     {
         contentType: "folder",
         name: "Microsoft",
+        nameKey: "explorer.folder.microsoft",
         icon: "/assets/icons/microsoft.png",
         defaultView: 'list',
         content: [
             {
                 contentType: "folder",
                 name: "Dynamics",
+                nameKey: "explorer.folder.dynamics",
                 icon: "/assets/icons/dynamics365.png",
                 content: [
                     {
                         contentType: "file",
                         name: "Sales",
                         icon: "assets/icons/dynamics-sales.png",
-                        experience: "Desarrollo de módulos",
+                        experienceKey: "explorer.exp.moduleDevelopment",
                         version: "Dynamics 2016/365"
                     },
                     {
                         contentType: "file",
                         name: "Marketing",
                         icon: "assets/icons/dynamics-marketing.png",
-                        experience: "Desarrollo/mantenimiento de campañas",
+                        experienceKey: "explorer.exp.campaignMaintenance",
                         version: "Dynamics 365"
                     }
                 ]
@@ -165,34 +169,35 @@ const fsData = [
             {
                 contentType: "folder",
                 name: "Azure",
+                nameKey: "explorer.folder.azure",
                 icon: "/assets/icons/azure.png",
                 content: [
                     {
                         contentType: "file",
                         name: "DevOps",
                         icon: "assets/icons/devops.png",
-                        experience: "Gestión de repositorios y CI/CD",
+                        experienceKey: "explorer.exp.repositoriesCicd",
                         version: ""
                     },
                     {
                         contentType: "file",
                         name: "App Services",
                         icon: "assets/icons/app-services.png",
-                        experience: "Gestión y despliegue de Web Apps",
+                        experienceKey: "explorer.exp.webAppsDeployment",
                         version: ""
                     },
                     {
                         contentType: "file",
                         name: "Functions",
                         icon: "assets/icons/functions.png",
-                        experience: "Gestión y despliegue de APIs y microservicios",
+                        experienceKey: "explorer.exp.apisMicroservicesDeployment",
                         version: ""
                     },
                     {
                         contentType: "file",
                         name: "Graph API",
                         icon: "assets/icons/graph.png",
-                        experience: "Gestión de usuarios, grupos, sitios, drives, eventos y más",
+                        experienceKey: "explorer.exp.graphManagement",
                         version: ""
                     }
                 ]
@@ -201,26 +206,27 @@ const fsData = [
                 contentType: "file",
                 name: "SharePoint",
                 icon: "/assets/icons/sharepoint.png",
-                experience: 'Gestión de listas y sitios',
+                experienceKey: 'explorer.exp.listsSites',
                 version: 'SharePoint Online 365'
             },
             {
                 contentType: "folder",
                 name: "Power Platform",
+                nameKey: "explorer.folder.powerPlatform",
                 icon: "/assets/icons/powerplatform.png",
                 content: [
                     {
                         contentType: "file",
                         name: "Dataverse",
                         icon: "assets/icons/dataverse.png",
-                        experience: "Gestión y conexión a través de .NET",
+                        experienceKey: "explorer.exp.dataverseConnection",
                         version: ""
                     },
                     {
                         contentType: "file",
                         name: "Power Automate",
                         icon: "assets/icons/automate.png",
-                        experience: "Desarrollo de flujos de nube",
+                        experienceKey: "explorer.exp.cloudFlows",
                         version: ""
                     }
                 ]
@@ -254,6 +260,28 @@ function getFolderByPath(data, path) {
     }, { content: data });
 }
 
+function itemName(item) {
+    return item.nameKey ? window.t(item.nameKey) : item.name;
+}
+
+function itemExperience(item) {
+    return item.experienceKey ? window.t(item.experienceKey) : item.experience;
+}
+
+function itemVersion(item) {
+    return item.versionKey ? window.t(item.versionKey) : item.version;
+}
+
+function getItemByPath(path) {
+    if (!path.length) return null;
+    return getFolderByPath(fsData, path);
+}
+
+function pathSegmentName(path) {
+    const item = getItemByPath(path);
+    return item ? itemName(item) : path[path.length - 1];
+}
+
 
 
 /* =====================
@@ -284,7 +312,7 @@ function render(winId) {
         );
     }
 
-    win.querySelector('.window-title').textContent = win.querySelector('#pathBar').lastElementChild.textContent;
+    window.setWindowTitle(winId, win.querySelector('#pathBar').lastElementChild.textContent, { custom: true });
 }
 
 function renderPath(winId) {
@@ -295,13 +323,13 @@ function renderPath(winId) {
     pathBar.innerHTML = "";
 
     const root = document.createElement("span");
-    root.textContent = "Disco";
+    root.textContent = window.t('explorer.disk');
     root.onclick = () => navigateTo(winId, []);
     pathBar.appendChild(root);
 
     state.currentPath.forEach((segment, index) => {
         const span = document.createElement("span");
-        span.textContent = segment;
+        span.textContent = pathSegmentName(state.currentPath.slice(0, index + 1));
         span.onclick = () =>
             navigateTo(winId, state.currentPath.slice(0, index + 1));
         pathBar.appendChild(span);
@@ -316,16 +344,18 @@ function renderGridItem(winId, item) {
     const state = explorers.get(winId);
     const div = document.createElement("div");
 
+    const experience = itemExperience(item) || "";
+    const version = itemVersion(item) || "";
     const title =
-        (item.experience || "") +
-        (item.experience && item.version ? " - " : "") +
-        (item.version || "");
+        experience +
+        (experience && version ? " - " : "") +
+        version;
 
     div.className = "ui-grid-item";
     div.title = title;
     div.innerHTML = `
     <img src="${item.icon}">
-    <span>${item.name}</span>
+    <span>${itemName(item)}</span>
   `;
 
     if (item.contentType === "folder") {
@@ -340,9 +370,9 @@ function renderListHeader() {
     const li = document.createElement("li");
     li.className = "ui-list-header";
     li.innerHTML = `
-    <span>Nombre</span>
-    <span>Experiencia</span>
-    <span>Versión</span>
+    <span>${window.t('explorer.name')}</span>
+    <span>${window.t('explorer.experience')}</span>
+    <span>${window.t('explorer.version')}</span>
   `;
     return li;
 }
@@ -350,11 +380,13 @@ function renderListHeader() {
 function renderListItem(winId, item) {
     const state = explorers.get(winId);
     const li = document.createElement("li");
+    const experience = itemExperience(item) || "";
+    const version = itemVersion(item) || "";
 
     li.innerHTML = `
-    <span><img src="${item.icon}" class="ui-small-icon">${item.name}</span>
-    <span title='${item.experience || ""}'$>${item.experience || "—"}</span>
-    <span title='${item.version || ""}'>${item.version || "—"}</span>
+    <span><img src="${item.icon}" class="ui-small-icon">${itemName(item)}</span>
+    <span title='${experience}'>${experience || "—"}</span>
+    <span title='${version}'>${version || "—"}</span>
   `;
 
     if (item.contentType === "folder") {
@@ -438,6 +470,16 @@ window.explorerInit = (winId, options) => {
     render(winId);
 };
 
+window.addEventListener('languagechange', () => {
+    explorers.forEach((_, winId) => {
+        const win = window.getWindow(winId);
+        if (win) {
+            window.translateElement(win);
+            render(winId);
+        }
+    });
+});
+
 
 window.explorerDispose = (winId) => {
     explorers.clear();
@@ -447,6 +489,6 @@ window.explorerGoBack = (e) => goBack(e);
 window.explorerGoForward = (e) => goForward(e);
 window.explorerSwitchView = (e) => switchView(e);
 window.explorerGoToPath = (e) => {
-    getWindowIdByEvent(e);
+    const winId = getWindowIdByEvent(e);
     render(winId);
 }

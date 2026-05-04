@@ -1,27 +1,28 @@
 function aboutChangeTab(winId, tabId) {
     let win = window.getWindow(winId);
+    const t = window.t;
     let html = '';
     let className = '';
     switch (tabId) {
         case 'overview':
             html = `
             <div class="about-image">
-            <img src="/assets/images/me.png" alt="Un selfie mío">
+            <img src="/assets/images/me.png" alt="David S. Barragan">
             </div>
 
             <div class="about-info">
             <h1><strong>David</strong> S. Barragán</h1>
-            <p class="ui-muted about-version">Desarrollador de aplicaciones</p>
+            <p class="ui-muted about-version">${t('about.overview.description')}</p>
 
             <ul class="ui-list about-specs">
-                <li>Desarrollador Full-Stack</li>
-                <li><strong>Stack principal</strong> .NET (Desktop/Web)</li>
-                <li><strong>Ubicación</strong> Madrid</li>
+                <li>${t('about.overview.position')}</li>
+                <li><strong>${t('about.overview.mainStack')}</strong> .NET (Desktop/Web)</li>
+                <li><strong>${t('about.overview.location.title')}</strong> Madrid (${t('about.overview.location.country')})</li>
             </ul>
 
             <div class="about-actions">
-                <button class="ui-button" onclick='window.openApp("settings", {"setting":"language"})'>Cambiar idioma</button>
-                <button class="ui-button primary" onclick = "window.open('/assets/CV.pdf', '_blank')">Descargar este CV...</button>
+                <button class="ui-button" onclick='window.openApp("settings", {"setting":"language"})'>${t('about.overview.changeLanguage')}</button>
+                <button class="ui-button primary" onclick = "window.open('/assets/CV.pdf', '_blank')">${t('about.overview.downloadCv')}</button>
             </div>
             </div>`;
             className = 'about-content';
@@ -31,30 +32,29 @@ function aboutChangeTab(winId, tabId) {
             <div class="contact-header">
             <img class="contact-icon" src="/assets/icons/contact.png" alt="">
             <div class="contact-text">
-                <h4>Contacto</h4>
+                <h4>${t('about.contact')}</h4>
                 <p class="ui-muted">
-                Si este proyecto le ha interesado y le gustaría ver algo similar
-                en su empresa, no dude en contactar conmigo.
+                ${t('about.contact.description')}
                 </p>
             </div>
             </div>
 
             <ul class="ui-list contact-list">
             <li>
-                <span>Correo electrónico</span>
-                <button class="ui-button" onclick="window.location.href = 'mailto:davidsanchezbarragan@gmail.com'">Enviar email</button>
+                <span>${t('about.contact.email')}</span>
+                <button class="ui-button" onclick="window.location.href = 'mailto:davidsanchezbarragan@gmail.com'">${t('about.contact.email.text')}</button>
             </li>
             <li>
                 <span>LinkedIn</span>
-                <button class="ui-button" onclick="window.open('https://www.linkedin.com/in/dsanchezb/', '_blank')">Ver perfil</button>
+                <button class="ui-button" onclick="window.open('https://www.linkedin.com/in/dsanchezb/', '_blank')">${t('about.contact.text')}</button>
             </li>
             <li>
                 <span>X (Twitter)</span>
-                <button class="ui-button" onclick="window.open('https://x.com/davdevdiv_', '_blank')">Visitar</button>
+                <button class="ui-button" onclick="window.open('https://x.com/davdevdiv_', '_blank')">${t('about.contact.visit')}</button>
             </li>
             <li>
                 <span>GitHub</span>
-                <button class="ui-button" onclick="window.open('https://github.com/dsb97', '_blank')">Ver repositorios</button>
+                <button class="ui-button" onclick="window.open('https://github.com/dsb97', '_blank')">${t('about.contact.github.text')}</button>
             </li>
             </ul>`;
             className = 'contact-layout';
@@ -73,12 +73,12 @@ function aboutChangeTab(winId, tabId) {
 
             html = `            
             <div class="experience-icon ui-muted">
-                <img src="/assets/icons/disk.png" alt="Experiencia">
-                <span>${totalYears} años</span>
+                <img src="/assets/icons/disk.png" alt="${t('about.workExperience')}">
+                <span>${totalYears} ${t('about.workExperience.years')}</span>
             </div>
 
             <div class="experience-info">
-                <h4>Experiencia laboral</h4>
+                <h4>${t('about.workExperience')}</h4>
 
                 <div class="experience-bar">
                     <div title="Indra" class="experience-segment blue" style="width: ${(indraYears / totalYears) * 100}%"></div>
@@ -89,59 +89,59 @@ function aboutChangeTab(winId, tabId) {
                     <div class="legend-item">
                         <span class="legend-color blue"></span>
                         <span>Indra</span>
-                        <span class="ui-muted">${indraYears} años</span>
+                        <span class="ui-muted">${indraYears} ${t('about.workExperience.years')}</span>
                     </div>
 
                     <div class="legend-item">
                         <span class="legend-color yellow"></span>
                         <span>NTT Data</span>
-                        <span class="ui-muted">${nttYears} años</span>
+                        <span class="ui-muted">${nttYears} ${t('about.workExperience.years')}</span>
                     </div>
                 </div>
             </div>
 
             <div class="experience-icon ui-muted">
-                <img src="/assets/icons/suitcase.png" alt="Sectores">
-                <span>${totalProjects} clientes</span>
+                <img src="/assets/icons/suitcase.png" alt="${t('about.workExperience.sectors')}">
+                <span>${totalProjects} ${t('about.workExperience.clients')}</span>
             </div>
 
             <div class="experience-info">
-                <h4>Sectores</h4>
+                <h4>${t('about.workExperience.sectors')}</h4>
 
                 <div class="experience-bar">
-                    <div title="Sector público" class="experience-segment blue" style="width: ${(publicSector / totalProjects) * 100}%"></div>
-                    <div title="Internacional" class="experience-segment yellow" style="width: ${(international / totalProjects) * 100}%"></div>
-                    <div title="Banca" class="experience-segment red" style="width: ${(banking / totalProjects) * 100}%"></div>
-                    <div title="Energía" class="experience-segment green" style="width: ${(energy / totalProjects) * 100}%"></div>
-                    <div title="Herramientas empresariales" class="experience-segment purple" style="width: ${(internalTools / totalProjects) * 100}%"></div>
+                    <div title="${t('about.workExperience.public')}" class="experience-segment blue" style="width: ${(publicSector / totalProjects) * 100}%"></div>
+                    <div title="${t('about.workExperience.international')}" class="experience-segment yellow" style="width: ${(international / totalProjects) * 100}%"></div>
+                    <div title="${t('about.workExperience.banking')}" class="experience-segment red" style="width: ${(banking / totalProjects) * 100}%"></div>
+                    <div title="${t('about.workExperience.energy')}" class="experience-segment green" style="width: ${(energy / totalProjects) * 100}%"></div>
+                    <div title="${t('about.workExperience.businessTools')}" class="experience-segment purple" style="width: ${(internalTools / totalProjects) * 100}%"></div>
                 </div>
 
                 <div class="experience-legend-inline">
                     <div class="legend-item">
                         <span class="legend-color blue"></span>
-                        <span>Público</span>
-                        <span class="ui-muted">${publicSector} clientes</span>
+                        <span>${t('about.workExperience.public')}</span>
+                        <span class="ui-muted">${publicSector} ${t('about.workExperience.clients')}</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color yellow"></span>
-                        <span>Internacional</span>
-                        <span class="ui-muted">${international} clientes</span>
+                        <span>${t('about.workExperience.international')}</span>
+                        <span class="ui-muted">${international} ${t('about.workExperience.clients')}</span>
 
                     </div>
                     <div class="legend-item">
                         <span class="legend-color red"></span>
-                        <span>Banca</span>
-                        <span class="ui-muted">${banking} clientes</span>
+                        <span>${t('about.workExperience.banking')}</span>
+                        <span class="ui-muted">${banking} ${t('about.workExperience.clients')}</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color green"></span>
-                        <span>Energía</span>
-                        <span class="ui-muted">${energy} clientes</span>
+                        <span>${t('about.workExperience.energy')}</span>
+                        <span class="ui-muted">${energy} ${t('about.workExperience.clients')}</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color purple"></span>
-                        <span>Herramientas empresariales</span>
-                        <span class="ui-muted">${internalTools} clientes</span>
+                        <span>${t('about.workExperience.businessTools')}</span>
+                        <span class="ui-muted">${internalTools} ${t('about.workExperience.clients')}</span>
                     </div>
                 </div>
             </div>
@@ -153,18 +153,18 @@ function aboutChangeTab(winId, tabId) {
             html = `
             <div class="education-item">
                 <img src="/assets/icons/dam.png" alt="CFGS DAM">
-                <strong>CFGS Desarrollo de Aplicaciones Multiplataforma</strong>
+                <strong>${t('about.education.dam')}</strong>
                 <span class="ui-muted">2016 - 2018</span>
             </div>
 
             <div class="education-item">
                 <img src="/assets/icons/daw.png" alt="CFGS DAW">
-                <strong>CFGS Desarrollo de Aplicaciones Web</strong>
+                <strong>${t('about.education.daw')}</strong>
                 <span class="ui-muted">2021 - 2022</span>
             </div>
 
             <div class="education-item">
-                <img src="/assets/icons/english.png" alt="Inglés">
+                <img src="/assets/icons/english.png" alt="${t('about.education.englishAlt')}">
                 <strong>Key English Test - Cambridge</strong>
                 <span class="ui-muted">2018</span>
             </div>
@@ -181,12 +181,17 @@ function aboutChangeTab(winId, tabId) {
         tab.classList.remove('active');
     });
     win.querySelector(`#${tabId}`).classList.add('active');
+    window.translateElement(win);
 
 }
 
 window.aboutInit = (winId, options) => {
     aboutChangeTab(winId, 'overview');
     let win = window.getWindow(winId);
+    window.addEventListener('languagechange', () => {
+        const activeTab = win.querySelector('.ui-tab.active')?.id || 'overview';
+        aboutChangeTab(winId, activeTab);
+    });
     const tabs = win.querySelector('.ui-tabs.about-tabs');
     tabs.addEventListener('click', (e) => {
         if (!e.target.id) return;
@@ -198,4 +203,3 @@ window.aboutInit = (winId, options) => {
 window.aboutDispose = () => {
 
 }
-

@@ -18,12 +18,7 @@ const DEFAULT_SETTINGS = {
 String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
-const DEFAULT_POSITION = {
-  coords: {
-    latitude: 40.416729,
-    longitude: -3.703339
-  }
-};
+
 const desktop = document.getElementById("desktop");
 const dockIcons = document.getElementById("dock-icons");
 const windowTemplate = document.getElementById("window-template");
@@ -36,36 +31,53 @@ let windowIdCounter = 1;
 
 const appsRegistry = {
   explorer: {
-    title: 'Explorador de archivos',
+    titleKey: 'apps.explorer',
     icon: { name: 'file-manager', pinned: true },
     singleton: false,
     size: { width: 575, height: 352 }
   },
   textEditor: {
-    title: 'Editor de texto',
+    titleKey: 'apps.textEditor',
     icon: { name: 'text-edit', pinned: true },
     singleton: false,
     size: { width: 695, height: 503 }
   },
   settings: {
-    title: 'Ajustes',
+    titleKey: 'apps.settings',
     icon: { name: 'settings', pinned: true },
     singleton: true,
     size: { width: 600, height: 400 }
   },
   terminal: {
-    title: 'Terminal',
+    titleKey: 'apps.terminal',
     icon: { name: 'terminal', pinned: true },
     singleton: true,
     size: { width: 350, height: 200 }
   },
   about: {
-    title: 'Acerca de...',
+    titleKey: 'apps.about',
     icon: { name: 'about', pinned: false },
     singleton: true,
     size: { width: 525, height: 'auto' }
   }
 };
+
+function getAppTitle(appId) {
+  const app = appsRegistry[appId];
+  if (!app) return '';
+  return app.titleKey ? t(app.titleKey) : app.title;
+}
+
+function composeWindowTitle(titleKey, titlePrefix = null, titlePrefixKey = null) {
+  const baseTitle = titleKey ? t(titleKey) : t('window.defaultTitle');
+  const prefix = titlePrefixKey ? t(titlePrefixKey) : titlePrefix;
+  return prefix ? `${prefix} - ${baseTitle}` : baseTitle;
+}
+
+function getWindowTitle(info) {
+  if (info.customTitle) return info.customTitle;
+  return composeWindowTitle(info.titleKey, info.titlePrefix, info.titlePrefixKey);
+}
 
 // ========================================
 // GESTIÓN DEL DOCK
@@ -106,8 +118,8 @@ function createDockIcon(appId, app) {
   const btn = document.createElement("div");
   btn.className = "dock-app-icon pinned";
   btn.dataset.appId = appId;
-  btn.dataset.title = app.title;
-  btn.innerHTML = `<img src="/assets/icons/${app.icon.name}.png" alt="${app.title}">`;
+  btn.dataset.title = getAppTitle(appId);
+  btn.innerHTML = `<img src="/assets/icons/${app.icon.name}.png" alt="${getAppTitle(appId)}">`;
 
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -198,6 +210,19 @@ function updateDockForApp(appId) {
   dockIcon.classList.toggle("has-multiple", wins.length > 1);
 }
 
+function updateDockTitles() {
+  document.querySelectorAll('.dock-app-icon').forEach(icon => {
+    const { appId, windowId } = icon.dataset;
+    const windowInfo = windowId ? windowsById[windowId] : null;
+    const title = windowInfo ? getWindowTitle(windowInfo) : getAppTitle(appId);
+
+    icon.dataset.title = title;
+
+    const img = icon.querySelector('img');
+    if (img) img.alt = title;
+  });
+}
+
 function removeDockMenu() {
   document.querySelectorAll('.dock-window-menu').forEach(m => m.remove());
 }
@@ -220,10 +245,13 @@ document.addEventListener("mousedown", (e) => {
 
 function createWindow(options = {}) {
   const {
-    title = "Nueva ventana",
+    title = t('window.defaultTitle'),
     contentHTML = "",
     appId = null,
     icon = "folder",
+    titleKey = null,
+    titlePrefix = null,
+    titlePrefixKey = null,
     size = {},
     position = {}
   } = options;
@@ -248,7 +276,7 @@ function createWindow(options = {}) {
     clone.classList.remove("opening");
   });
 
-  registerWindow(winId, clone, appId, icon);
+  registerWindow(winId, clone, appId, icon, { titleKey, titlePrefix, titlePrefixKey });
   makeWindowInteractive(clone);
   focusWindow(clone);
   createWindowDockButton(winId, title, icon, appId);
@@ -282,11 +310,49 @@ function setWindowContent(element, title, contentHTML) {
   if (contentHTML) contentEl.innerHTML = contentHTML;
 }
 
-function registerWindow(winId, element, appId, icon) {
+function setWindowTitle(winId, title, options = {}) {
+  const info = windowsById[winId];
+  if (!info) return;
+
+  if (options.custom) {
+    info.customTitle = title;
+  } else {
+    info.titlePrefix = title;
+    info.titlePrefixKey = null;
+    info.customTitle = null;
+  }
+
+  updateWindowTitle(winId);
+}
+
+function updateWindowTitle(winId) {
+  const info = windowsById[winId];
+  if (!info) return;
+
+  const title = getWindowTitle(info);
+  const titleEl = info.element.querySelector(".window-title");
+  if (titleEl) titleEl.textContent = title;
+
+  if (info.dockButton) {
+    info.dockButton.dataset.title = title;
+    const img = info.dockButton.querySelector('img');
+    if (img) img.alt = title;
+  }
+}
+
+function updateWindowTitles() {
+  Object.keys(windowsById).forEach(updateWindowTitle);
+}
+
+function registerWindow(winId, element, appId, icon, titleInfo = {}) {
   windowsById[winId] = {
     element,
     appId,
     icon,
+    titleKey: titleInfo.titleKey,
+    titlePrefix: titleInfo.titlePrefix,
+    titlePrefixKey: titleInfo.titlePrefixKey,
+    customTitle: null,
     minimized: false,
     maximized: false,
     dockButton: null,
@@ -304,7 +370,7 @@ function createWindowDockButton(winId, title, icon, appId) {
   btn.dataset.appId = appId;
   btn.dataset.windowId = winId;
   btn.dataset.title = title;
-  btn.innerHTML = `<img src="./assets/icons/${icon.name || "folder"}.png">`;
+  btn.innerHTML = `<img src="./assets/icons/${icon.name || "folder"}.png" alt="${title}">`;
   btn.addEventListener("click", () => restoreWindow(winId));
   createTooltip(btn);
 
@@ -723,22 +789,28 @@ async function openApp(appId, options = {}) {
 
   if (app.singleton && windowsByApp[appId].length > 0) {
     const winId = windowsByApp[appId][0];
+    updateWindowTitle(winId);
     restoreWindow(winId);
     return;
   }
 
   const contentHTML = await loadHTML(appId);
+  const titlePrefix = options.title;
   const win = createWindow({
-    title: app.title,
+    title: composeWindowTitle(app.titleKey, titlePrefix, options.titleKey),
     contentHTML,
     appId,
     icon: app.icon,
+    titleKey: app.titleKey,
+    titlePrefix,
+    titlePrefixKey: options.titleKey,
     size: options.size ?? appsRegistry[appId].size,
     position: options.position ?? appsRegistry[appId].position
   });
 
   const winId = win.dataset.windowId;
   windowsByApp[appId].push(winId);
+  translateElement(win);
 
   updateDockForApp(appId);
   loadAppStyle(appId);
@@ -784,6 +856,7 @@ function saveSettings(settings) {
 }
 
 function updateSettings(path, value) {
+  const settingPath = path.join('.');
   const settings = getSettings();
 
   let ref = settings;
@@ -795,11 +868,18 @@ function updateSettings(path, value) {
 
   saveSettings(settings);
   applySettings(settings);
+
+  if (settingPath === 'language') {
+    applyLanguage();
+    window.dispatchEvent(new CustomEvent('languagechange', { detail: { language: value } }));
+  }
 }
 
 function applySettings(settings) {
   applyDesktopWallpaper(settings.appearance.wallpaper);
   applyWindowColors(settings.appearance.windowColor);
+  document.documentElement.lang = settings.language;
+  applyLanguage();
 }
 
 function loadDesktopWallpaper() {
@@ -818,6 +898,47 @@ function applyDesktopWallpaper(src) {
   const desktopEl = document.getElementById('desktop');
   if (!desktopEl) return;
   desktopEl.style.backgroundImage = `url('${src}')`;
+}
+
+function getLanguage() {
+  return getSetting(['language'], 'es');
+}
+
+function t(key) {
+  if (!key) return '';
+  const lang = getLanguage();
+  return TRANSLATIONS[lang]?.[key] ?? TRANSLATIONS.es[key] ?? key;
+}
+
+function translateElement(root = document) {
+  root.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+
+  root.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.dataset.i18nTitle);
+  });
+
+  root.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    el.alt = t(el.dataset.i18nAlt);
+  });
+
+  root.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+
+  root.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+    el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel));
+  });
+}
+
+function applyLanguage() {
+  document.documentElement.lang = getLanguage();
+  document.title = t('app.documentTitle');
+  translateElement(document);
+  updateDockTitles();
+  updateWindowTitles();
+  updateClock();
 }
 
 // ========================================
@@ -856,7 +977,7 @@ function loadInitialSetup() {
     openApp('textEditor', {
       position: { left: 1211, top: 274 },
       firstLoad: true,
-      title: 'Responsabilidades.ted'
+      titleKey: 'editor.defaultFileTitle'
     });
   }
 }
@@ -867,7 +988,7 @@ function updateClock() {
   var h = time.getHours() >= 10 ? time.getHours() : '0' + time.getHours();
   var m = time.getMinutes() >= 10 ? time.getMinutes() : '0' + time.getMinutes();
   hour.innerHTML = `${h}:${m}`;
-  date.innerHTML = time.toLocaleDateString('es-ES', options);
+  date.innerHTML = time.toLocaleDateString(getLanguage() === 'en' ? 'en-GB' : 'es-ES' , options);
 }
 
 function getLocation() {
@@ -907,7 +1028,7 @@ function handlePosition(position) {
 }
 
 function forecastRequest(position) {
-  let url = `https://api.openweathermap.org/data/2.5/weather?lang=es&units=metric&lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=24df251cc48b660b67328e7b827099d5`;
+  let url = `https://api.openweathermap.org/data/2.5/weather?lang=${getLanguage()}&units=metric&lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=24df251cc48b660b67328e7b827099d5`;
   var myHeaders = new Headers();
   var myInit = {
     method: "GET",
@@ -957,7 +1078,12 @@ function getCityName(position) {
 function processCityNameResponse(data, position) {
   cityName.innerHTML = data.address.city;
   let dP = getSetting(['defaultPosition']);
-  cityName.title = (position.longitude == dP.longitude && position.latitude === dP.latitude ? 'Ubicación por defecto' : '');
+  cityName.title = (
+    position.coords.longitude == dP.coords.longitude &&
+    position.coords.latitude === dP.coords.latitude
+      ? t('status.defaultLocation')
+      : ''
+  );
 }
 
 function processForecastResponse(datos) {
@@ -969,14 +1095,21 @@ function processForecastResponse(datos) {
 // INICIALIZACIÓN
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
+  initDesktop();
+});
+
+window.addEventListener('languagechange', () => {
+  getLocation();
+});
+
+function initDesktop() {
+  applySettings(getSettings());
   getLocation();
   initDock();
   loadInitialSetup();
   updateClock();
   setInterval(updateClock, 1000);
-  applySettings(getSettings());
-});
-
+}
 
 // ========================================
 // API GLOBAL
@@ -989,3 +1122,6 @@ window.getWindow = (winId) => {
 window.updateSettings = updateSettings;
 window.getSetting = getSetting;
 window.openApp = openApp;
+window.setWindowTitle = setWindowTitle;
+window.t = t;
+window.translateElement = translateElement;

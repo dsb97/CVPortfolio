@@ -2,8 +2,8 @@
 
 
 <div class="settings-toolbar" data-toolbar>
-  <button class="ui-button icon primary btn-back" title="Atrás">
-    <img src="/assets/ui/left-arrow-white.png" alt="Volver atrás">
+  <button class="ui-button icon primary btn-back" title="Atras" data-i18n-title="settings.back">
+    <img src="/assets/ui/left-arrow-white.png" alt="Volver atras" data-i18n-alt="settings.backAlt">
   </button>
 </div>
 
@@ -13,39 +13,39 @@
 
 <!-- VISTA PRINCIPAL -->
 <template id="tpl-settings-home">
-  <h3>Ajustes</h3>
+  <h3 data-i18n="settings.title">Ajustes</h3>
 
   <div class="control-panel-grid">
     <div class="control-item" data-template="tpl-wallpaper">
       <img src="/assets/icons/image.png">
-      <span>Fondo de pantalla</span>
+      <span data-i18n="settings.wallpaper">Fondo de pantalla</span>
     </div>
 
     <div class="control-item" data-template="tpl-window-color">
       <img src="/assets/icons/color.png">
-      <span>Color de ventanas y dock</span>
+      <span data-i18n="settings.windowColor">Color de ventanas y dock</span>
     </div>
 
     <div class="control-item" data-template="tpl-language">
       <img src="/assets/icons/language.png">
-      <span>Idioma</span>
+      <span data-i18n="settings.language">Idioma</span>
     </div>
 
     <div class="control-item" data-template="tpl-privacy">
       <img src="/assets/icons/privacy.png">
-      <span>Privacidad</span>
+      <span data-i18n="settings.privacy">Privacidad</span>
     </div>
 
     <div class="control-item" data-template="tpl-location">
       <img src="/assets/icons/location.png">
-      <span>Ubicación</span>
+      <span data-i18n="settings.location">Ubicación</span>
     </div>
 
     <div class="control-item" onclick="openApp('about', {
       size: { width: 525, height: 'auto' },
       });">
       <img src="/assets/icons/about.png">
-      <span>Acerca de...</span>
+      <span data-i18n="settings.about">Acerca de...</span>
     </div>
   </div>
 </template>
@@ -53,29 +53,41 @@
 
 <!-- TEMPLATES -->
 <template id="tpl-wallpaper">
-  <h4>Fondo de pantalla</h4>
-  <p class="subtitle ui-muted">Haz clic en una imagen para usarla como fondo de escritorio.</p>
+  <h4 data-i18n="settings.wallpaper">Fondo de pantalla</h4>
+  <p class="subtitle ui-muted" data-i18n="settings.wallpaperHelp">Haz clic en una imagen para usarla como fondo de escritorio.</p>
 
   <div class="wallpaper-grid" id="wallpaperGrid"></div>
 
 </template>
 
 <template id="tpl-window-color">
-  <h3>Color de ventanas y dock</h3>
-  <p><img height="96" src="/assets/icons/build.png" alt=""> En construcción</p>
+  <h4 data-i18n="settings.windowColor">Color de ventanas y dock</h4>
+  <p><img height="96" src="/assets/icons/build.png" alt=""> <span data-i18n="settings.underConstruction">En construccion</span></p>
 </template>
 
 <template id="tpl-language">
-  <h3>Idioma</h3>
-  <p><img height="96" src="/assets/icons/build.png" alt=""> En construcción</p>
+  <h4 data-i18n="settings.language">Idioma</h4>
+
+  <div class="control-panel-grid">
+    <div class="control-item" data-language="es">
+      <img src="/assets/icons/spain.png">
+      <span data-i18n="settings.spanish">Español</span>
+    </div>
+
+    <div class="control-item" data-language="en">
+      <img src="/assets/icons/english.png">
+      <span data-i18n="settings.english">Inglés</span>
+    </div>
+  </div>
 </template>
 
+
 <template id="tpl-privacy">
-  <h3>Privacidad</h3>
-  <p><img height="96" src="/assets/icons/build.png" alt=""> En construcción</p>
+  <h4 data-i18n="settings.privacy">Privacidad</h4>
+  <p><img height="96" src="/assets/icons/build.png" alt=""> <span data-i18n="settings.underConstruction">En construccion</span></p>
 </template>
 
 <template id="tpl-location">
-  <h3>Ubicación</h3>
-  <p><img height="96" src="/assets/icons/build.png" alt=""> En construcción</p>
+  <h4 data-i18n="settings.location">Ubicación</h4>
+  <p><img height="96" src="/assets/icons/build.png" alt=""> <span data-i18n="settings.underConstruction">En construccion</span></p>
 </template>

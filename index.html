@@ -22,7 +22,7 @@
             <div class="icon-image">
                 <img src="/assets/icons/languages.png" alt="">
             </div>
-            <span class="icon-label">Lenguajes</span>
+            <span class="icon-label" data-i18n="desktop.languages">Lenguajes</span>
         </div>
         <div class="ui-grid-item desktop-icon" data-app-id="explorer" ondblclick="
         openApp('explorer', {
@@ -31,7 +31,7 @@
             <div class="icon-image">
                 <img src="/assets/icons/frameworks.png" alt="">
             </div>
-            <span class="icon-label">Frameworks</span>
+            <span class="icon-label" data-i18n="desktop.frameworks">Frameworks</span>
         </div>
         <div class="ui-grid-item desktop-icon" data-app-id="explorer" ondblclick="
         openApp('explorer', {
@@ -40,24 +40,24 @@
             <div class="icon-image">
                 <img src="/assets/icons/microsoft.png" alt="">
             </div>
-            <span class="icon-label">Microsoft</span>
+            <span class="icon-label" data-i18n="desktop.microsoft">Microsoft</span>
         </div>
         <div class="ui-grid-item desktop-icon" data-app-id="explorer" ondblclick="
             openApp('textEditor', {
                 firstLoad: true,
-                title: 'Responsabilidades.ted'
+                titleKey: 'editor.defaultFileTitle'
             });">
             <div class="icon-image">
                 <img src="/assets/icons/document.png" alt="">
             </div>
-            <span class="icon-label">Responsabilidades.ted</span>
+            <span class="icon-label" data-i18n="desktop.responsibilitiesFile">Responsabilidades.ted</span>
         </div>
     </div>
 
     <div id="statusbar">
         <div class="statusbar-left">
             <img id="forecastIcon" height="20" src="" alt="">
-            <span><strong id="forecastDescription">Previsión no disponible</strong> - <span id="cityName"></span></span>
+            <span><strong id="forecastDescription" data-i18n="status.forecastUnavailable">Prevision no disponible</strong> - <span id="cityName"></span></span>
         </div>
 
         <div class="statusbar-center">
@@ -92,6 +92,7 @@
         </div>
     </template>
 
+    <script src="translations.js"></script>
     <script src="index.js"></script>
 </body>
 

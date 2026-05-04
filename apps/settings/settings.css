@@ -28,6 +28,11 @@
   background: #eef6ff;
 }
 
+.control-item.selected {
+  background: #e5f1ff;
+  outline: 2px solid var(--ui-primary);
+}
+
 .settings-app {
   display: flex;
   height: 100%;

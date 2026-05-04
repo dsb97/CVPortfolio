@@ -30,21 +30,28 @@ window.settingsInit = (winId, options) => {
   const content = win.querySelector('#settingsContent');
   const toolbar = win.querySelector('.window-toolbar');
   const btnBack = win.querySelector('.btn-back');
+  let currentTemplateId = 'tpl-settings-home';
 
   btnBack.addEventListener('click', () => {
     loadTemplate('tpl-settings-home');
   });
 
   function loadTemplate(id) {
+    currentTemplateId = id;
     content.innerHTML = '';
 
     updateBackButton(win, id);
 
     const tpl = win.querySelector(`#${id}`);
     content.appendChild(tpl.content.cloneNode(true));
+    window.translateElement(content);
 
     if (id === 'tpl-wallpaper') {
       renderWallpapers();
+    }
+
+    if (id === 'tpl-language') {
+      renderLanguageOptions();
     }
 
     content.querySelectorAll('[data-template]').forEach(item => {
@@ -55,7 +62,7 @@ window.settingsInit = (winId, options) => {
   }
 
   function updateBackButton(win, currentTemplate) {
-    if(!toolbar) return;
+    if (!toolbar) return;
     toolbar.style.padding = '0';
 
     const btnBack = win.querySelector('.btn-back');
@@ -100,6 +107,24 @@ window.settingsInit = (winId, options) => {
     });
   }
 
+  function renderLanguageOptions() {
+    const currentLanguage = window.getSetting(['language'], 'es');
+
+    content.querySelectorAll('[data-language]').forEach(item => {
+      const language = item.dataset.language;
+
+      if (language === currentLanguage) {
+        item.classList.add('selected');
+      }
+
+      item.addEventListener('click', () => {
+        window.updateSettings(['language'], language);
+        loadTemplate('tpl-language');
+      });
+    });
+  }
+
+
   let templateToLoad = '';
   switch (options.setting) {
     case 'language':
@@ -111,6 +136,10 @@ window.settingsInit = (winId, options) => {
   }
 
   loadTemplate(templateToLoad);
+
+  window.addEventListener('languagechange', () => {
+    loadTemplate(currentTemplateId);
+  });
 
 
 }

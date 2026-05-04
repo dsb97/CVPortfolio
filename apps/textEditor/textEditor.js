@@ -6,6 +6,7 @@ window.textEditorInit = (winId, options) => {
   const mediaPanel = win.querySelector("#mediaPanel");
 
   let savedRange = null;
+  let loadingInitialContent = false;
 
   const saveSelection = () => {
     const sel = window.getSelection();
@@ -24,6 +25,11 @@ window.textEditorInit = (winId, options) => {
   editor.addEventListener("mouseup", saveSelection);
   editor.addEventListener("keyup", saveSelection);
   editor.addEventListener("focus", saveSelection);
+  editor.addEventListener("input", () => {
+    if (!loadingInitialContent) {
+      editor.dataset.generatedInitialContent = 'false';
+    }
+  });
 
   const getBlock = () => {
     const sel = window.getSelection();
@@ -91,7 +97,7 @@ window.textEditorInit = (winId, options) => {
   };
 
   // LISTS
-  document.querySelectorAll("[data-list]").forEach(btn => {
+  win.querySelectorAll("[data-list]").forEach(btn => {
     btn.onclick = () => {
       document.execCommand(
         btn.dataset.list === "ul" ? "insertUnorderedList" : "insertOrderedList"
@@ -100,7 +106,7 @@ window.textEditorInit = (winId, options) => {
   });
 
   // ALIGN
-  document.querySelectorAll("[data-align]").forEach(btn => {
+  win.querySelectorAll("[data-align]").forEach(btn => {
     btn.onclick = () =>
       document.execCommand("justify" + btn.dataset.align);
   });
@@ -120,7 +126,7 @@ window.textEditorInit = (winId, options) => {
     const blob = new Blob([editor.innerHTML], { type: "text/html" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `${editor.firstElementChild.textContent.substring(0, 60).trim() || 'Nuevo documento'}.ted`;
+    a.download = `${editor.firstElementChild.textContent.substring(0, 60).trim() || window.t('editor.newDocument')}.ted`;
     a.click();
   };
 
@@ -131,7 +137,7 @@ window.textEditorInit = (winId, options) => {
     const reader = new FileReader();
     reader.onload = () => {
       editor.innerHTML = reader.result;
-      win.querySelector('.window-title').innerHTML = `${file.name} - ${win.querySelector('.window-title').innerHTML}`;
+      window.setWindowTitle(winId, file.name);
     };
     reader.readAsText(file);
   };
@@ -158,7 +164,7 @@ window.textEditorInit = (winId, options) => {
     try {
       document.execCommand(command);
     } catch (e) {
-      console.error("No se pudo aplicar el estilo:", e);
+      console.error(window.t('editor.applyStyleError'), e);
     }
   };
 
@@ -168,42 +174,21 @@ window.textEditorInit = (winId, options) => {
   editor.addEventListener("blur", saveSelection);
 
   if (options.firstLoad) {
-    editor.innerHTML = `
-      <h1 style="text-align: center;">Responsabilidades en proyectos</h1>
-      <h2>Desarrollo de soluciones en entorno ETRM (Allegro)</h2>
-      <p>Participación en el desarrollo de soluciones técnicas y funcionales dentro de un proyecto basado en Allegro ETRM, orientado al trading de commodities.</p>
-      <p><b>Entre las tareas realizadas se incluyen:</b></p>
-      <ul>
-      <li>Implementación de funcionalidades adaptadas a los procesos de negocio del área de trading.</li>
-      <li>Ejecución de pruebas funcionales junto con usuarios clave para validar los desarrollos.</li>
-      <li>Colaboración en tareas de soporte de primer nivel, resolviendo incidencias operativas y dando asistencia al equipo de negocio.</li>
-      <li>Participación en la mejora continua del sistema, proponiendo ajustes técnicos y funcionales.</li>
-      </ul>
-      <h2>Desarrollo de aplicaciones .NET (Desktop y Web)</h2>
-      <p>Intervención en el diseño, desarrollo, pruebas y mantenimiento de aplicaciones tanto de escritorio como web basadas en tecnologías .NET.</p>
-      <p><b>Este trabajo abarca:</b></p>
-      <ul>
-      <li>Desarrollo de nuevas funcionalidades en diferentes proyectos con múltiples versiones del framework .NET.</li>
-      <li>Adaptación a distintos entornos tecnológicos y lenguajes asociados según las necesidades del proyecto.</li>
-      <li>Diseño y ejecución de pruebas técnicas y funcionales para asegurar la calidad del software.</li>
-      <li>Mantenimiento evolutivo y correctivo de aplicaciones existentes.</li>
-      <li>Resolución de incidencias y optimización del rendimiento de las soluciones implementadas.</li>
-      </ul>
-      <h2>Liderazgo técnico en Dynamics 365 y Power Platform</h2>
-      <p>Responsabilidad en el liderazgo del diseño, desarrollo y soporte de soluciones basadas en Microsoft Dynamics 365 y Power Platform.</p>
-      <p><b>Las funciones principales incluyen:</b></p>
-      <ul>
-      <li>Definición de arquitecturas técnicas y diseño de soluciones funcionales alineadas con los requisitos del negocio.</li>
-      <li>Liderazgo del desarrollo de aplicaciones, módulos y extensiones dentro del ecosistema Dynamics 365.</li>
-      <li>Gestión del soporte y mantenimiento de aplicaciones en producción, asegurando su estabilidad y evolución.</li>
-      <li>Coordinación técnica de equipos en la implementación de nuevas funcionalidades.</li>
-      <li>Mejora continua de las soluciones mediante la optimización de procesos y la adopción de buenas prácticas en la plataforma.</li>
-      </ul>`
+    loadingInitialContent = true;
+    editor.innerHTML = window.t('editor.initialContent');
+    editor.dataset.generatedInitialContent = 'true';
+    loadingInitialContent = false;
   }
 
-  if (options.title) {
-    win.querySelector('.window-title').innerHTML = `${options.title} - ${win.querySelector('.window-title').innerHTML}`;
-  }
+  window.addEventListener('languagechange', () => {
+    window.translateElement(win);
+
+    if (options.firstLoad && editor.dataset.generatedInitialContent === 'true') {
+      loadingInitialContent = true;
+      editor.innerHTML = window.t('editor.initialContent');
+      loadingInitialContent = false;
+    }
+  });
 
 }
 
