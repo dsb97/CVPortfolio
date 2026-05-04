@@ -62,7 +62,16 @@
 
 <template id="tpl-window-color">
   <h4 data-i18n="settings.windowColor">Color de ventanas y dock</h4>
-  <p><img height="96" src="/assets/icons/build.png" alt=""> <span data-i18n="settings.underConstruction">En construccion</span></p>
+
+  <section class="color-section">
+    <h5 data-i18n="settings.windowColorSection">Color de ventanas</h5>
+    <div class="wallpaper-grid color-grid" id="windowColorGrid"></div>
+  </section>
+
+  <section class="color-section">
+    <h5 data-i18n="settings.dockColorSection">Color de dock</h5>
+    <div class="wallpaper-grid color-grid" id="dockColorGrid"></div>
+  </section>
 </template>
 
 <template id="tpl-language">

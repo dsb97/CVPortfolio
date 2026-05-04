@@ -79,6 +79,37 @@
   outline-offset: -4px;
 }
 
+.color-section {
+  margin-top: 22px;
+}
+
+.color-section h5 {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.color-grid {
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 18px;
+}
+
+.color-swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(0, 0, 0, .22);
+  border-radius: var(--ui-radius);
+  background: var(--swatch-color);
+  cursor: pointer;
+  position: relative;
+  transition: outline-color .12s ease;
+}
+
+.color-swatch.selected {
+  outline: 4px solid var(--ui-primary);
+  outline-offset: -4px;
+}
+
 .btn-back {
   display: none;
 }

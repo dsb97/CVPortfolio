@@ -306,7 +306,10 @@ function setWindowContent(element, title, contentHTML) {
   const titleEl = element.querySelector(".window-title");
   const contentEl = element.querySelector(".window-content");
 
-  if (title) titleEl.textContent = title;
+  if (title) {
+    titleEl.removeAttribute('data-i18n');
+    titleEl.textContent = title;
+  }
   if (contentHTML) contentEl.innerHTML = contentHTML;
 }
 
@@ -827,10 +830,15 @@ function getSettings() {
   try {
     const saved = localStorage.getItem(SETTINGS_KEY);
     if (!saved) return structuredClone(DEFAULT_SETTINGS);
+    const parsedSettings = JSON.parse(saved);
 
     return {
       ...structuredClone(DEFAULT_SETTINGS),
-      ...JSON.parse(saved)
+      ...parsedSettings,
+      appearance: {
+        ...structuredClone(DEFAULT_SETTINGS).appearance,
+        ...parsedSettings.appearance
+      }
     };
   } catch (e) {
     console.warn('Error leyendo settings, usando defaults', e);
@@ -878,6 +886,7 @@ function updateSettings(path, value) {
 function applySettings(settings) {
   applyDesktopWallpaper(settings.appearance.wallpaper);
   applyWindowColors(settings.appearance.windowColor);
+  applyDockColors(settings.appearance.dockColor);
   document.documentElement.lang = settings.language;
   applyLanguage();
 }
@@ -892,6 +901,25 @@ function applyWindowColors(color) {
 
   root.style.setProperty('--ui-window-background-color', color + "cc");
   root.style.setProperty('--ui-window-active-background-color', color + "a8");
+}
+
+function applyDockColors(color) {
+  const root = document.documentElement;
+  const dockColor = color || DEFAULT_SETTINGS.appearance.dockColor;
+  const textColor = getReadableTextColor(dockColor);
+
+  root.style.setProperty('--ui-dock-background-color', dockColor + "cc");
+  root.style.setProperty('--ui-dock-text-color', textColor);
+}
+
+function getReadableTextColor(hexColor) {
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+  return luminance > 0.68 ? '#1f2933' : '#ffffff';
 }
 
 function applyDesktopWallpaper(src) {

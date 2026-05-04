@@ -27,6 +27,30 @@ window.settingsInit = (winId, options) => {
     'Waves.png',
   ];
 
+  const windowColors = [
+    '#f7fbff',
+    '#8db9e8',
+    '#73d6d5',
+    '#72c86f',
+    '#b7e46d',
+    '#fff2a5',
+    '#ffc36f',
+    '#e76565',
+    '#f49ac8',
+    '#efd5ec',
+    '#b595d0',
+    '#e4d9e5',
+    '#d9d2c1',
+    '#b99b9b',
+    '#b9b9b9',
+    '#ffffff'
+  ];
+
+  const dockColors = [
+    '#000000',
+    '#ffffff'
+  ];
+
   const content = win.querySelector('#settingsContent');
   const toolbar = win.querySelector('.window-toolbar');
   const btnBack = win.querySelector('.btn-back');
@@ -52,6 +76,10 @@ window.settingsInit = (winId, options) => {
 
     if (id === 'tpl-language') {
       renderLanguageOptions();
+    }
+
+    if (id === 'tpl-window-color') {
+      renderColorOptions();
     }
 
     content.querySelectorAll('[data-template]').forEach(item => {
@@ -121,6 +149,48 @@ window.settingsInit = (winId, options) => {
         window.updateSettings(['language'], language);
         loadTemplate('tpl-language');
       });
+    });
+  }
+
+  function renderColorOptions() {
+    renderColorGrid({
+      gridId: 'windowColorGrid',
+      colors: windowColors,
+      settingPath: ['appearance', 'windowColor']
+    });
+
+    renderColorGrid({
+      gridId: 'dockColorGrid',
+      colors: dockColors,
+      settingPath: ['appearance', 'dockColor']
+    });
+  }
+
+  function renderColorGrid({ gridId, colors, settingPath }) {
+    const grid = win.querySelector(`#${gridId}`);
+    if (!grid) return;
+
+    const selectedColor = window.getSetting(settingPath, '').toLowerCase();
+    grid.innerHTML = '';
+
+    colors.forEach(color => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'color-swatch';
+      button.style.setProperty('--swatch-color', color);
+      button.title = color;
+      button.setAttribute('aria-label', color);
+
+      if (color.toLowerCase() === selectedColor) {
+        button.classList.add('selected');
+      }
+
+      button.addEventListener('click', () => {
+        window.updateSettings(settingPath, color);
+        renderColorGrid({ gridId, colors, settingPath });
+      });
+
+      grid.appendChild(button);
     });
   }
 
