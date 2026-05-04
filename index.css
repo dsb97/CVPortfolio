@@ -47,13 +47,13 @@ body {
     bottom: 5px;
     height: 60px;
     padding: 8px 12px;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.5);
+    border-radius: 9px;
+    background: var(--ui-dock-background-color);
     display: flex;
     gap: 16px;
     align-items: center;
-    color: white;
-    backdrop-filter: blur(10px) saturate(2) brightness(1.5);
+    color: var(--ui-text);
+    backdrop-filter: blur(10px) saturate(4) brightness(0.5) hue-rotate(340deg);
 }
 
 #dock-icons,
@@ -78,27 +78,27 @@ body {
     height: 48px;
 }
 
-/* tooltip */
-.dock-app-icon::after {
-    content: attr(data-title);
-    position: absolute;
-    bottom: 120%;
-    left: 50%;
-    transform: translateX(-50%);
+.dock-tooltip {
+    position: fixed;
+    z-index: 999999;
 
-    background: #111;
-    color: #fff;
+    background: var(--ui-dock-background-color);
+    color: var(--ui-dock-text-color);
+    backdrop-filter: blur(10px) saturate(4) brightness(0.5) hue-rotate(340deg);
+    -webkit-backdrop-filter: blur(10px) saturate(4) brightness(0.5) hue-rotate(340deg);
+
     padding: 6px 10px;
-    border-radius: 6px;
-    /* font-size: 12px; */
+    border-radius: 9px;
     white-space: nowrap;
 
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+
+    transform: translate(-50%, 5px);
 }
 
-/* tooltip */
+
 .dock-app-icon.open::before {
     content: "";
     position: absolute;
@@ -119,8 +119,9 @@ body {
 .dock-window-menu {
     position: fixed;
     transform: translateX(-50%);
-    background: rgba(30, 30, 30, 0.95);
-    border-radius: 8px;
+    background: var(--ui-dock-background-color);
+    backdrop-filter: blur(10px) saturate(4) brightness(0.5) hue-rotate(340deg);
+    border-radius: 9px;
     padding: 6px;
     min-width: 180px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
@@ -146,8 +147,12 @@ body {
     justify-content: space-between;
     gap: 12px;
     padding: 6px 10px;
-    color: #fff;
-    /* font-size: var(--ui-font-size); */
+    color: var(--ui-dock-text-color);
+}
+
+.dock-window-menu-item:hover {
+    backdrop-filter: invert(1);
+    border-radius: 3px;
 }
 
 .dock-window-title {
@@ -158,12 +163,20 @@ body {
     background: none;
     border: none;
     color: #aaa;
-    /* font-size: 14px; */
 }
 
-.dock-window-close:hover {
-    color: #ff5f57;
+
+.dock-window-menu-item:hover .dock-window-close {
+    color: black;
 }
+
+.dock-window-menu-item:hover .dock-window-close:hover {
+        color: #ff5f57;
+
+}
+
+
+
 
 
 .window {
@@ -174,7 +187,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    backdrop-filter: blur(10px) saturate(2) brightness(1.5);
+    backdrop-filter: blur(10px) saturate(4) brightness(0.5) hue-rotate(340deg);
     transition:
         transform 0.2s cubic-bezier(0.2, 1.1, 0.3, 1),
         opacity 0.12s ease;
@@ -337,11 +350,11 @@ body {
     align-items: center;
     justify-content: space-between;
 
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px) saturate(2) brightness(1.5);
+    background: var(--ui-dock-background-color);
+    backdrop-filter: blur(10px) saturate(4) brightness(0.5) hue-rotate(340deg);
 
-    border-radius: var(--ui-radius);
-    color: white;
+    border-radius: 9px;
+    color: var(--ui-dock-text-color);
 }
 
 .statusbar-left,

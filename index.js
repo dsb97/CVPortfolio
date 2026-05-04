@@ -4,7 +4,15 @@
 const DEFAULT_SETTINGS = {
   appearance: {
     wallpaper: '/assets/images/wallpapers/Gradient.png',
-    windowColor: '#ffffff'
+    windowColor: '#ffffff',
+    dockColor: '#000000'
+  },
+  language: 'es',
+  defaultPosition: {
+    coords: {
+      latitude: 40.416729,
+      longitude: -3.703339
+    }
   }
 };
 String.prototype.capitalize = function () {
@@ -63,6 +71,28 @@ const appsRegistry = {
 // GESTIÓN DEL DOCK
 // ========================================
 
+
+const dockTooltip = document.createElement("div");
+dockTooltip.className = "dock-tooltip";
+document.body.appendChild(dockTooltip);
+
+function createTooltip(btn) {
+  btn.addEventListener("mouseenter", () => {
+    dockTooltip.textContent = btn.dataset.title;
+
+    const rect = btn.getBoundingClientRect();
+
+    dockTooltip.style.left = rect.left + rect.width / 2 + "px";
+    dockTooltip.style.top = rect.top - 42 + "px";
+
+    dockTooltip.style.opacity = "1";
+  });
+
+  btn.addEventListener("mouseleave", () => {
+    dockTooltip.style.opacity = "0";
+  });
+}
+
 function initDock() {
   Object.entries(appsRegistry).forEach(([appId, app]) => {
     if (!app.icon?.pinned) return;
@@ -84,6 +114,8 @@ function createDockIcon(appId, app) {
     handleDockIconClick(appId, btn);
   });
 
+  createTooltip(btn);
+
   return btn;
 }
 
@@ -102,9 +134,12 @@ function handleDockIconClick(appId, btn) {
 function createDockMenu(appId, dockIcon) {
   removeDockMenu();
 
+  dockTooltip.style.opacity = "0";
+
   const menu = document.createElement("div");
   menu.className = "dock-window-menu";
   menu.dataset.appId = appId;
+  menu.style.zIndex = 999999;
 
   windowsByApp[appId].forEach(winId => {
     const info = windowsById[winId];
@@ -161,8 +196,6 @@ function updateDockForApp(appId) {
   const wins = windowsByApp[appId] || [];
   dockIcon.classList.toggle("open", wins.length > 0);
   dockIcon.classList.toggle("has-multiple", wins.length > 1);
-
-  removeDockMenu();
 }
 
 function removeDockMenu() {
@@ -273,6 +306,7 @@ function createWindowDockButton(winId, title, icon, appId) {
   btn.dataset.title = title;
   btn.innerHTML = `<img src="./assets/icons/${icon.name || "folder"}.png">`;
   btn.addEventListener("click", () => restoreWindow(winId));
+  createTooltip(btn);
 
   dockIcons.appendChild(btn);
   info.dockButton = btn;
@@ -404,8 +438,8 @@ function maximizeWindow(winEl, info) {
   info.prevRect = {
     left: rect.left,
     top: rect.top,
-    width: rect.width,
-    height: rect.height
+    width: winEl.style.width === '' || winEl.style.width === 'auto' ? 'auto' : rect.width + 'px',
+    height: winEl.style.height === '' || winEl.style.height === 'auto' ? 'auto' : rect.height + 'px'
   };
 
   winEl.classList.add("maximized");
@@ -422,8 +456,8 @@ function restoreMaximizedWindow(winEl, info) {
   if (info.prevRect) {
     winEl.style.left = info.prevRect.left + "px";
     winEl.style.top = info.prevRect.top + "px";
-    winEl.style.width = info.prevRect.width + "px";
-    winEl.style.height = info.prevRect.height + "px";
+    winEl.style.width = info.prevRect.width;
+    winEl.style.height = info.prevRect.height;
   }
 
   info.maximized = false;
@@ -446,6 +480,20 @@ function closeWindow(winEl) {
 
     if (info.dockButton && !appsRegistry[info.appId]?.icon?.pinned) {
       info.dockButton.remove();
+    }
+
+    const openMenu = document.querySelector(
+      `.dock-window-menu[data-app-id="${appId}"]`
+    );
+
+    if (openMenu) {
+      const remainingWins = windowsByApp[appId] || [];
+
+      if (remainingWins.length <= 1) {
+        removeDockMenu();
+      } else {
+        createDockMenu(appId, getDockIconForWindow(info));
+      }
     }
 
     updateDockForApp(appId);
@@ -524,7 +572,6 @@ function setupWindowDrag(winEl) {
     let newLeft = startLeft + dx;
     let newTop = startTop + dy;
 
-    /* límite superior (statusbar) */
     const statusbar = document.getElementById("statusbar");
     const topLimit = statusbar ? statusbar.offsetHeight + statusbar.offsetTop : 0;
 
@@ -763,8 +810,8 @@ function loadDesktopWallpaper() {
 function applyWindowColors(color) {
   const root = document.documentElement;
 
-  root.style.setProperty('--ui-window-background-color', color + "e6");
-  root.style.setProperty('--ui-window-active-background-color', color + "cc");
+  root.style.setProperty('--ui-window-background-color', color + "cc");
+  root.style.setProperty('--ui-window-active-background-color', color + "a8");
 }
 
 function applyDesktopWallpaper(src) {
@@ -794,8 +841,8 @@ function loadInitialSetup() {
       path: ['Frameworks']
     });
     openApp('explorer', {
-      size: { width: 575, height: 352 },
-      position: { left: 45, top: 425 },
+      size: { width: 575, height: 346 },
+      position: { left: 45, top: 431 },
       path: ['Microsoft']
     });
     openApp('terminal', {
@@ -829,7 +876,7 @@ function getLocation() {
   const timeout = setTimeout(() => {
     if (!resolved) {
       resolved = true;
-      handlePosition(DEFAULT_POSITION);
+      handlePosition(getSetting(['defaultPosition']));
     }
   }, 6000);
 
@@ -844,7 +891,7 @@ function getLocation() {
       if (resolved) return;
       resolved = true;
       clearTimeout(timeout);
-      handlePosition(DEFAULT_POSITION);
+      handlePosition(getSetting(['defaultPosition']));
     },
     {
       timeout: 5000,
@@ -909,7 +956,8 @@ function getCityName(position) {
 
 function processCityNameResponse(data, position) {
   cityName.innerHTML = data.address.city;
-  cityName.title = (position == DEFAULT_POSITION ? 'Ubicación por defecto' : '');
+  let dP = getSetting(['defaultPosition']);
+  cityName.title = (position.longitude == dP.longitude && position.latitude === dP.latitude ? 'Ubicación por defecto' : '');
 }
 
 function processForecastResponse(datos) {
@@ -920,14 +968,15 @@ function processForecastResponse(datos) {
 // ========================================
 // INICIALIZACIÓN
 // ========================================
-getLocation();
 document.addEventListener('DOMContentLoaded', () => {
+  getLocation();
+  initDock();
+  loadInitialSetup();
+  updateClock();
+  setInterval(updateClock, 1000);
   applySettings(getSettings());
 });
-initDock();
-loadInitialSetup();
-updateClock();
-setInterval(updateClock, 1000);
+
 
 // ========================================
 // API GLOBAL
