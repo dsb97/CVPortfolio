@@ -203,7 +203,7 @@ var TRANSLATIONS = {
     'settings.windowColor.slate' : 'Slate',
     'settings.windowColor.frost' : 'Frost',
     'settings.windowColor.night' : 'Night',
-    'settings.windowColorHelp': 'You can change te color of windows, the dock and the status bar. Pick one of the available colors.',
+    'settings.windowColorHelp': 'You can change the color of windows, the dock and the status bar. Pick one of the available colors.',
     'settings.windowColorSection': 'Window color',
     'settings.dockColorSection': 'Dock and status bar color',
     'settings.language': 'Language',
