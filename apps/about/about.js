@@ -1,6 +1,7 @@
 function aboutChangeTab(winId, tabId) {
     let win = window.getWindow(winId);
     const t = window.t;
+    const getSetting = window.getSetting;
     let html = '';
     let className = '';
     switch (tabId) {
@@ -46,7 +47,7 @@ function aboutChangeTab(winId, tabId) {
             </li>
             <li>
                 <span>LinkedIn</span>
-                <button class="ui-button" onclick="window.open('https://www.linkedin.com/in/dsanchezb/', '_blank')">${t('about.contact.text')}</button>
+                <button class="ui-button" onclick="window.open('https://www.linkedin.com/in/dsanchezb/?locale=${getSetting(['language'], 'es') == 'es' ? 'es-ES' : 'en-US'}', '_blank')">${t('about.contact.text')}</button>
             </li>
             <li>
                 <span>X (Twitter)</span>

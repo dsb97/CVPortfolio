@@ -14,6 +14,7 @@
 
   --ui-text: #1f1f1f;
   --ui-text-muted: #6b6b6b;
+  --ui-text-error: #b42318;
 
   /* Radius */
   --ui-radius: 6px;
@@ -88,6 +89,9 @@ ins {
   color: var(--ui-text-muted);
 }
 
+.ui-error {
+  color: var(--ui-text-error);
+}
 
 .ui-label {
   /* font-size: 12px; */
@@ -208,6 +212,23 @@ label.ui-button {
   background: var(--ui-primary-hover);
 }
 
+.ui-close {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 8px 8px;
+    transition: background-color 0.12s ease;
+    background-color: var(--ui-window-button-close);
+    background-image: url('/assets/ui/close.svg');
+}
+
+.ui-close:hover {
+    background-color: var(--ui-window-button-close-hover);
+}
 /* ===============================
    CHECKBOX & RADIO
    =============================== */

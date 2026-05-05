@@ -3,6 +3,8 @@ window.settingsInit = (winId, options) => {
   if (!win) return;
 
   const CUSTOM_WALLPAPERS_KEY = 'customWallpapers';
+  const CUSTOM_WALLPAPER_MAX_SIZE = 1600;
+  const CUSTOM_WALLPAPER_QUALITY = 0.78;
 
   const wallpapers = [
     'Architecture.png',
@@ -30,27 +32,81 @@ window.settingsInit = (winId, options) => {
   ];
 
   const windowColors = [
-    '#f7fbff',
-    '#8db9e8',
-    '#73d6d5',
-    '#72c86f',
-    '#b7e46d',
-    '#fff2a5',
-    '#ffc36f',
-    '#e76565',
-    '#f49ac8',
-    '#efd5ec',
-    '#b595d0',
-    '#e4d9e5',
-    '#d9d2c1',
-    '#b99b9b',
-    '#b9b9b9',
-    '#ffffff'
+    {
+      code: '#f7fbff',
+      name: window.t ? window.t('settings.windowColor.sky') : 'Cielo'
+    },
+    {
+      code: '#8db9e8',
+      name: window.t ? window.t('settings.windowColor.twilight') : 'Crepúsculo'
+    },
+    {
+      code: '#73d6d5',
+      name: window.t ? window.t('settings.windowColor.sea') : 'Mar'
+    },
+    {
+      code: '#72c86f',
+      name: window.t ? window.t('settings.windowColor.leaf') : 'Hoja'
+    },
+    {
+      code: '#b7e46d',
+      name: window.t ? window.t('settings.windowColor.lime') : 'Lima'
+    },
+    {
+      code: '#fff2a5',
+      name: window.t ? window.t('settings.windowColor.sun') : 'Sol'
+    },
+    {
+      code: '#ffc36f',
+      name: window.t ? window.t('settings.windowColor.pumpkin') : 'Calabaza'
+    },
+    {
+      code: '#e76565',
+      name: window.t ? window.t('settings.windowColor.ruby') : 'Rubí'
+    },
+    {
+      code: '#f49ac8',
+      name: window.t ? window.t('settings.windowColor.fuschia') : 'Fucsia'
+    },
+    {
+      code: '#efd5ec',
+      name: window.t ? window.t('settings.windowColor.flush') : 'Rubor'
+    },
+    {
+      code: '#b595d0',
+      name: window.t ? window.t('settings.windowColor.violet') : 'Violeta'
+    },
+    {
+      code: '#e4d9e5',
+      name: window.t ? window.t('settings.windowColor.lavender') : 'Lavanda'
+    },
+    {
+      code: '#d9d2c1',
+      name: window.t ? window.t('settings.windowColor.taupe') : 'Gris'
+    },
+    {
+      code: '#b99b9b',
+      name: window.t ? window.t('settings.windowColor.chocolate') : 'Chocolate'
+    },
+    {
+      code: '#b9b9b9',
+      name: window.t ? window.t('settings.windowColor.slate') : 'Pizarra'
+    },
+    {
+      code: '#ffffff',
+      name: window.t ? window.t('settings.windowColor.frost') : 'Hielo'
+    },
   ];
 
   const dockColors = [
-    '#000000',
-    '#ffffff'
+    {
+      code: '#000000',
+      name: window.t ? window.t('settings.windowColor.night') : 'Noche'
+    },
+    {
+      code: '#ffffff',
+      name: window.t ? window.t('settings.windowColor.frost') : 'Hielo'
+    }
   ];
 
   const content = win.querySelector('#settingsContent');
@@ -114,7 +170,9 @@ window.settingsInit = (winId, options) => {
 
     grid.innerHTML = '';
 
-    const savedWallpaper = window.getSetting(['appearance', 'wallpaper']);
+    const customWallpapers = getCustomWallpapers();
+    let savedWallpaper = window.getSetting(['appearance', 'wallpaper']);
+    savedWallpaper = migrateCustomWallpaperSetting(savedWallpaper, customWallpapers);
 
     wallpapers.forEach(pic => {
       const url = `${pathFull}/${pic}`;
@@ -127,13 +185,14 @@ window.settingsInit = (winId, options) => {
       }));
     });
 
-    getCustomWallpapers().forEach(wallpaper => {
+    customWallpapers.forEach(wallpaper => {
+      const settingValue = getCustomWallpaperSettingValue(wallpaper.id);
       grid.appendChild(createWallpaperItem({
-        src: wallpaper.src,
+        src: settingValue,
         thumb: wallpaper.src,
         title: wallpaper.name,
         alt: wallpaper.name,
-        isSelected: wallpaper.src === savedWallpaper,
+        isSelected: settingValue === savedWallpaper || wallpaper.src === savedWallpaper,
         onRemove: () => removeCustomWallpaper(wallpaper.id)
       }));
     });
@@ -164,8 +223,7 @@ window.settingsInit = (winId, options) => {
     if (onRemove) {
       const removeButton = document.createElement('button');
       removeButton.type = 'button';
-      removeButton.className = 'ui-button icon wallpaper-remove';
-      removeButton.textContent = 'x';
+      removeButton.className = 'ui-close wallpaper-remove';
       removeButton.title = window.t ? window.t('settings.removeWallpaper') : 'Quitar fondo';
       removeButton.setAttribute('aria-label', removeButton.title);
       removeButton.addEventListener('click', (event) => {
@@ -186,24 +244,72 @@ window.settingsInit = (winId, options) => {
       const file = input.files?.[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        const src = reader.result;
-        if (typeof src !== 'string') return;
+      createOptimizedWallpaper(file)
+        .then(src => {
+          clearWallpaperMessage();
+          const customWallpapers = getCustomWallpapers();
+          const wallpaper = {
+            id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+            name: file.name,
+            src
+          };
 
-        const customWallpapers = getCustomWallpapers();
-        customWallpapers.push({
-          id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-          name: file.name,
-          src
+          customWallpapers.push(wallpaper);
+
+          if (!saveCustomWallpapers(customWallpapers)) {
+            showWallpaperMessage(window.t ? window.t('settings.wallpaperStorageError') : 'No hay espacio suficiente para guardar este fondo.');
+            return;
+          }
+
+          window.updateSettings(['appearance', 'wallpaper'], getCustomWallpaperSettingValue(wallpaper.id));
+          renderWallpapers();
+        })
+        .catch((error) => {
+          console.warn('Error preparando fondo personalizado', error);
+          showWallpaperMessage(window.t ? window.t('settings.wallpaperLoadError') : 'No se pudo cargar esta imagen.');
         });
 
-        saveCustomWallpapers(customWallpapers);
-        window.updateSettings(['appearance', 'wallpaper'], src);
-        renderWallpapers();
+      input.value = '';
+    });
+  }
+
+  function createOptimizedWallpaper(file) {
+    return new Promise((resolve, reject) => {
+      if (!file.type.startsWith('image/')) {
+        reject(new Error('El archivo no es una imagen'));
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.addEventListener('error', () => reject(reader.error));
+      reader.addEventListener('load', () => {
+        if (typeof reader.result !== 'string') {
+          reject(new Error('Imagen no valida'));
+          return;
+        }
+
+        const img = new Image();
+        img.addEventListener('error', () => reject(new Error('No se pudo leer la imagen')));
+        img.addEventListener('load', () => {
+          const scale = Math.min(1, CUSTOM_WALLPAPER_MAX_SIZE / Math.max(img.width, img.height));
+          const width = Math.max(1, Math.round(img.width * scale));
+          const height = Math.max(1, Math.round(img.height * scale));
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+
+          if (!context) {
+            reject(new Error('Canvas no disponible'));
+            return;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          context.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', CUSTOM_WALLPAPER_QUALITY));
+        });
+        img.src = reader.result;
       });
       reader.readAsDataURL(file);
-      input.value = '';
     });
   }
 
@@ -227,7 +333,28 @@ window.settingsInit = (winId, options) => {
   }
 
   function saveCustomWallpapers(wallpapers) {
-    localStorage.setItem(CUSTOM_WALLPAPERS_KEY, JSON.stringify(wallpapers));
+    try {
+      localStorage.setItem(CUSTOM_WALLPAPERS_KEY, JSON.stringify(wallpapers));
+      return true;
+    } catch (e) {
+      console.warn('No se pudieron guardar los fondos personalizados', e);
+      return false;
+    }
+  }
+
+  function getCustomWallpaperSettingValue(id) {
+    return `custom-wallpaper:${id}`;
+  }
+
+  function migrateCustomWallpaperSetting(savedWallpaper, customWallpapers) {
+    if (!savedWallpaper?.startsWith('data:image/')) return savedWallpaper;
+
+    const wallpaper = customWallpapers.find(item => item.src === savedWallpaper);
+    if (!wallpaper) return savedWallpaper;
+
+    const settingValue = getCustomWallpaperSettingValue(wallpaper.id);
+    window.updateSettings(['appearance', 'wallpaper'], settingValue);
+    return settingValue;
   }
 
   function removeCustomWallpaper(id) {
@@ -238,11 +365,24 @@ window.settingsInit = (winId, options) => {
 
     saveCustomWallpapers(updatedWallpapers);
 
-    if (wallpaperToRemove?.src === currentWallpaper) {
+    if (
+      currentWallpaper === getCustomWallpaperSettingValue(id) ||
+      wallpaperToRemove?.src === currentWallpaper
+    ) {
       window.updateSettings(['appearance', 'wallpaper'], '/assets/images/wallpapers/Gradient.png');
     }
 
     renderWallpapers();
+  }
+
+  function showWallpaperMessage(message) {
+    const messageEl = win.querySelector('#wallpaperMessage');
+    if (!messageEl) return;
+    messageEl.textContent = message;
+  }
+
+  function clearWallpaperMessage() {
+    showWallpaperMessage('');
   }
 
   function renderLanguageOptions() {
@@ -287,16 +427,16 @@ window.settingsInit = (winId, options) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'color-swatch';
-      button.style.setProperty('--swatch-color', color);
-      button.title = color;
-      button.setAttribute('aria-label', color);
+      button.style.setProperty('--swatch-color', color.code);
+      button.title = color.name;
+      button.setAttribute('aria-label', color.name);
 
-      if (color.toLowerCase() === selectedColor) {
+      if (color.code.toLowerCase() === selectedColor) {
         button.classList.add('selected');
       }
 
       button.addEventListener('click', () => {
-        window.updateSettings(settingPath, color);
+        window.updateSettings(settingPath, color.code);
         renderColorGrid({ gridId, colors, settingPath });
       });
 

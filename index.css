@@ -107,7 +107,7 @@ body {
     transform: translateX(-50%);
     width: 35px;
     height: 3px;
-    background: white;
+    background: var(--ui-dock-text-color);
     border-radius: 4px;
 }
 
@@ -158,26 +158,6 @@ body {
 .dock-window-title {
     flex: 1;
 }
-
-.dock-window-close {
-    background: none;
-    border: none;
-    color: #aaa;
-}
-
-
-.dock-window-menu-item:hover .dock-window-close {
-    color: black;
-}
-
-.dock-window-menu-item:hover .dock-window-close:hover {
-        color: #ff5f57;
-
-}
-
-
-
-
 
 .window {
     position: absolute;

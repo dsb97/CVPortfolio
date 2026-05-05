@@ -180,8 +180,7 @@ function createDockMenuItem(winId, windowInfo) {
   });
 
   const closeBtn = document.createElement("button");
-  closeBtn.className = "dock-window-close";
-  closeBtn.textContent = "×";
+  closeBtn.className = "ui-close";
 
   closeBtn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -908,7 +907,7 @@ function applyDockColors(color) {
   const dockColor = color || DEFAULT_SETTINGS.appearance.dockColor;
   const textColor = getReadableTextColor(dockColor);
 
-  root.style.setProperty('--ui-dock-background-color', dockColor + "cc");
+  root.style.setProperty('--ui-dock-background-color', dockColor + "80");
   root.style.setProperty('--ui-dock-text-color', textColor);
 }
 
@@ -925,7 +924,25 @@ function getReadableTextColor(hexColor) {
 function applyDesktopWallpaper(src) {
   const desktopEl = document.getElementById('desktop');
   if (!desktopEl) return;
-  desktopEl.style.backgroundImage = `url('${src}')`;
+  desktopEl.style.backgroundImage = `url('${resolveDesktopWallpaper(src)}')`;
+}
+
+function resolveDesktopWallpaper(src) {
+  const customWallpaperPrefix = 'custom-wallpaper:';
+  if (!src?.startsWith(customWallpaperPrefix)) return src;
+
+  try {
+    const customWallpapers = JSON.parse(localStorage.getItem('customWallpapers') || '[]');
+    const wallpaperId = src.slice(customWallpaperPrefix.length);
+    const wallpaper = Array.isArray(customWallpapers)
+      ? customWallpapers.find(item => item?.id === wallpaperId)
+      : null;
+
+    return wallpaper?.src || DEFAULT_SETTINGS.appearance.wallpaper;
+  } catch (e) {
+    console.warn('Error leyendo fondo personalizado', e);
+    return DEFAULT_SETTINGS.appearance.wallpaper;
+  }
 }
 
 function getLanguage() {
