@@ -34,78 +34,96 @@ window.settingsInit = (winId, options) => {
   const windowColors = [
     {
       code: '#f7fbff',
-      name: window.t ? window.t('settings.windowColor.sky') : 'Cielo'
+      key: 'settings.windowColor.sky',
+      defaultName: 'Cielo'
     },
     {
       code: '#8db9e8',
-      name: window.t ? window.t('settings.windowColor.twilight') : 'Crepúsculo'
+      key: 'settings.windowColor.twilight',
+      defaultName: 'Crepúsculo'
     },
     {
       code: '#73d6d5',
-      name: window.t ? window.t('settings.windowColor.sea') : 'Mar'
+      key: 'settings.windowColor.sea',
+      defaultName: 'Mar'
     },
     {
       code: '#72c86f',
-      name: window.t ? window.t('settings.windowColor.leaf') : 'Hoja'
+      key: 'settings.windowColor.leaf',
+      defaultName: 'Hoja'
     },
     {
       code: '#b7e46d',
-      name: window.t ? window.t('settings.windowColor.lime') : 'Lima'
+      key: 'settings.windowColor.lime',
+      defaultName: 'Lima'
     },
     {
       code: '#fff2a5',
-      name: window.t ? window.t('settings.windowColor.sun') : 'Sol'
+      key: 'settings.windowColor.sun',
+      defaultName: 'Sol'
     },
     {
       code: '#ffc36f',
-      name: window.t ? window.t('settings.windowColor.pumpkin') : 'Calabaza'
+      key: 'settings.windowColor.pumpkin',
+      defaultName: 'Calabaza'
     },
     {
       code: '#e76565',
-      name: window.t ? window.t('settings.windowColor.ruby') : 'Rubí'
+      key: 'settings.windowColor.ruby',
+      defaultName: 'Rubí'
     },
     {
       code: '#f49ac8',
-      name: window.t ? window.t('settings.windowColor.fuschia') : 'Fucsia'
+      key: 'settings.windowColor.fuschia',
+      defaultName: 'Fucsia'
     },
     {
       code: '#efd5ec',
-      name: window.t ? window.t('settings.windowColor.flush') : 'Rubor'
+      key: 'settings.windowColor.flush',
+      defaultName: 'Rubor'
     },
     {
       code: '#b595d0',
-      name: window.t ? window.t('settings.windowColor.violet') : 'Violeta'
+      key: 'settings.windowColor.violet',
+      defaultName: 'Violeta'
     },
     {
       code: '#e4d9e5',
-      name: window.t ? window.t('settings.windowColor.lavender') : 'Lavanda'
+      key: 'settings.windowColor.lavender',
+      defaultName: 'Lavanda'
     },
     {
       code: '#d9d2c1',
-      name: window.t ? window.t('settings.windowColor.taupe') : 'Gris'
+      key: 'settings.windowColor.taupe',
+      defaultName: 'Gris'
     },
     {
       code: '#b99b9b',
-      name: window.t ? window.t('settings.windowColor.chocolate') : 'Chocolate'
+      key: 'settings.windowColor.chocolate',
+      defaultName: 'Chocolate'
     },
     {
       code: '#b9b9b9',
-      name: window.t ? window.t('settings.windowColor.slate') : 'Pizarra'
+      key: 'settings.windowColor.slate',
+      defaultName: 'Pizarra'
     },
     {
       code: '#ffffff',
-      name: window.t ? window.t('settings.windowColor.frost') : 'Hielo'
+      key: 'settings.windowColor.frost',
+      defaultName: 'Hielo'
     },
   ];
 
   const dockColors = [
     {
       code: '#000000',
-      name: window.t ? window.t('settings.windowColor.night') : 'Noche'
+      key: 'settings.windowColor.night',
+      defaultName: 'Noche'
     },
     {
       code: '#ffffff',
-      name: window.t ? window.t('settings.windowColor.frost') : 'Hielo'
+      key: 'settings.windowColor.frost',
+      defaultName: 'Hielo'
     }
   ];
 
@@ -138,6 +156,14 @@ window.settingsInit = (winId, options) => {
 
     if (id === 'tpl-window-color') {
       renderColorOptions();
+    }
+
+    if (id === 'tpl-privacy') {
+      renderPrivacyText();
+    }
+
+    if (id === 'tpl-location') {
+      renderLocationSearch();
     }
 
     content.querySelectorAll('[data-template]').forEach(item => {
@@ -396,10 +422,17 @@ window.settingsInit = (winId, options) => {
       }
 
       item.addEventListener('click', () => {
+        removeLanguageFromURL();
         window.updateSettings(['language'], language);
         loadTemplate('tpl-language');
       });
     });
+  }
+
+  function removeLanguageFromURL() {
+    const url = new URL(window.location);
+    url.searchParams.delete('lang');
+    window.history.replaceState({}, '', url);
   }
 
   function renderColorOptions() {
@@ -425,11 +458,12 @@ window.settingsInit = (winId, options) => {
 
     colors.forEach(color => {
       const button = document.createElement('button');
+      let colorName = window.t ? window.t(color.key) : color.defaultName;
       button.type = 'button';
       button.className = 'color-swatch';
       button.style.setProperty('--swatch-color', color.code);
-      button.title = color.name;
-      button.setAttribute('aria-label', color.name);
+      button.title = colorName;
+      button.setAttribute('aria-label', colorName);
 
       if (color.code.toLowerCase() === selectedColor) {
         button.classList.add('selected');
@@ -444,6 +478,93 @@ window.settingsInit = (winId, options) => {
     });
   }
 
+  function renderPrivacyText() {
+    const privacyText = win.querySelector('#settings-privacy-text');
+    privacyText.innerHTML = window.t('settings.privacy.content');
+  }
+
+  function renderLocationSearch() {
+    const input = win.querySelector('#locationSearchInput');
+    const results = win.querySelector('#locationSearchResults');
+
+    if (!input || !results) return;
+
+    let debounceTimer = null;
+
+    input.addEventListener('input', () => {
+      const query = input.value.trim();
+
+      clearTimeout(debounceTimer);
+
+      if (query.length < 2) {
+        results.innerHTML = '';
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        searchLocations(query);
+      }, 250);
+    });
+
+    async function searchLocations(query) {
+      try {
+        const response = await fetch(locationSearchRequest(query));
+        const data = await response.json();
+
+        renderLocationResults(data);
+      } catch (e) {
+        console.warn('Error buscando ubicaciones', e);
+        results.innerHTML = '';
+      }
+    }
+
+    function renderLocationResults(locations) {
+      results.innerHTML = '';
+
+      locations.slice(0, 6).forEach(location => {
+        const item = document.createElement('li');
+
+        item.textContent = location.display_name;
+        item.style.cursor = 'pointer';
+
+        item.addEventListener('click', () => {
+          const position = {
+            coords: {
+              latitude: parseFloat(location.lat),
+              longitude: parseFloat(location.lon)
+            }
+          };
+
+          window.updateSettings(['defaultPosition'], position);
+
+          window.dispatchEvent(new CustomEvent('locationchange', {}));
+
+          input.value = location.display_name;
+          results.innerHTML = '';
+        });
+
+        results.appendChild(item);
+      });
+    }
+  }
+
+  function locationSearchRequest(query) {
+    const url =
+      `https://nominatim.openstreetmap.org/search?` +
+      `q=${encodeURIComponent(query)}` +
+      `&format=json` +
+      `&addressdetails=1` +
+      `&limit=6`;
+
+    return new Request(url, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'default',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+  }
 
   let templateToLoad = '';
   switch (options.setting) {
@@ -460,8 +581,6 @@ window.settingsInit = (winId, options) => {
   window.addEventListener('languagechange', () => {
     loadTemplate(currentTemplateId);
   });
-
-
 }
 
 window.settingsDispose = () => { }

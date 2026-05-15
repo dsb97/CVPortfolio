@@ -145,3 +145,19 @@
   height: 0px;
 }
 
+#locationSearchResults {
+  margin-top: 6px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  overflow: hidden;
+  background: var(--ui-bg);
+}
+
+#locationSearchResults li {
+  cursor: pointer;
+  padding: 8px 12px;
+}
+
+#locationSearchResults li:hover {
+  background: var(--ui-bg-hover);
+}

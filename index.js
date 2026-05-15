@@ -945,13 +945,9 @@ function resolveDesktopWallpaper(src) {
   }
 }
 
-function getLanguage() {
-  return getSetting(['language'], 'es');
-}
-
 function t(key) {
   if (!key) return '';
-  const lang = getLanguage();
+  const lang = getSetting(['language'], 'es');
   return TRANSLATIONS[lang]?.[key] ?? TRANSLATIONS.es[key] ?? key;
 }
 
@@ -978,7 +974,7 @@ function translateElement(root = document) {
 }
 
 function applyLanguage() {
-  document.documentElement.lang = getLanguage();
+  document.documentElement.lang = getSetting(['language'], 'es');
   document.title = t('app.documentTitle');
   translateElement(document);
   updateDockTitles();
@@ -990,7 +986,25 @@ function applyLanguage() {
 // CONFIGURACIÓN INICIAL
 // ========================================
 
-function loadInitialSetup() {
+function applyLanguageFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const lang = params.get('lang');
+  const supportedLanguages = ['es', 'en'];
+
+  if (!supportedLanguages.includes(lang)) {
+    return;
+  }
+
+  const currentLanguage = getSetting(['language']);
+
+  if (currentLanguage === lang) {
+    return;
+  }
+
+  updateSettings(['language'], lang);
+}
+
+function loadInitialApps() {
   if (window.screen.width < 1920) {
     openApp('about', {
       size: { width: 525, height: 'auto' },
@@ -1033,7 +1047,7 @@ function updateClock() {
   var h = time.getHours() >= 10 ? time.getHours() : '0' + time.getHours();
   var m = time.getMinutes() >= 10 ? time.getMinutes() : '0' + time.getMinutes();
   hour.innerHTML = `${h}:${m}`;
-  date.innerHTML = time.toLocaleDateString(getLanguage() === 'en' ? 'en-GB' : 'es-ES' , options);
+  date.innerHTML = time.toLocaleDateString(getSetting(['language'], 'es') === 'en' ? 'en-GB' : 'es-ES' , options);
 }
 
 function getLocation() {
@@ -1073,7 +1087,7 @@ function handlePosition(position) {
 }
 
 function forecastRequest(position) {
-  let url = `https://api.openweathermap.org/data/2.5/weather?lang=${getLanguage()}&units=metric&lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=24df251cc48b660b67328e7b827099d5`;
+  let url = `https://api.openweathermap.org/data/2.5/weather?lang=${getSetting(['language'], 'es')}&units=metric&lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=24df251cc48b660b67328e7b827099d5`;
   var myHeaders = new Headers();
   var myInit = {
     method: "GET",
@@ -1121,9 +1135,19 @@ function getCityName(position) {
 }
 
 function processCityNameResponse(data, position) {
-  cityName.innerHTML = data.address.city;
+  let cityName =
+  data.address.city ||
+  data.address.town ||
+  data.address.village ||
+  data.address.municipality ||
+  data.address.hamlet ||
+  data.address.county ||
+  data.address.province ||
+  data.address.state ||
+  t('status.locationUnavailable');
+  cityNameLabel.innerHTML = cityName;
   let dP = getSetting(['defaultPosition']);
-  cityName.title = (
+  cityNameLabel.title = (
     position.coords.longitude == dP.coords.longitude &&
     position.coords.latitude === dP.coords.latitude
       ? t('status.defaultLocation')
@@ -1147,11 +1171,16 @@ window.addEventListener('languagechange', () => {
   getLocation();
 });
 
+window.addEventListener('locationchange', () => {
+  getLocation();
+});
+
 function initDesktop() {
+  applyLanguageFromUrl();
   applySettings(getSettings());
   getLocation();
   initDock();
-  loadInitialSetup();
+  loadInitialApps();
   updateClock();
   setInterval(updateClock, 1000);
 }

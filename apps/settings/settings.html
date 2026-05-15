@@ -84,7 +84,7 @@
 <template id="tpl-language">
   <h4 data-i18n="settings.language">Idioma</h4>
 
-  <div class="control-panel-grid">
+  <section class="control-panel-grid">
     <div class="control-item" data-language="es">
       <img src="/assets/icons/spain.png">
       <span data-i18n="settings.spanish">Español</span>
@@ -94,18 +94,28 @@
       <img src="/assets/icons/english.png">
       <span data-i18n="settings.english">Inglés</span>
     </div>
-  </div>
+  </section>
 </template>
 
 
 <template id="tpl-privacy">
   <h4 data-i18n="settings.privacy">Privacidad</h4>
-  <p><img height="96" src="/assets/icons/build.png" alt=""> <span data-i18n="settings.underConstruction">En
-      construccion</span></p>
+  <section id="settings-privacy-text" data-i18n="settings.privacy.content"></section>
 </template>
 
 <template id="tpl-location">
-  <h4 data-i18n="settings.location">Ubicación</h4>
+
+  <!-- <h4 data-i18n="settings.location">Ubicación</h4>
   <p><img height="96" src="/assets/icons/build.png" alt=""> <span data-i18n="settings.underConstruction">En
-      construccion</span></p>
+      construccion</span></p> -->
+  <h4 data-i18n="settings.location">
+    Ubicación
+  </h4>
+  <p class="subtitle ui-muted" data-i18n="settings.locationHelp">Busque una ubicación que se establecerá por defecto y
+    permitirá acceder a los servicios que la requieran.</p>
+  <section class="settings-section">
+    <input id="locationSearchInput" class="ui-input" type="text" autocomplete="off"
+      data-i18n-placeholder="settings.locationPlaceholder">
+    <ul id="locationSearchResults" class="ui-list"></ul>
+  </section>
 </template>
