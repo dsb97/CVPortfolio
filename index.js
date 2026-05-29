@@ -1021,8 +1021,8 @@ function loadInitialApps() {
       path: ['Frameworks']
     });
     openApp('explorer', {
-      size: { width: 575, height: 346 },
-      position: { left: 45, top: 431 },
+      size: { width: 575, height: 323 },
+      position: { left: 42, top: 454 },
       path: ['Microsoft']
     });
     openApp('terminal', {
@@ -1031,7 +1031,7 @@ function loadInitialApps() {
     });
     openApp('about', {
       size: { width: 525, height: 'auto' },
-      position: { left: 95, top: 125 },
+      position: { left: 95, top: 158 },
     });
     openApp('textEditor', {
       position: { left: 1211, top: 274 },
